@@ -1,0 +1,12 @@
+name: CI - Git Governance
+
+on:
+  push:
+    branches: [ main, master, develop ]
+
+jobs:
+  enforce-commit-standards:
+    uses: tu-organizacion/org-ci-workflows/.github/workflows/conventional-commits-enforcement.yml@main
+    secrets:
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      
