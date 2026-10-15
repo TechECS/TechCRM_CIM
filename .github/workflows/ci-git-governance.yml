@@ -6,7 +6,7 @@ on:
 
 jobs:
   enforce-commit-standards:
-    uses: tu-organizacion/org-ci-workflows/.github/workflows/conventional-commits-enforcement.yml@main
+    uses: TechECS/org-ci-workflows/.github/workflows/conventional-commits-enforcement.yml@main
     secrets:
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
       
