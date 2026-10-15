@@ -1,0 +1,2332 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CIM SaaS (CIM) SaaS CRM</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* Classic Windows / Clarify Retro Enterprise UI styling */
+        body {
+            font-family: 'Tahoma', 'Segoe UI', Geneva, Verdana, sans-serif;
+            font-size: 11px;
+            background-color: #3b6c9d;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        .win-border {
+            border: 2px solid;
+            border-color: #ffffff #808080 #808080 #ffffff;
+        }
+
+        .win-inset {
+            border: 2px solid;
+            border-color: #808080 #ffffff #ffffff #808080;
+            background-color: #ffffff;
+        }
+
+        .win-bg {
+            background-color: #ece9d8;
+        }
+
+        .red-header {
+            background: linear-gradient(90deg, #8a0000 0%, #b80000 50%, #8a0000 100%);
+            color: white;
+            font-weight: bold;
+            padding: 2px 6px;
+            font-size: 11px;
+            border-bottom: 1px solid #550000;
+        }
+
+        .gray-header {
+            background: linear-gradient(180deg, #f0f0f0 0%, #e0e0e0 100%);
+            border-bottom: 1px solid #a0a0a0;
+            color: #333;
+            font-weight: bold;
+            padding: 2px 6px;
+        }
+
+        .purple-btn {
+            background: linear-gradient(180deg, #8c2472 0%, #631750 100%);
+            color: white;
+            border: 1px solid #3d0c32;
+            padding: 2px 10px;
+            font-size: 10px;
+            font-weight: bold;
+            border-radius: 2px;
+            box-shadow: inset 1px 1px 0px rgba(255,255,255,0.3);
+            cursor: pointer;
+        }
+        .purple-btn:hover {
+            background: linear-gradient(180deg, #a12b84 0%, #781d62 100%);
+        }
+        .purple-btn:active {
+            background: linear-gradient(180deg, #501241 0%, #781d62 100%);
+            box-shadow: inset 1px 1px 2px rgba(0,0,0,0.5);
+        }
+        .purple-btn:disabled {
+            background: #a0909c !important;
+            border-color: #70606c !important;
+            cursor: not-allowed !important;
+            opacity: 0.6;
+        }
+
+        .classic-btn {
+            background: linear-gradient(180deg, #ffffff 0%, #ece9d8 100%);
+            border: 1px solid #7f9db9;
+            color: #000;
+            padding: 2px 8px;
+            font-size: 10px;
+            cursor: pointer;
+            box-shadow: 1px 1px 0px #fff inset;
+        }
+        .classic-btn:hover {
+            background: #f5f3e7;
+            border-color: #316ac5;
+        }
+        .classic-btn:active {
+            background: #dedabf;
+        }
+
+        /* Tables styling */
+        .cim-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 10px;
+            background: white;
+        }
+        .cim-table th {
+            background: linear-gradient(180deg, #f5f5f5 0%, #dddddd 100%);
+            border: 1px solid #acacac;
+            padding: 2px 4px;
+            text-align: left;
+            font-weight: bold;
+            color: #222;
+            white-space: nowrap;
+        }
+        .cim-table td {
+            border: 1px solid #e0e0e0;
+            padding: 2px 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .cim-table tr.selected {
+            background-color: #316ac5 !important;
+            color: white !important;
+        }
+        .cim-table tr:nth-child(even):not(.selected) {
+            background-color: #f9f9f9;
+        }
+        .cim-table tr:hover:not(.selected) {
+            background-color: #e8f1ff;
+            cursor: pointer;
+        }
+
+        /* Tab strip */
+        .tab-btn {
+            background: #e0ded0;
+            border: 1px solid #808080;
+            border-bottom: none;
+            padding: 3px 8px;
+            margin-right: 2px;
+            cursor: pointer;
+            font-size: 10px;
+            font-weight: bold;
+            color: #444;
+            border-top-left-radius: 3px;
+            border-top-right-radius: 3px;
+        }
+        .tab-btn.active {
+            background: #ece9d8;
+            border-color: #7f9db9;
+            border-bottom: 2px solid #ece9d8;
+            color: #a80000;
+            margin-bottom: -1px;
+            z-index: 10;
+        }
+        .tab-btn.disabled {
+            color: #a0a0a0;
+            cursor: not-allowed;
+            background: #d4d0c8;
+        }
+
+        /* Menu Bar */
+        .menu-bar-item {
+            padding: 2px 8px;
+            cursor: pointer;
+        }
+        .menu-bar-item:hover {
+            background-color: #316ac5;
+            color: white;
+        }
+
+        /* Form Inputs */
+        input[type="text"], select, textarea {
+            font-size: 10px;
+            padding: 1px 3px;
+            border: 1px solid #7f9db9;
+            background-color: #fff;
+            outline: none;
+        }
+        input[type="text"]:focus, select:focus, textarea:focus {
+            border-color: #316ac5;
+            box-shadow: 0 0 2px rgba(49, 106, 197, 0.5);
+        }
+
+        /* Tree view style */
+        .tree-node-item {
+            padding: 2px 4px;
+            border: 1px transparent solid;
+            cursor: pointer;
+            display: flex;
+            items-center;
+            gap: 4px;
+        }
+        .tree-node-item:hover {
+            background-color: #e8f1ff;
+            border-color: #b5d1ff;
+        }
+        .tree-node-item.selected {
+            background-color: #316ac5;
+            color: white !important;
+        }
+        .tree-node-item.selected * {
+            color: white !important;
+        }
+
+        .tree-toggle-btn {
+            width: 11px;
+            height: 11px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #808080;
+            background: #fff;
+            color: #000;
+            font-size: 9px;
+            font-weight: bold;
+            line-height: 1;
+            cursor: pointer;
+        }
+
+        /* Scrollbars retro look */
+        ::-webkit-scrollbar {
+            width: 12px;
+            height: 12px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #ece9d8;
+            border: 1px solid #d4d0c8;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c1bda8;
+            border: 1px solid #ffffff;
+            box-shadow: inset -1px -1px 0px #808080;
+        }
+    </style>
+<style>body.no-ctx [id^="hdr-"]{visibility:hidden}input:disabled,select:disabled,textarea:disabled{background:#eee;color:#666}</style>
+</head>
+<body class="h-screen w-screen flex flex-col overflow-hidden select-none">
+
+    <!-- Top Window Title Bar -->
+    <div class="bg-gradient-to-r from-blue-900 via-blue-800 to-blue-950 text-white px-2 py-1 flex items-center justify-between text-xs font-bold border-b border-gray-600">
+        <div class="flex items-center space-x-2">
+            <i class="fa-solid fa-desktop text-red-400"></i>
+            <span id="app-window-title">CIM SaaS - [Sin Cliente Seleccionado]</span>
+        </div>
+        <div class="flex items-center space-x-1">
+            <button onclick="showToast('Minimizado a la barra de tareas')" class="w-4 h-4 bg-gray-300 text-black flex items-center justify-center text-xs font-bold leading-none hover:bg-gray-100">-</button>
+            <button onclick="showToast('Ventana Maximizada')" class="w-4 h-4 bg-gray-300 text-black flex items-center justify-center text-xs font-bold leading-none hover:bg-gray-100">□</button>
+            <button onclick="showToast('No se puede cerrar la sesión de agente activa')" class="w-4 h-4 bg-red-600 text-white flex items-center justify-center text-xs font-bold leading-none hover:bg-red-700">×</button>
+        </div>
+    </div>
+
+    <!-- Main Menu Bar -->
+    <div class="win-bg border-b border-gray-400 flex items-center text-xs px-1 py-0.5 space-x-1 text-gray-800">
+        <div class="menu-bar-item" onclick="showToast('Menú Archivo: Exportar datos disponible')">Archivo</div>
+        <div class="menu-bar-item" onclick="switchView('search')">Buscar</div>
+        <div class="menu-bar-item" onclick="showToast('Tickets de soporte cargados')">Tickets</div>
+        <div class="menu-bar-item" onclick="showToast('Menú Acciones: Crear Incidencia / Modificar Tarifas')">Acciones</div>
+        <div class="menu-bar-item" onclick="showToast('Herramientas del sistema en línea')">Herramientas</div>
+        <div class="menu-bar-item" onclick="openModal('help-modal')">Ayuda</div>
+        <div class="ml-auto flex items-center space-x-2 text-red-700 font-bold pr-2">
+            <i class="fa-solid fa-signal text-green-600"></i>
+            <span>ENTORNO PRODUCCIÓN CRM [ES-VDF-P04]</span>
+        </div>
+    </div>
+
+    <!-- TOP CUSTOMER BANNER (Dynamic Client Information Bar) -->
+    <div class="win-bg p-1 border-b border-gray-400">
+        <div class="grid grid-cols-12 gap-1 bg-gray-100 border border-gray-400 p-1 rounded text-xs">
+            <!-- Col 1: Información Llamante -->
+            <div class="col-span-3 border-r border-gray-300 pr-2">
+                <div class="red-header mb-1 text-center uppercase tracking-wide">Información Llamante</div>
+                <div class="grid grid-cols-2 gap-x-1 text-2xs">
+                    <span class="font-bold text-gray-600">ID Cliente:</span> <span id="hdr-id" class="font-bold text-blue-900">-</span>
+                    <span class="font-bold text-gray-600">Cliente:</span> <span id="hdr-name" class="font-bold text-red-700 truncate">-</span>
+                    <span class="font-bold text-gray-600">Provincia:</span> <span id="hdr-prov">-</span>
+                    <span class="font-bold text-gray-600">Oferta:</span> <span id="hdr-offer">-</span>
+                    <span class="font-bold text-gray-600">Teléfono:</span> <span id="hdr-phone" class="font-bold text-green-700">-</span>
+                    <span class="font-bold text-gray-600">Estado:</span> <span id="hdr-status" class="text-gray-500 font-bold">Sin Selección</span>
+                    <span class="font-bold text-gray-600">Retención:</span> <span id="hdr-retention">-</span>
+                    <span class="font-bold text-gray-600">Tipo Contacto:</span> <span id="hdr-contact">-</span>
+                </div>
+            </div>
+
+            <!-- Col 2: Contexto -->
+            <div class="col-span-3 border-r border-gray-300 px-2">
+                <div class="red-header mb-1 text-center uppercase tracking-wide">Contexto</div>
+                <div class="flex flex-col space-y-1">
+                    <select id="hdr-context-select" disabled class="w-full text-xs font-bold text-gray-500 bg-gray-200 border border-gray-300">
+                        <option value="">[Sin Cuenta Activa]</option>
+                    </select>
+                    <div class="text-2xs text-gray-600">Clase Cliente: <span id="hdr-clase" class="font-bold text-gray-800">-</span></div>
+                    <div class="text-2xs text-gray-600">Segmento: <span id="hdr-segmento" class="font-bold text-purple-800">-</span></div>
+                </div>
+            </div>
+
+            <!-- Col 3: Información de Servicio/Dirección -->
+            <div class="col-span-4 border-r border-gray-300 px-2">
+                <div class="red-header mb-1 text-center uppercase tracking-wide">Información de Servicio / Dirección</div>
+                <div class="grid grid-cols-2 gap-x-1 text-2xs">
+                    <span class="font-bold text-gray-600">Paquete Contratado:</span> <span id="hdr-pkg" class="font-bold text-gray-800 truncate">-</span>
+                    <span class="font-bold text-gray-600">Tecnología:</span> <span id="hdr-tech">-</span>
+                    <span class="font-bold text-gray-600">Serviciable:</span> <span id="hdr-serv" class="text-gray-500 font-bold">-</span>
+                    <span class="font-bold text-gray-600">Velocidad:</span> <span id="hdr-speed">-</span>
+                    <span class="font-bold text-gray-600">Deuda Principal:</span> <span id="hdr-debt-p" class="font-bold text-gray-600">-</span>
+                    <span class="font-bold text-gray-600">Deuda SaaS:</span> <span id="hdr-debt-m" class="font-bold text-gray-600">-</span>
+                </div>
+            </div>
+
+            <!-- Col 4: Avisos -->
+            <div class="col-span-2 pl-2 flex flex-col">
+                <div class="red-header mb-1 text-center uppercase tracking-wide">Avisos</div>
+                <div class="bg-yellow-100 border border-yellow-300 p-1 text-2xs text-yellow-900 overflow-y-auto flex-grow max-h-12">
+                    <i class="fa-solid fa-info-circle text-blue-600 mr-1"></i>
+                    <span id="hdr-notice">Seleccione un cliente para consultar el estado global.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN APP CONTENT AREA -->
+    <div class="flex-grow flex overflow-hidden win-bg p-1 space-x-1">
+
+        <!-- LEFT ACCORDION SIDEBAR -->
+        <div class="w-64 flex-shrink-0 flex flex-col space-y-1">
+            
+            <!-- Abrir Ventanas Section -->
+            <div class="win-border bg-gray-200 flex flex-col">
+                <div class="red-header flex justify-between items-center">
+                    <span>Abrir Ventanas</span>
+                    <i class="fa-solid fa-window-restore text-2xs"></i>
+                </div>
+                <div class="p-1 bg-white"><div id="ow-list" class="text-2xs space-y-px"></div><div id="sidebar-client-actions" class="hidden"></div></div>
+            </div>
+
+            <!-- Argumentarios Section -->
+            <div class="win-border bg-gray-200 flex flex-col flex-shrink-0">
+                <div class="red-header">Argumentarios</div>
+                <div class="p-1 bg-white">
+                    <div class="flex space-x-1 mb-1">
+                        <input type="text" id="arg-search-input" placeholder="Buscar argumentario..." class="w-full text-2xs" onkeyup="filterArgumentarios()">
+                    </div>
+                    <div id="arg-list" class="win-inset p-1 h-20 overflow-y-auto text-2xs space-y-1">
+                        <div class="text-gray-700 hover:text-blue-800 cursor-pointer" onclick="showModalInfo('Argumentario Retención', 'Ofrecer 50% descuento durante 12 meses en cuota SaaS Cloud CRM.')">• Descuento Retención 50%</div>
+                        <div class="text-gray-700 hover:text-blue-800 cursor-pointer" onclick="showModalInfo('Argumentario Fibra PRO', 'Migración gratuita a FTTH 1Gbps simétrico con IP Fija.')">• Migración Fibra 1Gbps</div>
+                        <div class="text-gray-700 hover:text-blue-800 cursor-pointer" onclick="showModalInfo('Argumentario SaaS', 'Añadir licencias ilimitadas de Microsoft 365 / Vodafone Cloud.')">• Up-sell Licencias SaaS</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Busqueda Ordenes / Peticiones Widget -->
+            <div class="win-border bg-gray-200 flex flex-col flex-grow">
+                <div class="red-header">Búsqueda Órdenes / Peticiones</div>
+                <div class="p-2 bg-white flex-grow flex flex-col justify-between space-y-1 text-2xs">
+                    <div class="space-y-1 overflow-y-auto max-h-48">
+                        <label class="flex items-center space-x-1 cursor-pointer">
+                            <input type="radio" name="search_order_type" value="EE" checked onclick="filterWidgetOrders('EE')">
+                            <span>Órdenes P. de instalar con EE:</span>
+                        </label>
+                        <label class="flex items-center space-x-1 cursor-pointer">
+                            <input type="radio" name="search_order_type" value="INS" onclick="filterWidgetOrders('INS')">
+                            <span>Órdenes Instaladas</span>
+                        </label>
+                        <label class="flex items-center space-x-1 cursor-pointer">
+                            <input type="radio" name="search_order_type" value="VPT" onclick="filterWidgetOrders('VPT')">
+                            <span>Peticiones Portabilidad VPT</span>
+                        </label>
+                        <label class="flex items-center space-x-1 cursor-pointer">
+                            <input type="radio" name="search_order_type" value="INF" onclick="filterWidgetOrders('INF')">
+                            <span>Peticiones Info / Añadir</span>
+                        </label>
+                        <label class="flex items-center space-x-1 cursor-pointer">
+                            <input type="radio" name="search_order_type" value="POT" onclick="filterWidgetOrders('POT')">
+                            <span>Peticiones Cliente Potencial</span>
+                        </label>
+                        <label class="flex items-center space-x-1 cursor-pointer">
+                            <input type="radio" name="search_order_type" value="DECO" onclick="filterWidgetOrders('DECO')">
+                            <span>Recogida de Deco / Router</span>
+                        </label>
+                        <label class="flex items-center space-x-1 cursor-pointer">
+                            <input type="radio" name="search_order_type" value="TERM" onclick="filterWidgetOrders('TERM')">
+                            <span>Peticiones Terminal Móvil</span>
+                        </label>
+                        <label class="flex items-center space-x-1 cursor-pointer">
+                            <input type="radio" name="search_order_type" value="DEF" onclick="filterWidgetOrders('DEF')">
+                            <span>Peticiones Pendientes DEFAULT</span>
+                        </label>
+                    </div>
+                    
+                    <button onclick="executeWidgetOrderSearch()" class="purple-btn w-full py-1 text-center font-bold mt-2">
+                        <i class="fa-solid fa-magnifying-glass mr-1"></i> Buscar
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- RIGHT WORKSPACE AREA -->
+        <div class="flex-grow flex flex-col win-border bg-gray-200 overflow-hidden">
+            
+            <!-- VIEW 1: BUSCAR CLIENTE EN EL CIM (Search View - Active by Default) -->
+            <div id="view-search" class="flex-grow flex flex-col p-1 space-y-2 overflow-y-auto">
+                
+                <!-- Criterios de Búsqueda -->
+                <div class="win-border bg-gray-100 p-2">
+                    <div class="text-blue-900 font-bold border-b border-blue-800 pb-1 mb-2 flex justify-between items-center">
+                        <span><i class="fa-solid fa-filter mr-1"></i> Criterios de Búsqueda de Cliente / Dirección</span>
+                        <span class="text-2xs text-gray-500 font-normal">Sistemas Integrados Vodafone Clarify CIM</span>
+                    </div>
+
+                    <form id="search-form" onsubmit="event.preventDefault(); performClientSearch();">
+                        <div class="grid grid-cols-6 gap-2 text-2xs">
+                            <div>
+                                <label class="block text-gray-700 font-bold">ID Dir:</label>
+                                <input type="text" id="src-iddir" class="w-full" placeholder="ej. 64043921">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 font-bold">Provincia:</label>
+                                <select id="src-provincia" class="w-full">
+                                    <option value="">A seleccionar</option>
+                                    <option value="MADRID">MADRID</option>
+                                    <option value="BARCELONA">BARCELONA</option>
+                                    <option value="VALENCIA">VALENCIA</option>
+                                    <option value="ZARAGOZA">ZARAGOZA</option>
+                                    <option value="SEVILLA">SEVILLA</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 font-bold">Población:</label>
+                                <input type="text" id="src-poblacion" class="w-full">
+                            </div>
+                            <div class="col-span-2">
+                                <label class="block text-gray-700 font-bold">Calle:</label>
+                                <input type="text" id="src-calle" class="w-full" placeholder="Nombre de vía pública">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 font-bold">Nº / Planta:</label>
+                                <input type="text" id="src-numero" class="w-full">
+                            </div>
+
+                            <div>
+                                <label class="block text-gray-700 font-bold">NIF / NIE / CIF:</label>
+                                <input type="text" id="src-nif" class="w-full font-bold" placeholder="00000000T">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 font-bold">Teléfono:</label>
+                                <input type="text" id="src-telefono" class="w-full" placeholder="600000001">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 font-bold">ID Cliente:</label>
+                                <input type="text" id="src-idcliente" class="w-full">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 font-bold">Nombre:</label>
+                                <input type="text" id="src-nombre" class="w-full">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 font-bold">Primer Apellido:</label>
+                                <input type="text" id="src-apellido1" class="w-full">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 font-bold">Segundo Apellido:</label>
+                                <input type="text" id="src-apellido2" class="w-full">
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end space-x-2 mt-2 pt-1 border-t border-gray-300">
+                            <button type="button" onclick="clearSearchForm()" class="purple-btn flex items-center space-x-1">
+                                <i class="fa-solid fa-eraser"></i> <span>Limpiar</span>
+                            </button>
+                            <button type="submit" class="purple-btn flex items-center space-x-1">
+                                <i class="fa-solid fa-magnifying-glass"></i> <span>Buscar</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Resultados de Búsqueda: Dirección -->
+                <div class="win-border bg-white p-1 flex-1 flex flex-col">
+                    <div class="gray-header flex justify-between items-center text-xs">
+                        <span>Resultados de Búsqueda - Dirección</span>
+                        <div class="space-x-1">
+                            <button onclick="showToast('Vista de mapa GIS no disponible')" class="purple-btn text-2xs">Ver en ventana individual</button>
+                            <button onclick="showToast('Iniciando módulo Cartografía GIS...')" class="purple-btn text-2xs">Activar Mapa</button>
+                        </div>
+                    </div>
+                    <div class="overflow-auto flex-1 max-h-36 border border-gray-300 mt-1">
+                        <table class="cim-table" id="table-direcciones">
+                            <thead>
+                                <tr>
+                                    <th>Tecnología</th>
+                                    <th>Calle</th>
+                                    <th>Número</th>
+                                    <th>Planta</th>
+                                    <th>Puerta</th>
+                                    <th>Escalera/Bloque</th>
+                                    <th>Serviciabilidad</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody-direcciones">
+                                <tr onclick="selectDirRow(this)" class="selected">
+                                    <td class="font-bold text-purple-900">[CABLE][ULL]</td>
+                                    <td>AV CRUZ DEL SUR</td>
+                                    <td>1</td>
+                                    <td>2</td>
+                                    <td>C</td>
+                                    <td>-</td>
+                                    <td><span class="text-green-700 font-bold"><i class="fa-solid fa-check-circle"></i> Disponible (1000M)</span></td>
+                                </tr>
+                                <tr onclick="selectDirRow(this)">
+                                    <td class="font-bold text-blue-900">[FTTH][NEBA]</td>
+                                    <td>CALLE GRAN VIA</td>
+                                    <td>45</td>
+                                    <td>3</td>
+                                    <td>B</td>
+                                    <td>Izda</td>
+                                    <td><span class="text-green-700 font-bold"><i class="fa-solid fa-check-circle"></i> Cobertura Directa</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Resultados de Búsqueda: Cliente -->
+                <div class="win-border bg-white p-1 flex-1 flex flex-col">
+                    <div class="gray-header flex justify-between items-center text-xs">
+                        <span>Resultados de Búsqueda - Cliente</span>
+                        <button onclick="openModal('legend-modal')" class="purple-btn text-2xs">Leyenda</button>
+                    </div>
+                    <div class="overflow-auto flex-1 max-h-44 border border-gray-300 mt-1">
+                        <table class="cim-table" id="table-clientes">
+                            <thead>
+                                <tr>
+                                    <th>ID Cliente</th>
+                                    <th>ID Dir</th>
+                                    <th>Tipo Cliente</th>
+                                    <th>Nombre y Apellidos / Nombre Empresa</th>
+                                    <th>NIF / CIF</th>
+                                    <th>Estado</th>
+                                    <th>Deuda / Tipo Deuda</th>
+                                    <th>Deuda vendida</th>
+                                    <th>RGU Móvil</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody-clientes">
+                                <!-- Dynamic JS Population -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Bottom Action Buttons for Search -->
+                    <div class="flex justify-end space-x-2 mt-2 pt-1 border-t border-gray-300">
+                        <button onclick="showToast('Consultando WSTESA... Sin incidencias de cobertura.')" class="purple-btn">Consulta WSTESA</button>
+                        <button onclick="openModal('alta-direccion-modal')" class="purple-btn">+ Alta Dirección</button>
+                        <button onclick="openModal('alta-contacto-modal')" class="purple-btn">+ Alta Contacto</button>
+                        <button onclick="confirmSelectClient()" class="purple-btn px-4 py-1 text-xs font-bold bg-green-800 hover:bg-green-700">
+                            <i class="fa-solid fa-check mr-1"></i> Seleccionar Cliente
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- VIEW 2: PAGINA CENTRAL INTERACCION (Main Interaction View) -->
+            <div id="view-interaction" class="hidden flex-grow flex flex-col p-1 space-y-1 overflow-hidden">
+                
+                <!-- Main Horizontal Navigation Tabs -->
+                <div id="main-tabs" class="flex items-center border-b border-gray-400 bg-gray-300 pt-1 px-1 text-xs overflow-x-auto">
+                    <button class="tab-btn active" id="tab-btn-info-contacto" onclick="switchMainTab('tab-btn-info-contacto', 'tab-info-contacto')">Información de Contacto</button>
+                    <button class="tab-btn" id="tab-btn-servicios-contratados" onclick="switchMainTab('tab-btn-servicios-contratados', 'tab-servicios-contratados')">Servicios Contratados (Árbol)</button>
+                    <button class="tab-btn" id="tab-btn-configurador" onclick="switchMainTab('tab-btn-configurador', 'tab-configurador')">Configurador Oferta</button>
+                    <button class="tab-btn" id="tab-btn-jerarquia" onclick="switchMainTab('tab-btn-jerarquia', 'tab-jerarquia')">Jerarquía</button>
+                    <button class="tab-btn" id="tab-btn-registros" onclick="switchMainTab('tab-btn-registros', 'tab-registros')">Registros de Cliente</button>
+                    <button class="tab-btn" id="tab-btn-facturacion" onclick="mainTab('facturacion')">Facturación</button>
+                    <button class="tab-btn" id="tab-btn-campanas" onclick="switchMainTab('tab-btn-campanas', 'tab-campanas')">Campañas Comerciales</button>
+<button class="tab-btn" id="tab-btn-otra-info" onclick="mainTab('otra-info')">Otra Información</button>
+<button class="tab-btn" id="tab-btn-mgm" onclick="mainTab('mgm')">Información MGM</button>
+<button class="tab-btn" id="tab-btn-averias" onclick="mainTab('averias')">Averías y Soporte</button>
+                </div>
+
+                <!-- Tab Content Container -->
+                <div class="flex-grow flex flex-col win-border bg-white p-1 overflow-hidden space-y-1">
+                    
+                    <!-- TAB 1 CONTENT: INFORMACION DE CONTACTO -->
+                    <div id="tab-info-contacto" class="flex-grow flex flex-col space-y-1 overflow-hidden">
+                        
+                        <div class="win-border bg-white p-1 flex-shrink-0"><div class="gray-header">Información del contacto</div>
+<div class="grid grid-cols-4 gap-x-3 gap-y-1 p-2 text-2xs"><div class=""><label class="block font-bold">NIF/NIE/Pasaporte/CIF:</label><input type="text" id="ci-nif" readonly class="w-full bg-gray-50"></div><div class=""><label class="block font-bold">Correo electrónico:</label><input type="text" id="ci-mail" readonly class="w-full bg-gray-50"></div><div class=""><label class="block font-bold">Estado:</label><input type="text" id="ci-estado" readonly class="w-full bg-gray-50"></div><div class="row-span-2"><label class="block font-bold">Dirección:</label><textarea id="ci-dir" readonly class="w-full bg-gray-50" rows="3"></textarea></div><div class=""><label class="block font-bold">Teléfono 1:</label><input type="text" id="ci-tel1" readonly class="w-full bg-gray-50"></div><div class=""><label class="block font-bold">Teléfono 2:</label><input type="text" id="ci-tel2" readonly class="w-full bg-gray-50"></div><div class=""><label class="block font-bold">Teléfono móvil:</label><input type="text" id="ci-mov" readonly class="w-full bg-gray-50"></div><div class=""><label class="block font-bold">Clase cliente:</label><input type="text" id="ci-clase" readonly class="w-full bg-gray-50"></div><div class=""><label class="block font-bold">Velocidad Máx (MB):</label><input type="text" id="ci-vmax" readonly class="w-full bg-gray-50"></div><div class=""><label class="block font-bold">Velocidad Real:</label><input type="text" id="ci-vreal" readonly class="w-full bg-gray-50"></div><div class=""><label class="block font-bold">Central – Nodo:</label><input type="text" id="ci-nodo" readonly class="w-full bg-gray-50"></div><div class=""><label class="block font-bold">ROL:</label><input type="text" id="ci-rol" readonly class="w-full bg-gray-50"></div><div class=""><label class="block font-bold">Cod / Div / Fra:</label><input type="text" id="ci-cdf" readonly class="w-full bg-gray-50"></div><div></div><div class="flex items-end justify-end"><button class="purple-btn" onclick="showModalInfo('Detalle / Editar','Edición de datos de contacto: pendiente de implementar.')">Detalle / Editar</button></div></div></div>
+<div class="win-border flex-grow flex flex-col p-1 overflow-hidden"><div class="gray-header">Interacciones – Tickets – Envíos – Órdenes de trabajo</div>
+<div class="flex items-center gap-2 text-2xs py-1"><label>Tipo:</label><select id="f-tipo" onchange="renderInteracciones()"><option value="TODOS">Todos</option><option>Orden</option><option>Interaccion</option><option>Envio</option><option>Averia</option></select>
+<label>Estado:</label><select id="f-estado" onchange="renderInteracciones()"><option value="TODOS">Todos</option><option>Cerrada</option><option>En Proceso</option></select>
+<button class="purple-btn" onclick="renderInteracciones()">Filtrar</button><span class="flex-grow"></span>
+<button class="purple-btn" onclick="clearIntFilters()">Ver Todo</button><button class="purple-btn" onclick="showModalInfo('Leyenda','Azul: abierta o en proceso. Gris: cerrada. Pulse una Orden para abrir su provisioning.')">Leyenda</button>
+<label>MSISDN:</label><input type="text" id="f-msisdn" class="w-20"><button class="purple-btn" onclick="renderInteracciones()">Buscar Interacción</button></div>
+<div class="overflow-auto flex-grow border border-gray-300"><table class="cim-table"><thead><tr><th>Tipo</th><th>ID</th><th>Estado</th><th>Razón 1 / Tipo</th><th>Razón 2 / Desc.</th><th>Razón 3 / Subtipo</th><th>Resultado</th><th>F. Apertura</th><th>F. Cierre</th><th>Tipo Vend.</th><th>Agente</th></tr></thead><tbody id="tbody-interacciones"></tbody></table></div></div>
+<!-- Bottom Section: Detalle Interacción Actual -->
+                        <div class="win-border p-2 bg-gray-100 flex-shrink-0">
+                            <div class="red-header mb-1">Detalle Interacción Actual</div>
+                            <div class="grid grid-cols-12 gap-2 text-2xs items-center">
+                                <div class="col-span-3">
+                                    <label class="block font-bold">Razón 1:</label>
+                                    <select id="int-razon1" class="w-full">
+                                        <option value="Atencion Comercial">Atención Comercial</option>
+                                        <option value="Soporte Tecnico">Soporte Técnico / Avería</option>
+                                        <option value="Facturacion">Consulta Facturación</option>
+                                        <option value="Retencion">Retención / Bajas</option>
+                                    </select>
+                                </div>
+                                <div class="col-span-3">
+                                    <label class="block font-bold">Razón 2:</label>
+                                    <select id="int-razon2" class="w-full">
+                                        <option value="Informacion SaaS">Información Paquete SaaS</option>
+                                        <option value="Modificacion Tarifa">Modificación de Tarifa</option>
+                                        <option value="Reclamacion Cobro">Reclamación de Cobro</option>
+                                    </select>
+                                </div>
+                                <div class="col-span-3">
+                                    <label class="block font-bold">Razón 3:</label>
+                                    <select id="int-razon3" class="w-full">
+                                        <option value="Aduana / Tramitacion">Aduana / Tramitación</option>
+                                        <option value="Alta Licencias">Alta Licencias SaaS</option>
+                                        <option value="Resuelto en llamada">Resuelto en Primera Llamada</option>
+                                    </select>
+                                </div>
+                                <div class="col-span-3">
+                                    <label class="block font-bold">Resultado:</label>
+                                    <select id="int-resultado" class="w-full font-bold text-blue-900">
+                                        <option value="Gestion Finalizada OK">Gestión Finalizada OK</option>
+                                        <option value="Pendiente Seguimiento">Pendiente Seguimiento</option>
+                                        <option value="Escalado N2">Escalado Soporte Nivel 2</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-span-9">
+                                    <label class="block font-bold">Notas de la Interacción:</label>
+                                    <input type="text" id="int-notas" class="w-full" placeholder="Escriba aquí los detalles conversados con el cliente...">
+                                </div>
+                                <div class="col-span-3 flex space-x-1 pt-3">
+                                    <button onclick="saveInteraction()" class="purple-btn w-full py-1 text-center font-bold">
+                                        <i class="fa-solid fa-floppy-disk mr-1"></i> Guardar Interacción
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Bottom Toolbar Buttons -->
+                            <div class="flex justify-between items-center mt-2 pt-1 border-t border-gray-300">
+                                <div class="space-x-1">
+                                    <button onclick="openModal('tickets-modal')" class="purple-btn">Tickets</button>
+                                    <span class="relative inline-block"><button onclick="toggleGC(event)" class="purple-btn">Gest. Comercial &#9662;</button>
+<span id="gc-menu" class="hidden absolute left-0 flex flex-col gap-px z-30" style="bottom:100%;min-width:150px">
+<button class="purple-btn text-left" onclick="openWorkOrder('TRAS')">Traslados</button>
+<button class="purple-btn text-left" onclick="openWorkOrder('MIG')">Migraciones</button>
+<button class="purple-btn text-left" onclick="openWorkOrder('ESP')">Órdenes Especiales</button>
+<button class="purple-btn text-left" onclick="openWorkOrder('OT')">Órdenes de Trabajo</button></span></span>
+                                    <button onclick="openModal('gest-clientes-modal')" class="purple-btn">Gest. Clientes</button>
+                                </div>
+                                <button onclick="closeFicha()" class="purple-btn">&#10005; Cerrar</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div id="view-billing" class="hidden flex-grow flex flex-col p-1 space-y-1 overflow-hidden">
+                <div class="red-header flex justify-between items-center">
+                    <span>Módulo de Facturación, Impagos y Gestión de Cobros</span>
+                    <span id="billing-client-header">Cliente: -</span>
+                </div>
+
+                <!-- Upper Section: Invoices List -->
+                <div class="win-border bg-white p-1 h-44 flex flex-col">
+                    <div class="gray-header flex justify-between items-center text-xs">
+                        <span>Listado de Facturas Emitidas</span>
+                        <div class="space-x-1">
+                            <button onclick="sendDuplicateInvoice()" class="purple-btn text-2xs">Enviar Duplicado</button>
+                            <button onclick="showToast('Cargando historial completo de facturas desde 2018...')" class="purple-btn text-2xs">Todas Facturas</button>
+                        </div>
+                    </div>
+
+                    <div class="overflow-auto flex-grow mt-1 border border-gray-300">
+                        <table class="cim-table" id="table-invoices">
+                            <thead>
+                                <tr>
+                                    <th>Nº Factura</th>
+                                    <th>Fecha Factura</th>
+                                    <th>Importe</th>
+                                    <th>IVA</th>
+                                    <th>Plazo Final</th>
+                                    <th>Pagos a T...</th>
+                                    <th>Total a P...</th>
+                                    <th>Base Imponible</th>
+                                    <th>Tipo Factura</th>
+                                    <th>Fecha Vencimiento</th>
+                                    <th>Estado Factura</th>
+                                    <th>Existe Cargo</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody-invoices">
+                                <tr onclick="selectInvoiceRow(this)" class="selected">
+                                    <td class="font-bold text-blue-900">Y119-023848921</td>
+                                    <td>22/10/2026</td>
+                                    <td class="font-bold">45.00 €</td>
+                                    <td>9.45 €</td>
+                                    <td>-</td>
+                                    <td>0.00 €</td>
+                                    <td>54.45 €</td>
+                                    <td>45.00 €</td>
+                                    <td>Factura Principal SaaS</td>
+                                    <td>12/11/2026</td>
+                                    <td><span class="bg-green-200 text-green-900 font-bold px-1 rounded">PAGADO</span></td>
+                                    <td>NO</td>
+                                </tr>
+                                <tr onclick="selectInvoiceRow(this)">
+                                    <td class="font-bold text-blue-900">Y119-021404908</td>
+                                    <td>22/09/2026</td>
+                                    <td class="font-bold">45.00 €</td>
+                                    <td>9.45 €</td>
+                                    <td>-</td>
+                                    <td>0.00 €</td>
+                                    <td>54.45 €</td>
+                                    <td>45.00 €</td>
+                                    <td>Factura Principal SaaS</td>
+                                    <td>12/10/2026</td>
+                                    <td><span class="bg-green-200 text-green-900 font-bold px-1 rounded">PAGADO</span></td>
+                                    <td>NO</td>
+                                </tr>
+                                <tr onclick="selectInvoiceRow(this)">
+                                    <td class="font-bold text-blue-900">Y119-019823412</td>
+                                    <td>22/08/2026</td>
+                                    <td class="font-bold">120.00 €</td>
+                                    <td>25.20 €</td>
+                                    <td>-</td>
+                                    <td>0.00 €</td>
+                                    <td>145.20 €</td>
+                                    <td>120.00 €</td>
+                                    <td>Factura Alta Licencias ERP</td>
+                                    <td>12/09/2026</td>
+                                    <td><span class="bg-green-200 text-green-900 font-bold px-1 rounded">PAGADO</span></td>
+                                    <td>NO</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Sub-Tabs Navigation for Billing Sub-Sections -->
+                <div class="flex items-center border-b border-gray-400 bg-gray-300 pt-1 px-1 text-xs">
+                    <button class="tab-btn active" onclick="switchBillingSubTab(this, 'subtab-datos-fact')">Datos Facturación</button>
+                    <button class="tab-btn" onclick="switchBillingSubTab(this, 'subtab-direcciones-envio')">Direcciones Envío</button>
+                    <button class="tab-btn" onclick="switchBillingSubTab(this, 'subtab-ajustes')">Ajustes / Devoluciones</button>
+                    <button class="tab-btn" onclick="switchBillingSubTab(this, 'subtab-pagos')">Pagos y Cobros</button>
+                    <button class="tab-btn" onclick="switchBillingSubTab(this, 'subtab-acc-recobro')">Acciones Recobro</button>
+                    <button class="tab-btn" onclick="switchBillingSubTab(this, 'subtab-financiacion')">Financiación Terminal</button>
+                </div>
+
+                <!-- Sub-Tab Content -->
+                <div class="flex-grow flex flex-col win-border bg-white p-1 overflow-hidden">
+                    
+                    <div id="subtab-datos-fact" class="flex-grow flex flex-col space-y-2 overflow-hidden">
+                        
+                        <!-- Event Log Table -->
+                        <div class="overflow-auto flex-grow border border-gray-300">
+                            <table class="cim-table" id="table-billing-events">
+                                <thead>
+                                    <tr>
+                                        <th>Secu...</th>
+                                        <th>F. Evento</th>
+                                        <th>Descripción Evento</th>
+                                        <th>Comentario</th>
+                                        <th>F. Completado</th>
+                                        <th>Completado por</th>
+                                        <th>Estado</th>
+                                        <th>F. Prevista</th>
+                                        <th>Plazo Máx.</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>10</td>
+                                        <td>2026</td>
+                                        <td>CADO1</td>
+                                        <td>Llamadas PDS Generación SMS</td>
+                                        <td>2/07/2026 0:00</td>
+                                        <td>SISTEMA_CIM</td>
+                                        <td>COMPLETADO</td>
+                                        <td>02/07/2026</td>
+                                        <td>-</td>
+                                    </tr>
+                                    <tr>
+                                        <td>11</td>
+                                        <td>2026</td>
+                                        <td>CAD01</td>
+                                        <td>Generación Email Factura Electrónica</td>
+                                        <td>3/07/2026 8:30</td>
+                                        <td>RMCA</td>
+                                        <td>COMPLETADO</td>
+                                        <td>03/07/2026</td>
+                                        <td>-</td>
+                                    </tr>
+                                    <tr>
+                                        <td>12</td>
+                                        <td>2026</td>
+                                        <td>SUSP_SERV</td>
+                                        <td>Aviso por SMS de emisión de factura</td>
+                                        <td>10/07/2026 7:59</td>
+                                        <td>RMCA</td>
+                                        <td>COMPLETADO</td>
+                                        <td>10/07/2026</td>
+                                        <td>-</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Bloqueos y Factura Forms at Bottom -->
+                        <div class="win-border p-2 bg-gray-100 grid grid-cols-12 gap-2 text-2xs">
+                            
+                            <div class="col-span-6 space-y-1 border-r border-gray-300 pr-2">
+                                <label class="flex items-center space-x-1 font-bold text-red-800">
+                                    <input type="checkbox" id="chk-bloqueo-cuenta"> <span>Bloqueo Cuenta Contrato</span>
+                                </label>
+                                <div class="grid grid-cols-2 gap-1">
+                                    <span>Motivo bloqueo cuenta:</span>
+                                    <input type="text" id="txt-motivo-bloqueo" class="w-full">
+                                    <span>Inicio bloqueo cuenta:</span>
+                                    <input type="text" id="txt-inicio-bloqueo" placeholder="DD/MM/AAAA" class="w-full">
+                                    <span>Fin bloqueo cuenta:</span>
+                                    <input type="text" id="txt-fin-bloqueo" placeholder="DD/MM/AAAA" class="w-full">
+                                </div>
+                            </div>
+
+                            <div class="col-span-6 space-y-1 pl-2">
+                                <span class="font-bold text-blue-900 block">Detalles de Factura Selección:</span>
+                                <div class="grid grid-cols-2 gap-1">
+                                    <span>Factura N°:</span>
+                                    <input type="text" id="txt-factura-sel" readonly value="Y119-023848921" class="w-full bg-gray-200">
+                                    <span>Motivo bloqueo factura:</span>
+                                    <input type="text" class="w-full">
+                                    <span>Inicio / Fin bloqueo:</span>
+                                    <div class="flex space-x-1">
+                                        <input type="text" placeholder="Inicio" class="w-1/2">
+                                        <input type="text" placeholder="Fin" class="w-1/2">
+                                    </div>
+                                </div>
+                                <div class="flex justify-end mt-2">
+                                    <button onclick="saveBillingBlock()" class="purple-btn">Guardar Ajustes Bloqueo</button>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- SUBTAB DUMMIES -->
+                    <div id="subtab-direcciones-envio" class="hidden p-4 text-xs">
+                        <p class="font-bold">Dirección de Envío de Facturas Papel / PDF:</p>
+                        <p>AV CRUZ DEL SUR Nº 1, 2ºC - 28001 MADRID</p>
+                    </div>
+                    <div id="subtab-ajustes" class="hidden p-4 text-xs">
+                        <p class="font-bold">Solicitud de Abonare / Ajustes de Cobro:</p>
+                        <button onclick="showToast('Ajuste comercial registrado por importe de 10.00 €')" class="purple-btn mt-2">Crear Ajuste Comercial 10.00 €</button>
+                    </div>
+                    <div id="subtab-pagos" class="hidden p-4 text-xs">
+                        <p class="font-bold">Forma de Pago Registrada:</p>
+                        <p>Domiciliación Bancaria SEPA - IBAN: ES91 2100 **** **** **89</p>
+                    </div>
+                    <div id="subtab-acc-recobro" class="hidden p-4 text-xs">
+                        <p class="font-bold text-green-700">Estado de Recobro: Al corriente de pago. Sin acciones judiciales o recobro pendientes.</p>
+                    </div>
+                    <div id="subtab-financiacion" class="hidden p-4 text-xs">
+                        <p class="font-bold">Financiación de Equipos / Routers SaaS:</p>
+                        <p>No existen contratos de adquisición a plazos activos.</p>
+                    </div>
+
+                </div>
+
+            </div>
+<div id="view-breakdown" class="hidden flex-grow flex flex-col p-2 space-y-2 overflow-y-auto">
+                <div class="red-header">Diagnóstico y Ticket de Averías de Red SaaS</div>
+                <div class="win-border p-3 bg-white space-y-2 text-xs">
+                    <h3 class="font-bold text-blue-900">Diagnóstico Automático del Bucle FTTH / Móvil</h3>
+                    <div class="p-2 bg-green-100 border border-green-400 text-green-900 rounded">
+                        <i class="fa-solid fa-check-circle mr-1"></i> Estado del Router Ont: Online. Atenuación Óptica OK (-19.2 dBm). IP Dinámica Asignada.
+                    </div>
+                    <button onclick="showToast('Prueba de ping realizada: 12ms. Pérdida de paquetes 0%')" class="purple-btn">Ejecutar Test de Velocidad / Ping</button>
+                </div>
+            </div>
+<!-- TAB 2: SERVICIOS CONTRATADOS COMO ÁRBOL EXPANDIBLE DE SERVICIOS SAAS -->
+                    <div id="tab-servicios-contratados" class="hidden flex-grow flex flex-col p-1 space-y-1 overflow-hidden">
+                        <div class="red-header flex justify-between items-center">
+                            <span>Árbol Jerárquico de Servicios SaaS y Telecom del Cliente</span>
+                            <span class="flex items-center gap-2 font-normal"><label>Oferta:</label><select id="svc-oferta" disabled class="text-2xs"></select><button class="purple-btn" onclick="showModalInfo('Leyenda','Activo · Suspendido · Baja pendiente. Seleccione un nodo y use la botonera inferior.')">Leyenda</button><span id="tree-client-label" class="text-2xs"></span></span>
+                        </div>
+
+                        <div class="grid grid-cols-12 gap-1 flex-grow overflow-hidden">
+                            <!-- Left Side Tree View -->
+                            <div class="col-span-5 flex flex-col overflow-hidden"><div class="win-inset p-2 overflow-auto font-mono text-2xs space-y-1 flex-grow" id="contracted-services-tree">
+                                <!-- Dynamic Render from JS -->
+                            </div><div class="flex flex-wrap items-center gap-1 pt-1 border-t border-gray-300"><button class="purple-btn" onclick="svcAction('Desc. T')">Desc. T</button><button class="purple-btn" onclick="svcAction('Desinst.')">Desinst.</button><button class="purple-btn" onclick="svcAction('Modif.')">Modif.</button><button class="purple-btn" onclick="svcAction('Mig. Téc.')">Mig. Téc.</button><button class="purple-btn" onclick="svcAction('Restaurar')">Restaurar</button><button class="purple-btn" onclick="svcAction('Añadir')">Añadir</button><span class="ml-auto font-bold" id="svc-cuota"></span></div></div>
+
+                            <!-- Right Side Selected Element Details -->
+                            <div class="col-span-7 win-border bg-gray-100 p-2 flex flex-col justify-between overflow-y-auto">
+                                <div>
+                                    <div class="gray-header mb-2 font-bold text-blue-900">Detalles del Servicio Seleccionado</div>
+                                    <div id="tree-detail-content" class="space-y-2 text-2xs">
+                                        <p class="text-gray-500 italic">Haga clic en cualquier nodo o carpeta del árbol para consultar y gestionar parámetros.</p>
+                                    </div>
+                                </div>
+
+                                <div class="border-t border-gray-300 pt-2 flex flex-wrap gap-1">
+                                    <button onclick="svcAction('Modif.')" class="purple-btn text-2xs">Modificar configuración</button>
+                                    <button onclick="treeNodeAction('Añadir Sub-producto')" class="purple-btn text-2xs">+ Añadir Sub-producto</button>
+                                    <button onclick="svcAction('Desinst.')" class="purple-btn text-2xs">Desinstalar</button>
+                                    <button onclick="treeNodeAction('Suspender')" class="purple-btn text-2xs">Suspender</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="tab-otra-info" class="hidden flex-grow p-2 text-2xs overflow-auto"></div><div id="tab-mgm" class="hidden flex-grow p-2 text-2xs overflow-auto"></div>
+<!-- OTHER TABS -->
+                    <div id="tab-configurador" class="hidden flex-grow p-4 text-xs">
+                        <h3 class="font-bold text-red-800 text-sm mb-2">Configurador de Ofertas Especiales</h3>
+                        <p>Seleccione promociones aplicables para la retención o fidelización del cliente actual.</p>
+                        <button onclick="showToast('Oferta especial de retención 25% aplicada')" class="purple-btn mt-2">Aplicar Descuento Fidelidad 25%</button>
+                    </div>
+                    <div id="tab-jerarquia" class="hidden flex-grow p-4 text-xs">
+                        <h3 class="font-bold text-red-800 text-sm mb-2">Jerarquía de Cuentas y Grupo Empresa</h3>
+                        <p>Matriz: <strong>VODAFONE ESPAÑA S.A.U.</strong></p>
+                        <p>Subcuenta de Facturación: <strong id="jerarquia-account-id">-</strong></p>
+                    </div>
+                    <div id="tab-registros" class="hidden flex-grow p-4 text-xs">
+                        <h3 class="font-bold text-red-800 text-sm mb-2">Histórico de Cambios en la Cuenta</h3>
+                        <p>• 15/05/2026: Modificación datos de facturación IBAN.</p>
+                        <p>• 10/01/2026: Upgrade velocidad Fibra 300M -> 1000M.</p>
+                    </div>
+                    <div id="tab-campanas" class="hidden flex-grow p-4 text-xs">
+                        <h3 class="font-bold text-red-800 text-sm mb-2">Campañas Comerciales Disponibles</h3>
+                        <p>1. Campaña Up-sell SaaS ERP Security Shield (5€/mes)</p>
+                        <p>2. Renovación Terminales Cero Euros Móvil 5G</p>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- VIEW 3: ORDEN DE TRABAJO (Work Order View) -->
+            <div id="view-workorder" class="hidden flex-grow flex flex-col p-1 space-y-1 overflow-hidden">
+                <div class="red-header flex justify-between items-center">
+                    <span>Orden de Trabajo / Gestión de Productos SaaS & Telecom</span>
+                    <span id="wo-hdr">Nº Orden: -</span>
+                </div>
+
+                <div class="flex border-b border-gray-400 px-1 pt-1">
+<button id="wo-tabb-conf" class="tab-btn active" onclick="woTab('conf')">Configurador de OT</button>
+<button id="wo-tabb-prov" class="tab-btn" onclick="woTab('prov')">Provisioning (Tareas) <span id="wo-prov-badge"></span></button></div>
+<div id="wo-banner" class="hidden"></div>
+<div id="wo-pane-conf" class="grid grid-cols-12 gap-1 flex-grow overflow-hidden">
+                    
+                    <!-- Left Column: Product Tree & Operations -->
+                    <div class="col-span-7 flex flex-col win-border bg-white p-1 overflow-hidden">
+                        <div class="gray-header mb-1 flex justify-between items-center">
+                            <span>Árbol de Productos de la Orden de Provisión</span>
+                            <span class="text-2xs text-gray-500">Amdocs Configurator Engine</span>
+                        </div>
+
+                        <!-- Tree Container -->
+                        <div class="win-inset flex-grow overflow-auto p-2 text-2xs font-mono space-y-1" id="product-tree-wo">
+                            <!-- Dynamic Rendered Work Order Tree -->
+                        </div>
+
+                        <!-- Tree Action Buttons -->
+                        <div class="flex flex-wrap gap-1 mt-2 pt-1 border-t border-gray-300">
+                            <button onclick="performTreeAction('Desistir')" class="purple-btn text-2xs">Desistir</button>
+                            <button onclick="performTreeAction('Modificar')" class="purple-btn text-2xs">Modif</button>
+                            <button onclick="document.getElementById('wo-cat').focus()" class="purple-btn text-2xs">+ Añadir Producto</button>
+                            <button onclick="performTreeAction('Reclamar')" class="purple-btn text-2xs">Reclamar</button>
+                            <button onclick="performTreeAction('Anular')" class="purple-btn text-2xs">Anular</button>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Order Details Form & Provisions -->
+                    <div class="col-span-5 flex flex-col win-border bg-gray-100 p-2 overflow-y-auto space-y-2 text-2xs">
+                        <div class="red-header">Datos de la Orden y Provisiones</div>
+                        
+                        <div class="win-border p-2 bg-white space-y-1">
+<div class="font-bold text-blue-900">Tipo de orden: <span id="wo-type-lbl"></span></div><div id="wo-extra" class="space-y-1"></div>
+<div class="grid grid-cols-3 gap-1"><div><label class="font-bold">Fecha efecto</label><input type="date" id="wo-fecha" class="w-full"></div><div><label class="font-bold">Prioridad</label><select id="wo-prio" class="w-full"><option>Normal</option><option>Alta</option><option>Urgente</option></select></div><div><label class="font-bold">Categoría</label><select id="wo-catf" class="w-full" onchange="fillCat()"><option value="">Todas</option><option>SaaS Core</option><option>Integraciones</option><option>Seguridad</option><option>Telecom</option></select></div></div>
+<div class="flex gap-1"><select id="wo-cat" class="flex-grow"></select><input type="text" id="wo-qty" value="1" style="width:30px"><button class="purple-btn" onclick="woAddLine()">Añadir</button></div>
+<div id="wo-cfg" class="hidden"></div>
+<table class="cim-table"><thead><tr><th>Acc.</th><th>Producto</th><th>Cant.</th><th>Configuración</th><th>€/mes</th><th></th></tr></thead><tbody id="wo-lines"></tbody></table>
+<div id="wo-price" class="bg-gray-50 border border-gray-300 p-1"></div><div class="flex items-start gap-1"><button class="purple-btn" onclick="woCheck()">Cheq.</button><div id="wo-valid" class="flex-grow"></div></div></div>
+<div>
+                            <label class="block font-bold">Estado de Lanzar Procesos:</label>
+                            <input type="text" id="wo-estado" readonly value="Pendiente Aceptación de Contrato" class="w-full bg-yellow-100 font-bold text-yellow-900">
+                        </div>
+
+                        <div>
+                            <label class="block font-bold">Método Entrega / Instalación:</label>
+                            <select class="w-full">
+                                <option>Técnico Presencial</option>
+                                <option>Autoinstalable SaaS / Router Envío Express</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block font-bold">Comentarios de Orden:</label>
+                            <textarea class="w-full h-16" placeholder="Añadir observaciones de instalación..."></textarea>
+                        </div>
+
+                        <div class="win-border p-2 bg-white">
+                            <span class="font-bold text-blue-900 block mb-1">Aceptación de Contrato / SMS:</span>
+                            <div class="space-y-1">
+                                <label class="flex items-center space-x-1">
+                                    <input type="checkbox" checked> <span>Verificación Firma Digital OK</span>
+                                </label>
+                                <label class="flex items-center space-x-1">
+                                    <input type="checkbox" checked> <span>SMS de Confirmación Enviado</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="mt-auto pt-2 border-t border-gray-300 flex justify-end space-x-2">
+                            <button onclick="closeWO()" class="classic-btn keep">Cerrar</button>
+                            <button onclick="submitWorkOrder()" class="purple-btn font-bold px-4 py-1">
+                                <i class="fa-solid fa-paper-plane mr-1"></i> Tramitar Orden
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+<div id="wo-pane-prov" class="hidden grid grid-cols-12 gap-1 flex-grow overflow-hidden">
+ <div class="col-span-5 flex flex-col win-border bg-white p-1 overflow-hidden">
+  <div class="gray-header mb-1 flex justify-between"><span>Árbol de tareas de provisioning</span><span id="pv-summary" class="text-2xs"></span></div>
+  <div class="flex items-center gap-1 mb-1"><div class="flex-grow h-2 bg-gray-200 border border-gray-400"><div id="pv-bar" class="h-full bg-green-600" style="width:0"></div></div><select id="pv-filter" class="text-2xs" onchange="renderPV()"><option value="">Todas</option><option value="ERR">Errores</option><option value="EXC">Excepciones</option><option value="RUN">En curso</option><option value="PEND">Pendientes</option><option value="BLOQ">Bloqueadas</option><option value="CANC">Canceladas</option></select></div>
+<div id="pv-tree" class="win-inset flex-grow overflow-auto p-1 text-2xs"></div>
+  <div class="flex gap-1 mt-1 pt-1 border-t border-gray-300"><button class="purple-btn" onclick="pvExpand(true)">Expandir</button><button class="purple-btn" onclick="pvExpand(false)">Contraer</button><button class="purple-btn" onclick="pvRetryAll()">Reintentar errores</button></div>
+ </div>
+ <div class="col-span-7 flex flex-col win-border bg-gray-100 p-1 overflow-hidden">
+  <div class="red-header" id="pv-title">Detalle de tarea</div>
+  <div id="pv-tabs" class="flex pt-1"></div>
+  <div id="pv-detail" class="win-inset bg-white flex-grow overflow-auto p-2 text-2xs"></div>
+  <div id="pv-actions" class="flex items-center gap-1 mt-1 pt-1 border-t border-gray-300"></div>
+ </div>
+</div>
+            </div>
+
+            <div id="view-contract" class="hidden flex-grow flex flex-col p-1 space-y-1 overflow-auto"></div>
+<!-- VIEW 4: FACTURACION (Billing View) -->
+            
+
+            <!-- VIEW 5: AVERIAS / SOPORTE TECNICO -->
+            
+
+        </div>
+
+    </div>
+
+    <!-- STATUS BAR AT BOTTOM -->
+    <div class="win-bg border-t border-gray-400 px-2 py-0.5 text-2xs flex justify-between items-center text-gray-700">
+        <div class="flex items-center space-x-3">
+            <span><i class="fa-solid fa-user-gear text-purple-800"></i> Agente: <strong>ES_9381</strong></span>
+            <span><i class="fa-solid fa-server text-blue-800"></i> Servidor: <strong>MAD-CIM-PRD02</strong></span>
+            <span id="status-message" class="text-blue-900 font-bold">Modo Búsqueda: Seleccione cliente</span>
+        </div>
+        <div>
+            <span id="live-clock" class="font-mono">14/10/2026 10:25:00</span>
+        </div>
+    </div>
+
+    <!-- MODAL DIALOG BACKDROP -->
+    <div id="modal-backdrop" class="hidden fixed inset-0 bg-black/50 z-40 flex items-center justify-center p-4">
+        
+        <div id="modal-box" class="win-border bg-gray-200 shadow-2xl max-w-lg w-full p-1 z-50 flex flex-col">
+            <div class="red-header flex justify-between items-center">
+                <span id="modal-title">Título del Diálogo</span>
+                <button onclick="closeModal()" class="text-white font-bold hover:text-red-200">×</button>
+            </div>
+            
+            <div id="modal-body" class="p-3 bg-white text-xs space-y-2 my-1 win-inset">
+                <!-- Dynamic Content -->
+            </div>
+
+            <div class="flex justify-end space-x-2 p-1 bg-gray-200 border-t border-gray-300">
+                <button id="modal-ok-btn" onclick="closeModal()" class="purple-btn px-4">Aceptar</button>
+                <button onclick="closeModal()" class="classic-btn">Cancelar</button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- TOAST ALERT NOTIFICATION -->
+    <div id="toast-notification" class="hidden fixed bottom-8 right-4 bg-gray-900 text-white px-3 py-2 rounded shadow-2xl text-xs flex items-center space-x-2 border-2 border-purple-500 z-50 transition-all duration-300">
+        <i class="fa-solid fa-info-circle text-yellow-400 text-sm"></i>
+        <span id="toast-text">Notificación del sistema</span>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC & STATE MANAGEMENT -->
+    <script>
+        // GLOBAL CLIENT DATABASE
+        const clientsDatabase = [
+            {
+                id: "600000011",
+                iddir: "64043921",
+                type: "EMPRESA SAAS",
+                name: "ACME CORP S.L.",
+                nif: "B83019283",
+                status: "Activo",
+                debt: "0.00 €",
+                debtSold: "NO",
+                mobileRgu: "Activo",
+                provincia: "MADRID",
+                phone: "910883322",
+                offer: "VDF ENTERPRISE CLOUD SUITE",
+                pkg: "SAAS CRM & BILLING PRO",
+                clase: "EM - Empresa Premium",
+                segmento: "Corporate Cloud",
+                speed: "1000 Mbps",
+                serv: "[FTTH][DIRECTO] OK",
+                tree: {
+                    name: "Cliente: ACME CORP S.L. (ID: 600000011)",
+                    type: "folder",
+                    expanded: true,
+                    children: [
+                        {
+                            name: "SaaS Core: Enterprise Suite (Cloud)",
+                            type: "folder",
+                            expanded: true,
+                            children: [
+                                { name: "Licencia Fija Admin (10 Usuarios)", type: "file", id: "SAAS-01", status: "Activo", price: "120.00 €/mes" },
+                                {
+                                    name: "Módulo CRM & Billing",
+                                    type: "folder",
+                                    expanded: true,
+                                    children: [
+                                        { name: "Conector API Salesforce", type: "file", id: "MOD-01", status: "Activo", price: "45.00 €/mes" },
+                                        { name: "Bonos de Almacenamiento Cloud (1 TB)", type: "file", id: "MOD-02", status: "Activo", price: "20.00 €/mes" }
+                                    ]
+                                },
+                                {
+                                    name: "Módulo Provisión Autoadministrada",
+                                    type: "folder",
+                                    expanded: false,
+                                    children: [
+                                        { name: "Webhook Event Stream (Kafka)", type: "file", id: "MOD-03", status: "Activo", price: "15.00 €/mes" }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            name: "Módulo SSO & Security",
+                            type: "folder",
+                            expanded: true,
+                            children: [
+                                { name: "Identidad SAML 2.0 / Okta Integration", type: "file", id: "SEC-01", status: "Activo", price: "30.00 €/mes" }
+                            ]
+                        },
+                        {
+                            name: "Acceso Telecom / Banda Ancha",
+                            type: "folder",
+                            expanded: false,
+                            children: [
+                                { name: "Fibra FTTH 1Gbps Simétrica Directa", type: "file", id: "TEL-01", status: "Activo", price: "50.00 €/mes" },
+                                { name: "Línea Móvil Ilimitada 5G - 600000001", type: "file", id: "TEL-02", status: "Activo", price: "25.00 €/mes" }
+                            ]
+                        }
+                    ]
+                }
+            },
+            {
+                id: "600000022",
+                iddir: "64043922",
+                type: "RESIDENCIAL",
+                name: "LAURA PRADO VEGA",
+                nif: "00000000T",
+                status: "Activo",
+                debt: "0.00 €",
+                debtSold: "NO",
+                mobileRgu: "Activo",
+                provincia: "MADRID",
+                phone: "600000001",
+                offer: "FIBRA 300M + SAAS CRM",
+                pkg: "VDF ONE CLOUD PRO",
+                clase: "RS - Residencial",
+                segmento: "SME SaaS",
+                speed: "300 Mbps",
+                serv: "[HFC] OK",
+                tree: {
+                    name: "Cliente: LAURA PRADO VEGA (ID: 600000022)",
+                    type: "folder",
+                    expanded: true,
+                    children: [
+                        {
+                            name: "Paquete VDF ONE Cloud",
+                            type: "folder",
+                            expanded: true,
+                            children: [
+                                { name: "Licencia Cloud CRM User Basic", type: "file", id: "CRM-BASIC", status: "Activo", price: "15.00 €/mes" },
+                                { name: "Acceso Fibra 300M", type: "file", id: "FIB-300", status: "Activo", price: "30.00 €/mes" }
+                            ]
+                        }
+                    ]
+                }
+            }
+        ];
+
+        // WORK ORDERS DATA
+        let workOrdersData = [
+            { num: "2206880886", title: "Alta Módulo SaaS Kafka", status: "Cerrada", fApertura: "11/06/2026", fPlanifica: "11/06/2026", fCierre: "11/06/2026", vendNum: "07", vendName: "Dep. SaaS", perfil: "FrontOffice" },
+            { num: "143361406", title: "Orden Trabajo Licencias CRM", status: "Cerrada", fApertura: "18/01/2026", fPlanifica: "18/01/2026", fCierre: "18/01/2026", vendNum: "07", vendName: "Venta Directa", perfil: "SOC-FrontOffice" },
+            { num: "98350331", title: "Upgrade Almacenamiento 1TB", status: "En Proceso", fApertura: "13/08/2026", fPlanifica: "14/08/2026", fCierre: "-", vendNum: "07", vendName: "Online", perfil: "FrontOffice SaaS" }
+        ];
+
+        let peticionesData = [
+            { tipo: "Interaccion", id: "193099404", estado: "Encuesta INS", codigo: "SAC", subcodigo: "9", titulo: "Encuesta satisfacción atención", fCreacion: "3/02/2026", fCierre: "3/02/2026", perfil: "SAC - Atenc" },
+            { tipo: "Interaccion", id: "206082466", estado: "Averias Net", codigo: "SaaS Cloud", subcodigo: "1", titulo: "Comprobación Webhook API", fCreacion: "25/05/2026", fCierre: "25/05/2026", perfil: "SOC-Front" }
+        ];
+
+        // SYSTEM STATE MANAGEMENT
+        let currentClient = null;
+        let selectedClientIndex = 0;
+        let selectedTreeNode = null;
+
+        window.onload = function() {
+            renderClientTable();
+            startLiveClock();
+            resetToSearchState();
+        };
+
+        // RESET SYSTEM TO NO-CLIENT / SEARCH-ONLY MODE
+        function resetToSearchState() {
+            currentClient = null;
+
+            // Reset top banner to empty hyphens
+            document.getElementById('hdr-id').innerText = "-";
+            document.getElementById('hdr-name').innerText = "-";
+            document.getElementById('hdr-prov').innerText = "-";
+            document.getElementById('hdr-offer').innerText = "-";
+            document.getElementById('hdr-phone').innerText = "-";
+            document.getElementById('hdr-status').innerText = "Sin Selección";
+            document.getElementById('hdr-status').className = "text-gray-500 font-bold";
+            document.getElementById('hdr-retention').innerText = "-";
+            document.getElementById('hdr-contact').innerText = "-";
+            document.getElementById('hdr-clase').innerText = "-";
+            document.getElementById('hdr-segmento').innerText = "-";
+            document.getElementById('hdr-pkg').innerText = "-";
+            document.getElementById('hdr-tech').innerText = "-";
+            document.getElementById('hdr-serv').innerText = "-";
+            document.getElementById('hdr-speed').innerText = "-";
+            document.getElementById('hdr-debt-p').innerText = "-";
+            document.getElementById('hdr-debt-m').innerText = "-";
+            document.getElementById('hdr-notice').innerText = "Seleccione un cliente para consultar el estado global.";
+
+            // Hide client sidebar controls
+            document.getElementById('sidebar-client-actions').classList.add('hidden');
+
+            // Force switch to search view
+            switchView('search');
+
+            showToast("Modo de Búsqueda activo. Sin cliente cargado.");
+        }
+
+        // VIEW SWITCHING CONTROL
+        function switchView(viewName) {
+            // Guard: Block client views if no client loaded
+            if (!currentClient && viewName !== 'search') {
+                openModal('guard-modal', `
+                    <div class="text-center py-2 space-y-2">
+                        <i class="fa-solid fa-triangle-exclamation text-amber-500 text-2xl"></i>
+                        <p class="font-bold text-red-800">Acceso no permitido</p>
+                        <p>Debe buscar y <strong>Seleccionar</strong> primero un cliente en el CIM para abrir sus fichas operativas.</p>
+                    </div>
+                `);
+                return;
+            }
+
+            const views = ['search', 'interaction', 'workorder', 'billing', 'breakdown'];
+            views.forEach(v => {
+                const el = document.getElementById('view-' + v);
+                if (el) el.classList.add('hidden');
+            });
+
+            const activeView = document.getElementById('view-' + viewName);
+            if (activeView) activeView.classList.remove('hidden');
+
+            // Navigation buttons highlight
+            ['search', 'interaction', 'workorder', 'billing', 'breakdown'].forEach(v => {
+                const btn = document.getElementById('nav-btn-' + v);
+                if (btn) {
+                    btn.className = "w-full text-left px-2 py-1 hover:bg-gray-100 text-gray-800 border border-gray-300 rounded flex items-center space-x-2";
+                }
+            });
+
+            const activeBtn = document.getElementById('nav-btn-' + viewName);
+            if (activeBtn) {
+                activeBtn.className = "w-full text-left px-2 py-1 bg-blue-100 hover:bg-blue-200 text-blue-900 font-bold border border-blue-400 rounded flex items-center space-x-2";
+            }
+
+            // Window Title Bar
+            const titlePrefix = currentClient ? `[Cliente: ${currentClient.name}] - ` : `[Sin Cliente Seleccionado] - `;
+            const titles = {
+                'search': titlePrefix + 'Buscar Cliente en el CIM',
+                'interaction': titlePrefix + 'Página Central Interacción',
+                'workorder': titlePrefix + 'Orden de Trabajo SaaS',
+                'billing': titlePrefix + 'Facturación y Cobros',
+                'breakdown': titlePrefix + 'Averías y Soporte Técnico'
+            };
+            document.getElementById('app-window-title').innerText = "CIM SaaS - " + (titles[viewName] || "");
+            document.getElementById('status-message').innerText = currentClient ? `Ficha Activa: ${currentClient.name} (${viewName.toUpperCase()})` : "Modo Búsqueda: Seleccione cliente";
+        }
+
+        // SEARCH VIEW ACTIONS
+        function renderClientTable(filteredData = null) {
+            const tbody = document.getElementById('tbody-clientes');
+            tbody.innerHTML = "";
+            const data = filteredData || clientsDatabase;
+
+            data.forEach((client, idx) => {
+                const tr = document.createElement('tr');
+                if (idx === selectedClientIndex) tr.className = 'selected';
+                tr.onclick = function() {
+                    document.querySelectorAll('#tbody-clientes tr').forEach(r => r.classList.remove('selected'));
+                    tr.classList.add('selected');
+                    selectedClientIndex = idx;
+                };
+                tr.ondblclick = function() {
+                    selectedClientIndex = idx;
+                    confirmSelectClient();
+                };
+
+                tr.innerHTML = `
+                    <td class="font-bold text-blue-900">${client.id}</td>
+                    <td>${client.iddir}</td>
+                    <td>${client.type}</td>
+                    <td class="font-bold">${client.name}</td>
+                    <td>${client.nif}</td>
+                    <td><span class="text-green-800 font-bold">${client.status}</span></td>
+                    <td class="font-bold ${client.debt !== '0.00 €' ? 'text-red-600' : ''}">${client.debt}</td>
+                    <td>${client.debtSold}</td>
+                    <td>${client.mobileRgu}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function performClientSearch() {
+            const nifVal = document.getElementById('src-nif').value.trim().toLowerCase();
+            const phoneVal = document.getElementById('src-telefono').value.trim();
+            const idVal = document.getElementById('src-iddir').value.trim();
+
+            let results = clientsDatabase.filter(c => {
+                let match = true;
+                if (nifVal && !c.nif.toLowerCase().includes(nifVal)) match = false;
+                if (phoneVal && !c.phone.includes(phoneVal)) match = false;
+                if (idVal && !c.iddir.includes(idVal)) match = false;
+                return match;
+            });
+
+            renderClientTable(results);
+            showToast("Búsqueda realizada: " + results.length + " coincidencia(s).");
+        }
+
+        function clearSearchForm() {
+            document.getElementById('search-form').reset();
+            renderClientTable();
+            showToast("Criterios de búsqueda reseteados.");
+        }
+
+        function loadClientUI() {
+            currentClient = arguments[0] || clientsDatabase[selectedClientIndex] || clientsDatabase[0];
+
+            // Fill Top Banner Header
+            document.getElementById('hdr-id').innerText = currentClient.id;
+            document.getElementById('hdr-name').innerText = currentClient.name;
+            document.getElementById('hdr-prov').innerText = currentClient.provincia;
+            document.getElementById('hdr-offer').innerText = currentClient.offer;
+            document.getElementById('hdr-phone').innerText = currentClient.phone;
+            document.getElementById('hdr-status').innerText = currentClient.status;
+            document.getElementById('hdr-status').className = "text-green-800 font-bold";
+            document.getElementById('hdr-retention').innerText = "No";
+            document.getElementById('hdr-contact').innerText = "C";
+            document.getElementById('hdr-clase').innerText = currentClient.clase;
+            document.getElementById('hdr-segmento').innerText = currentClient.segmento;
+            document.getElementById('hdr-pkg').innerText = currentClient.pkg;
+            document.getElementById('hdr-tech').innerText = "FTTH / Cloud";
+            document.getElementById('hdr-serv').innerText = currentClient.serv;
+            document.getElementById('hdr-speed').innerText = currentClient.speed;
+            document.getElementById('hdr-debt-p').innerText = currentClient.debt;
+            document.getElementById('hdr-debt-m').innerText = "0.00 €";
+            document.getElementById('hdr-notice').innerText = "Cliente VIP con cuota SaaS activa. Sin incidencias graves de provisión.";
+
+            // Context Dropdown
+            const ctxSel = document.getElementById('hdr-context-select');
+            ctxSel.disabled = false;
+            ctxSel.className = "w-full text-xs font-bold text-blue-900 bg-yellow-50 border border-yellow-400";
+            ctxSel.innerHTML = `<option>[${currentClient.id}] ${currentClient.name}</option>`;
+
+            // Header labels in subsections
+            document.getElementById('tree-client-label').innerText = `${currentClient.name} (${currentClient.id})`;
+            document.getElementById('jerarquia-account-id').innerText = `${currentClient.id} - ${currentClient.name}`;
+            document.getElementById('billing-client-header').innerText = `Cliente: ${currentClient.name} (${currentClient.id})`;
+
+            // Enable Sidebar links
+            document.getElementById('sidebar-client-actions').classList.remove('hidden');
+
+            // Render Tree andTables for this client
+            renderContractedServicesTree();
+            renderWorkOrderTree();
+            renderWorkOrders();
+            renderPeticiones();
+
+            
+        }
+
+        function closeClientSession() {
+            resetToSearchState();
+        }
+
+        // RENDER EXPANDABLE TREE FOR CONTRACTED SAAS SERVICES
+        function renderContractedServicesTree() {
+            const container = document.getElementById('contracted-services-tree');
+            container.innerHTML = "";
+            if (!currentClient || !currentClient.tree) return;
+
+            container.appendChild(buildTreeDOM(currentClient.tree));
+        }
+
+        function renderWorkOrderTree() {
+            const container = document.getElementById('product-tree-wo');
+            container.innerHTML = "";
+            if (!currentClient || !currentClient.tree) return;
+
+            container.appendChild(buildTreeDOM(currentClient.tree));
+        }
+
+        function buildTreeDOM(node) {
+            const wrapper = document.createElement('div');
+            wrapper.className = "pl-2 space-y-0.5";
+
+            const row = document.createElement('div');
+            row.className = "tree-node-item rounded text-2xs";
+
+            if (node.type === 'folder') {
+                const toggle = document.createElement('span');
+                toggle.className = "tree-toggle-btn mr-1";
+                toggle.innerText = node.expanded ? "-" : "+";
+                toggle.onclick = function(e) {
+                    e.stopPropagation();
+                    node.expanded = !node.expanded;
+                    renderContractedServicesTree();
+                    renderWorkOrderTree();
+                };
+                row.appendChild(toggle);
+
+                const icon = document.createElement('i');
+                icon.className = `fa-solid ${node.expanded ? 'fa-folder-open text-amber-600' : 'fa-folder text-amber-500'} mr-1`;
+                row.appendChild(icon);
+            } else {
+                const spacer = document.createElement('span');
+                spacer.className = "w-3 inline-block";
+                row.appendChild(spacer);
+
+                const icon = document.createElement('i');
+                icon.className = "fa-solid fa-cube text-blue-600 mr-1";
+                row.appendChild(icon);
+            }
+
+            const label = document.createElement('span');
+            label.className = "font-bold text-gray-800";
+            label.innerText = node.name;
+            row.appendChild(label);
+
+            row.onclick = function(e) {
+                e.stopPropagation();
+                document.querySelectorAll('.tree-node-item').forEach(el => el.classList.remove('selected'));
+                row.classList.add('selected');
+                selectedTreeNode = node;
+                showTreeNodeDetails(node);
+            };
+
+            wrapper.appendChild(row);
+
+            if (node.type === 'folder' && node.expanded && node.children) {
+                const childrenContainer = document.createElement('div');
+                childrenContainer.className = "pl-3 border-l border-gray-300 ml-1";
+                node.children.forEach(child => {
+                    childrenContainer.appendChild(buildTreeDOM(child));
+                });
+                wrapper.appendChild(childrenContainer);
+            }
+
+            return wrapper;
+        }
+
+        function showTreeNodeDetails(node) {
+            const container = document.getElementById('tree-detail-content');
+            if (node.type === 'folder') {
+                container.innerHTML = `
+                    <div class="bg-amber-50 p-2 border border-amber-300 rounded space-y-1">
+                        <p class="font-bold text-amber-900"><i class="fa-solid fa-folder mr-1"></i> Carpeta de Módulo: ${node.name}</p>
+                        <p>Tipo: Grupo de Licencias / Componentes</p>
+                        <p>Nº Elementos Subordinados: ${node.children ? node.children.length : 0}</p>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = `
+                    <div class="bg-blue-50 p-2 border border-blue-300 rounded space-y-1">
+                        <p class="font-bold text-blue-900"><i class="fa-solid fa-cube mr-1"></i> Componente SaaS: ${node.name}</p>
+                        <p><strong>ID Componente:</strong> ${node.id}</p>
+                        <p><strong>Estado Provisión:</strong> <span class="text-green-700 font-bold">${node.status}</span></p>
+                        <p><strong>Precio Cuota:</strong> <span class="font-bold">${node.price}</span></p>
+                        <p><strong>Clave Autenticación:</strong> SAML_VDF_SEC_OK</p>
+                    </div>
+                `;
+            }
+        }
+
+        function treeNodeAction(actionName) {
+            if (!selectedTreeNode) {
+                showToast("Seleccione primero un nodo del árbol de servicios.");
+                return;
+            }
+            openModal('tree-act-modal', `
+                <div class="space-y-2">
+                    <p class="font-bold text-red-800">Acción: ${actionName}</p>
+                    <p>Elemento seleccionado: <strong>${selectedTreeNode.name}</strong></p>
+                    <textarea class="w-full text-xs h-16" placeholder="Observaciones de la gestión..."></textarea>
+                </div>
+            `);
+        }
+
+        // TAB SWITCHING
+        function switchMainTab(btnId, tabId) {
+            document.querySelectorAll('#view-interaction .tab-btn').forEach(b => b.classList.remove('active'));
+            const btn = document.getElementById(btnId);
+            if (btn) btn.classList.add('active');
+
+            const ids = ['tab-info-contacto', 'tab-servicios-contratados', 'tab-configurador', 'tab-jerarquia', 'tab-registros', 'tab-campanas'];
+            ids.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.add('hidden');
+            });
+
+            const target = document.getElementById(tabId);
+            if (target) target.classList.remove('hidden');
+        }
+
+        function switchBillingSubTab(btn, subtabId) {
+            document.querySelectorAll('#view-billing .tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const ids = ['subtab-datos-fact', 'subtab-direcciones-envio', 'subtab-ajustes', 'subtab-pagos', 'subtab-acc-recobro', 'subtab-financiacion'];
+            ids.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.add('hidden');
+            });
+
+            const target = document.getElementById(subtabId);
+            if (target) target.classList.remove('hidden');
+        }
+
+        // INTERACTION & WORK ORDERS
+        function renderWorkOrders() {
+            const tbody = document.getElementById('tbody-work-orders');
+            if (!tbody) return;
+            tbody.innerHTML = "";
+            workOrdersData.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="font-bold text-purple-900">${item.num}</td>
+                    <td>${item.title}</td>
+                    <td><span class="font-bold ${item.status === 'Cerrada' ? 'text-gray-600' : 'text-blue-800'}">${item.status}</span></td>
+                    <td>${item.fApertura}</td>
+                    <td>${item.fPlanifica}</td>
+                    <td>${item.fCierre}</td>
+                    <td>${item.vendNum}</td>
+                    <td>${item.vendName}</td>
+                    <td>${item.perfil}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function renderPeticiones() {
+            const tbody = document.getElementById('tbody-peticiones');
+            if (!tbody) return;
+            tbody.innerHTML = "";
+            peticionesData.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="font-bold">${item.tipo}</td>
+                    <td class="font-bold text-blue-900">${item.id}</td>
+                    <td>${item.estado}</td>
+                    <td>${item.codigo}</td>
+                    <td>${item.subcodigo}</td>
+                    <td>${esc(item.titulo)}</td>
+                    <td>${item.fCreacion}</td>
+                    <td>${item.fCierre}</td>
+                    <td>${item.perfil}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function saveInteraction() {
+            const r1 = document.getElementById('int-razon1').value;
+            const r2 = document.getElementById('int-razon2').value;
+            const notas = document.getElementById('int-notas').value;
+
+            if (!notas) {
+                showToast("Por favor escriba una nota de la interacción.");
+                return;
+            }
+
+            const newId = Math.floor(100000000 + Math.random() * 900000000).toString();
+            peticionesData.unshift({
+                tipo: "Interaccion",
+                id: newId,
+                estado: "Cerrado",
+                codigo: r1,
+                subcodigo: r2,
+                titulo: notas,
+                fCreacion: new Date().toLocaleDateString('es-ES'),
+                fCierre: new Date().toLocaleDateString('es-ES'),
+                perfil: "AGENTE_ES"
+            });
+
+            renderPeticiones();
+            document.getElementById('int-notas').value = "";
+            showToast("Interacción #" + newId + " guardada en el historial.");
+        }
+
+        function submitWorkOrder() {
+            showToast("Tramitando Orden #270232032...");
+            setTimeout(() => {
+                showToast("¡Orden Tramitada con éxito! Licencias SaaS provisionadas.");
+                switchView('interaction');
+            }, 1000);
+        }
+
+        function selectInvoiceRow(tr) {
+            document.querySelectorAll('#tbody-invoices tr').forEach(r => r.classList.remove('selected'));
+            tr.classList.add('selected');
+            document.getElementById('txt-factura-sel').value = tr.children[0].innerText;
+        }
+
+        function sendDuplicateInvoice() {
+            const inv = document.getElementById('txt-factura-sel').value;
+            openModal('dup-modal', `
+                <p>Enviar duplicado de la Factura: <strong>${inv}</strong> por correo electrónico registrado.</p>
+            `);
+        }
+
+        function saveBillingBlock() {
+            showToast("Ajustes de bloqueo de factura actualizados.");
+        }
+
+        function filterWidgetOrders(type) {
+            showToast("Filtro aplicado: " + type);
+        }
+
+        function executeWidgetOrderSearch() {
+            showToast("Búsqueda rápida ejecutada.");
+        }
+
+        function filterArgumentarios() {
+            const val = document.getElementById('arg-search-input').value.toLowerCase();
+            document.querySelectorAll('#arg-list div').forEach(it => {
+                it.style.display = it.innerText.toLowerCase().includes(val) ? 'block' : 'none';
+            });
+        }
+
+        function selectDirRow(row) {
+            document.querySelectorAll('#tbody-direcciones tr').forEach(r => r.classList.remove('selected'));
+            row.classList.add('selected');
+        }
+
+        // MODAL DIALOG MANAGEMENT
+        function openModal(modalType, customHtml = null) {
+            const backdrop = document.getElementById('modal-backdrop');
+            const title = document.getElementById('modal-title');
+            const body = document.getElementById('modal-body');
+
+            backdrop.classList.remove('hidden');
+
+            if (customHtml) {
+                title.innerText = "Información del Sistema";
+                body.innerHTML = customHtml;
+                return;
+            }
+
+            if (modalType === 'help-modal') {
+                title.innerText = "Ayuda - Amdocs CIM SaaS";
+                body.innerHTML = `<p>Manual de usuario. Seleccione un cliente para habilitar todas las vistas de interacción, árbol de productos y facturación.</p>`;
+            } else if (modalType === 'alta-direccion-modal') {
+                title.innerText = "+ Alta Nueva Dirección";
+                body.innerHTML = `<label>Dirección:</label><input type="text" class="w-full">`;
+            } else if (modalType === 'alta-contacto-modal') {
+                title.innerText = "+ Alta Nuevo Contacto";
+                body.innerHTML = `<label>Nombre Contacto:</label><input type="text" class="w-full">`;
+            } else if (modalType === 'add-product-modal') {
+                title.innerText = "+ Añadir Producto SaaS";
+                body.innerHTML = `
+                    <label>Catálogo SaaS:</label>
+                    <select class="w-full"><option>Licencia Adicional Microsoft 365 (12€/mes)</option></select>
+                `;
+            } else {
+                title.innerText = "Notificación";
+                body.innerHTML = `<p>Operación realizada con éxito.</p>`;
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('modal-backdrop').classList.add('hidden');
+        }
+
+        function showModalInfo(heading, text) {
+            openModal(null, `<div><strong class="text-blue-900">${heading}</strong><p class="mt-1">${text}</p></div>`);
+        }
+
+        function showToast(text) {
+            const toast = document.getElementById('toast-notification');
+            document.getElementById('toast-text').innerText = text;
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 2500);
+        }
+
+        function startLiveClock() {
+            setInterval(() => {
+                const now = new Date();
+                document.getElementById('live-clock').innerText = now.toLocaleDateString('es-ES') + " " + now.toLocaleTimeString('es-ES');
+            }, 1000);
+        }
+    </script>
+
+<style>pre{font-size:10px;white-space:pre-wrap;margin:0}</style>
+<script>
+// ===== Configurador de OT + Provisioning (UI, datos simulados) =====
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const eur=c=>(c/100).toFixed(2).replace('.',',')+' €';
+const today=()=>new Date().toLocaleDateString('es-ES');
+const CATALOG=[
+ {id:'CRM-USR',name:'Licencia CRM usuario',price:1500,sys:'CRM'},
+ {id:'STO-1TB',name:'Almacenamiento Cloud 1 TB',price:2000,sys:'Storage'},
+ {id:'API-SF',name:'Conector API Salesforce',price:4500,sys:'Integraciones'},
+ {id:'SSO-SAML',name:'SSO SAML 2.0 / Okta',price:3000,sys:'Identity',fail:'http',failStep:'Configurar federación SAML'},
+ {id:'WH-KAFKA',name:'Webhook Event Stream (Kafka)',price:1500,sys:'Eventos',fail:'exc',failStep:'Registrar endpoint del webhook'},
+ {id:'FTTH-1G',name:'Fibra FTTH 1 Gbps',price:5000,sys:'Telecom'}];
+const WO_TYPES={OT:'Orden de Trabajo',ESP:'Orden Especial',TRAS:'Traslado',MIG:'Migración'};
+const WO_EXTRA={OT:'',
+ ESP:'<select class="w-full"><option>Excepción comercial</option><option>Alta urgente</option><option>Regularización</option></select><input type="text" class="w-full" placeholder="Descripción de la excepción">',
+ TRAS:'<input type="text" class="w-full" placeholder="Nueva dirección de instalación">',
+ MIG:'<select class="w-full"><option>FIBRA 300M + SAAS CRM</option><option>VDF ENTERPRISE CLOUD SUITE</option></select>'};
+let woState=null,PV=null,pvSel=null,pvTab='info',seq=0;
+
+function toggleGC(e){e.stopPropagation();document.getElementById('gc-menu').classList.toggle('hidden')}
+document.addEventListener('click',()=>{const m=document.getElementById('gc-menu');if(m)m.classList.add('hidden')});
+
+function baseCents(n){let s=(n.type==='file'&&n.price)?Math.round(parseFloat(n.price)*100):0;(n.children||[]).forEach(c=>s+=baseCents(c));return s}
+function openWorkOrder(kind){
+  document.getElementById('gc-menu').classList.add('hidden');
+  if(!currentClient){switchView('workorder');return}
+  woState={type:kind,num:String(Date.now()).slice(-9),lines:[],launched:false};PV=null;pvSel=null;
+  const e=document.getElementById('wo-estado');e.value='Pte. Lanzar Procesos';e.className='w-full font-bold bg-yellow-100 text-yellow-900';
+  document.getElementById('wo-prov-badge').textContent='';
+  document.getElementById('wo-cat').innerHTML=CATALOG.map(c=>`<option value="${c.id}">${esc(c.name)} (${eur(c.price)}/mes)</option>`).join('');
+  document.getElementById('wo-extra').innerHTML=WO_EXTRA[kind];
+  woRender();woTab('conf');switchView('workorder');renderPV();
+}
+function woRender(){
+  const s=woState;document.getElementById('wo-hdr').textContent='Nº Orden: '+s.num+' · '+WO_TYPES[s.type];
+  document.getElementById('wo-type-lbl').textContent=WO_TYPES[s.type];
+  document.getElementById('wo-lines').innerHTML=s.lines.map((l,i)=>`<tr><td class="font-bold ${l.act==='BAJA'?'text-red-700':'text-green-700'}">${l.act}</td><td>${esc(l.item.name)}</td><td>${l.qty}</td><td>${eur(l.item.price*l.qty)}</td><td>${s.launched?'':`<button onclick="woDel(${i})">&#10005;</button>`}</td></tr>`).join('')||'<tr><td colspan="5" class="text-gray-500">Sin líneas. Añada productos del catálogo.</td></tr>';
+  const base=baseCents(currentClient.tree),d=s.lines.reduce((a,l)=>a+(l.act==='BAJA'?-1:1)*l.item.price*l.qty,0);
+  document.getElementById('wo-price').innerHTML=`<b>Nuevo precio</b><br>Cuota actual: ${eur(base)}<br>Cuota nueva desde ${today()}: <b>${eur(base+d)}</b> (${d>=0?'+':''}${eur(d)})`;
+}
+function woAddLine(){if(woState.launched)return showToast('La orden ya está tramitada.');const it=CATALOG.find(c=>c.id===document.getElementById('wo-cat').value),q=Math.max(1,parseInt(document.getElementById('wo-qty').value)||1);woState.lines.push({act:'ALTA',item:it,qty:q});woRender()}
+function woDel(i){woState.lines.splice(i,1);woRender()}
+if(typeof performTreeAction!=='function')window.performTreeAction=function(a){
+  if(!woState)return showToast('Abra una orden desde Gest. Comercial.');
+  const n=selectedTreeNode;if(!n||n.type!=='file')return showToast('Seleccione un producto del árbol.');
+  if(a==='Desistir'||a==='Anular'){woState.lines.push({act:'BAJA',item:{id:n.id,name:n.name,price:Math.round(parseFloat(n.price)*100)||0,sys:'Core'},qty:1});woRender()}
+  else showToast(a+': pendiente de implementar');
+};
+function woTab(k){
+  ['conf','prov'].forEach(x=>{document.getElementById('wo-pane-'+x).classList.toggle('hidden',x!==k);document.getElementById('wo-tabb-'+x).classList.toggle('active',x===k)});
+  if(k==='prov')renderPV();
+}
+
+// ----- Provisioning -----
+const ST={PEND:['fa-regular fa-clock','text-gray-500','Pendiente'],RUN:['fa-solid fa-spinner fa-spin','text-blue-600','En curso'],OK:['fa-solid fa-circle-check','text-green-600','Completada'],ERR:['fa-solid fa-circle-xmark','text-red-600','Error técnico'],EXC:['fa-solid fa-triangle-exclamation','text-amber-500','Excepción (manual)'],BLOQ:['fa-solid fa-lock','text-gray-400','Bloqueada']};
+const mk=(name,sys,par)=>({id:++seq,name,sys,par,st:'PEND',att:0,logs:[],children:[],open:true,tech:null});
+const all=t=>[t,...t.children.flatMap(all)];
+function agg(t){if(!t.children.length)return t.st;const s=t.children.map(agg);for(const k of['ERR','EXC','RUN'])if(s.includes(k))return k;if(s.every(x=>x==='OK'))return'OK';if(s.includes('OK'))return'RUN';return s.includes('BLOQ')?'BLOQ':'PEND'}
+const log=(t,l,m)=>t.logs.push({ts:new Date().toLocaleTimeString('es-ES'),l,m});
+function buildPV(){
+  PV=mk('Orden '+woState.num+' · '+WO_TYPES[woState.type],'Orchestrator',null);
+  woState.lines.forEach(l=>{
+    const ln=mk(l.act+' · '+l.item.name+' x'+l.qty,l.item.sys,PV);ln.line=l;PV.children.push(ln);
+    const c=CATALOG.find(x=>x.id===l.item.id)||{};
+    const steps=l.act==='BAJA'?[['Validar baja y dependencias','Core'],['Revocar licencia / recurso',l.item.sys]]:[['Validar catálogo y disponibilidad','Catalog'],['Reservar recurso / tenant',l.item.sys],['Provisionar '+l.item.name,l.item.sys]];
+    if(c.failStep)steps.push([c.failStep,l.item.sys,c.fail]);
+    steps.push(['Alta/baja en facturación','Billing'],['Notificar al cliente','Notifier']);
+    steps.forEach(([n,s,f])=>{const t=mk(n,s,ln);t.fail=f;ln.children.push(t)});
+  });
+}
+function runStep(ln,i){
+  const P=PV,C=currentClient,t=ln.children[i];if(!t)return;t.st='RUN';t.att++;t.t0=Date.now();log(t,'INFO','Intento '+t.att+': llamando a '+t.sys);renderPV();
+  setTimeout(()=>{
+    if(t.st==='CANC')return;const dur=Date.now()-t.t0,b={m:'POST',ep:'https://api.'+t.sys.toLowerCase()+'.example/v1/provision',corr:'c-'+Math.random().toString(16).slice(2,10),dur,req:{customer:C.id,product:ln.line.item.id,qty:ln.line.qty,action:ln.line.act,config:ln.line.cfg}};
+    if(t.fail&&t.att===1){
+      if(t.fail==='http'){t.st='ERR';t.tech={...b,http:502,code:'GW_UPSTREAM_502',msg:'Bad Gateway: el IdP no respondió',res:{error:'bad_gateway'}};log(t,'ERROR','HTTP 502 · GW_UPSTREAM_502')}
+      else{t.st='EXC';t.tech={...b,http:422,code:'WEBHOOK_URL_MISSING',msg:'Falta la URL destino del webhook: requiere dato manual',res:{error:'missing_field',field:'target_url'}};log(t,'WARN','HTTP 422 · requiere intervención manual')}
+      ln.children.slice(i+1).forEach(c=>{c.st='BLOQ';log(c,'WARN','Bloqueada por dependencia: '+t.name)});
+    }else{t.st='OK';t.tech={...b,http:200,res:{status:'done'}};log(t,'INFO','HTTP 200 OK · '+dur+' ms');if(t.orig){t.orig.st='REV';log(t.orig,'WARN','Revertida por desaprovisionamiento')}runStep(ln,i+1)}
+    if(PV===P){finishCheck();renderPV()}
+  },600+Math.random()*700);
+}
+const unblock=(ln,i)=>ln.children.slice(i+1).forEach(c=>{if(c.st==='BLOQ')c.st='PEND'});
+function pvRetry(t){if(t.st!=='ERR')return;const ln=t.par,i=ln.children.indexOf(t);unblock(ln,i);log(t,'INFO','Reintento solicitado por ES_9381');runStep(ln,i)}
+function pvForce(t){const ln=t.par,i=ln.children.indexOf(t),n=document.getElementById('pv-note');t.st='OK';log(t,'WARN','Resuelta manualmente por ES_9381: '+((n&&n.value)||'sin nota'));unblock(ln,i);runStep(ln,i+1);renderPV()}
+function pvEscalate(t){log(t,'INFO','Escalado a Soporte N2 (TK-'+(100000+t.id)+')');showToast('Escalado a N2');renderPV()}
+function pvRetryAll(){if(!PV)return;all(PV).filter(t=>!t.children.length&&t.st==='ERR').forEach(pvRetry)}
+function pvExpand(v){if(PV){all(PV).forEach(t=>t.open=v);renderPV()}}
+function finishCheck(){
+  const s=agg(PV),m={OK:['Cerrada - Procesada','bg-green-100 text-green-900'],ERR:['Pte. Intervención (Error)','bg-red-100 text-red-900'],EXC:['Pte. Intervención (Excepción)','bg-amber-100 text-amber-900'],BLOQ:['Bloqueada','bg-red-100 text-red-900'],CANC:['Anulada','bg-gray-200 text-gray-700']}[s]||['Procesos lanzados','bg-blue-100 text-blue-900'];
+  const e=document.getElementById('wo-estado');e.value=m[0];e.className='w-full font-bold '+m[1];
+  document.getElementById('wo-prov-badge').textContent=s==='OK'?'✔':(s==='ERR'||s==='EXC')?'⚠':'…';
+  const w=workOrdersData.find(x=>x.num===woState.num);if(w){w.status=s==='OK'?'Cerrada':s==='CANC'?'Anulada':'En Proceso';if(s==='OK'||s==='CANC')w.fCierre=today();renderWorkOrders()}
+}
+function submitWorkOrder(){
+  if(!woState)return showToast('Abra una orden desde Gest. Comercial.');
+  if(woState.launched)return showToast('La orden ya está tramitada.');
+  if(!woState.lines.length)return showToast('Añada al menos una línea a la orden.');
+  woState.launched=true;buildPV();
+  workOrdersData.unshift({num:woState.num,title:WO_TYPES[woState.type]+' · '+woState.lines.length+' línea(s)',status:'En Proceso',fApertura:today(),fPlanifica:today(),fCierre:'-',vendNum:'07',vendName:'Venta Directa',perfil:'FrontOffice SaaS'});
+  renderWorkOrders();woRender();woTab('prov');PV.children.forEach(ln=>runStep(ln,0));finishCheck();
+}
+function openExisting(w){
+  const ls=[{act:'ALTA',item:CATALOG[0],qty:2},{act:'ALTA',item:CATALOG[3],qty:1}];
+  woState={type:'OT',num:w.num,lines:ls,launched:true};buildPV();pvSel=null;
+  document.getElementById('wo-cat').innerHTML='';document.getElementById('wo-extra').innerHTML='';
+  woRender();switchView('workorder');woTab('prov');
+  if(w.status==='Cerrada'){all(PV).filter(t=>!t.children.length).forEach(t=>{t.st='OK';t.att=1;t.tech={m:'POST',ep:'https://api.'+t.sys.toLowerCase()+'.example/v1/provision',corr:'c-hist'+t.id,dur:420,http:200,req:{customer:currentClient.id},res:{status:'done'}};log(t,'INFO','HTTP 200 OK (histórico)')});finishCheck();renderPV()}
+  else{PV.children.forEach(ln=>runStep(ln,0));finishCheck()}
+}
+const _rwo=renderWorkOrders;renderWorkOrders=function(){_rwo();document.querySelectorAll('#tbody-work-orders tr').forEach((tr,i)=>{tr.onclick=()=>openExisting(workOrdersData[i])})};
+function pvPick(id){pvSel=all(PV).find(t=>t.id===id);renderPV()}
+function pvToggle(id){const t=all(PV).find(x=>x.id===id);t.open=!t.open;renderPV()}
+function pvTabSet(k){pvTab=k;renderPV()}
+function pvNode(t,d){
+  const s=agg(t),[ic,co,lb]=ST[s],leaf=!t.children.length;
+  let h=`<div class="tree-node-item items-center ${pvSel===t?'selected':''}" style="padding-left:${d*14+4}px" onclick="pvPick(${t.id})">`+(leaf?'<span style="width:11px"></span>':`<span class="tree-toggle-btn" onclick="event.stopPropagation();pvToggle(${t.id})">${t.open?'&minus;':'+'}</span>`)+`<i class="${ic} ${co}"></i><span>${esc(t.name)}</span>${leaf?`<span class="ml-auto text-gray-500">${lb}</span>`:''}</div>`;
+  if(t.open)t.children.forEach(c=>h+=pvNode(c,d+1));return h;
+}
+function renderPV(){
+  const tr=document.getElementById('pv-tree');if(!tr)return;
+  if(!PV){tr.innerHTML='<p class="p-2 text-gray-500">La orden aún no se ha tramitado. Pulse «Tramitar Orden» para generar las tareas, o abra una OT existente desde Registros.</p>';document.getElementById('pv-summary').textContent='';renderDetail();return}
+  tr.innerHTML=pvNode(PV,0);
+  const c={};all(PV).filter(t=>!t.children.length).forEach(t=>c[t.st]=(c[t.st]||0)+1);
+  document.getElementById('pv-summary').textContent=Object.entries(c).map(([k,v])=>ST[k][2]+': '+v).join(' · ');
+  renderDetail();
+}
+function renderDetail(){
+  const t=pvSel,box=document.getElementById('pv-detail'),act=document.getElementById('pv-actions'),tabs=document.getElementById('pv-tabs');
+  if(!t||!PV){box.textContent='Seleccione una tarea del árbol.';act.innerHTML='';tabs.innerHTML='';document.getElementById('pv-title').textContent='Detalle de tarea';return}
+  const s=agg(t),leaf=!t.children.length;document.getElementById('pv-title').textContent=t.name+' — '+ST[s][2];
+  tabs.innerHTML=[['info','Info técnica'],['logs','Logs'],['serv','Servicios']].map(([k,l])=>`<button class="tab-btn ${pvTab===k?'active':''}" onclick="pvTabSet('${k}')">${l}</button>`).join('');
+  let b='';
+  if(pvTab==='info'){
+    const k=t.tech,r=[['Estado',ST[s][2]],['Sistema',t.sys],['Intentos',t.att]];
+    if(k)r.push(['Endpoint',k.m+' '+k.ep],['HTTP',k.http],['Correlation ID',k.corr],['Duración',k.dur+' ms'],['Código',k.code||'—'],['Mensaje',k.msg||'OK']);
+    if(!leaf)r.push(['Subtareas',t.children.length]);
+    b='<table class="cim-table">'+r.map(x=>`<tr><th style="width:110px">${x[0]}</th><td style="white-space:normal">${esc(x[1])}</td></tr>`).join('')+'</table>'+(k?`<b class="block mt-2">Request</b><pre class="bg-gray-100 p-1">${esc(JSON.stringify(k.req,null,2))}</pre><b class="block mt-1">Response</b><pre class="bg-gray-100 p-1">${esc(JSON.stringify(k.res,null,2))}</pre>`:'');
+  }else if(pvTab==='logs'){
+    const L=all(t).flatMap(x=>x.logs.map(l=>({...l,src:x.name}))).sort((a,b)=>a.ts<b.ts?-1:1);
+    b=L.map(l=>`<div class="${l.l==='ERROR'?'text-red-700':l.l==='WARN'?'text-amber-700':''}" style="font-family:monospace">[${l.ts}] ${l.l} · ${esc(l.src)}: ${esc(l.m)}</div>`).join('')||'Sin logs.';
+  }else{
+    const ln=t===PV?PV.children:[t.line?t:t.par];
+    b='<table class="cim-table"><tr><th>Servicio</th><th>ID</th><th>Acción</th><th>Estado</th></tr>'+ln.filter(x=>x&&x.line).map(x=>`<tr><td>${esc(x.line.item.name)}</td><td>${esc(x.line.item.id)}</td><td>${x.line.act}</td><td>${ST[agg(x)][2]}</td></tr>`).join('')+'</table>';
+  }
+  box.innerHTML=b;
+  act.innerHTML=!leaf?'':(t.st==='ERR'?`<button class="purple-btn" onclick="pvRetry(pvSel)">Reintentar</button>`:t.st==='EXC'?`<input type="text" id="pv-note" class="flex-grow" placeholder="Dato / nota de resolución"><button class="purple-btn" onclick="pvForce(pvSel)">Resolver manualmente</button>`:'')+((t.st==='ERR'||t.st==='EXC')?`<button class="purple-btn" onclick="pvEscalate(pvSel)">Escalar N2</button>`:'');
+}
+</script>
+
+<script>
+// ===== Ventanas (fichas abiertas) y pestañas dentro de la ficha =====
+let fichas=[],activeFicha=null,fichaSeq=0,curView='search';
+const TABKEYS=['info-contacto','servicios-contratados','configurador','jerarquia','registros','facturacion','campanas','averias'];
+const PANE={facturacion:'view-billing',averias:'view-breakdown'};
+function mainTab(k){
+  TABKEYS.forEach(x=>{const p=document.getElementById(PANE[x]||'tab-'+x);if(p)p.classList.toggle('hidden',x!==k);const b=document.getElementById('tab-btn-'+x);if(b)b.classList.toggle('active',x===k)});
+  if(activeFicha)activeFicha.tab=k;
+}
+function switchMainTab(btnId){mainTab(btnId.replace('tab-btn-',''))}
+function confirmSelectClient(){
+  const c=clientsDatabase[selectedClientIndex]||clientsDatabase[0];
+  let f=fichas.find(x=>x.client===c);
+  if(!f){f={n:++fichaSeq,client:c,tab:'info-contacto',view:'interaction',wo:null,pv:null,sel:null};fichas.push(f)}
+  f.view='interaction';activateFicha(f);showToast('Ficha de cliente abierta: '+c.name);
+}
+function saveFicha(){if(activeFicha){activeFicha.wo=woState;activeFicha.pv=PV;activeFicha.sel=pvSel}}
+function activateFicha(f){
+  if(activeFicha&&activeFicha!==f)saveFicha();
+  activeFicha=f;loadClientUI(f.client);renderContacto();
+  woState=f.wo;PV=f.pv;pvSel=f.sel;
+  if(woState){woRender();document.getElementById('wo-extra').innerHTML=woState.launched?'':WO_EXTRA[woState.type];
+    const e=document.getElementById('wo-estado');if(PV)finishCheck();else{e.value='Pte. Lanzar Procesos';e.className='w-full font-bold bg-yellow-100 text-yellow-900'}
+    document.getElementById('wo-cat').innerHTML=CATALOG.map(c=>`<option value="${c.id}">${esc(c.name)} (${eur(c.price)}/mes)</option>`).join('');
+    if(PV)renderPV()}
+  mainTab(f.tab);switchView(f.view==='workorder'&&!woState?'interaction':f.view);
+}
+function gotoFicha(n,view){const f=fichas.find(x=>x.n===n);if(!f)return;f.view=view;if(f===activeFicha)switchView(view);else activateFicha(f)}
+function closeFicha(){
+  if(!activeFicha)return;const i=fichas.indexOf(activeFicha);fichas.splice(i,1);
+  woState=null;PV=null;pvSel=null;activeFicha=null;
+  if(fichas.length)activateFicha(fichas[Math.max(0,i-1)]);else resetToSearchState();
+}
+function closeClientSession(){closeFicha()}
+function closeWO(){woState=null;PV=null;pvSel=null;if(activeFicha){activeFicha.wo=null;activeFicha.pv=null}switchView('interaction')}
+function renderWindows(){
+  saveFicha();const el=document.getElementById('ow-list');if(!el)return;
+  const it=(sel,ic,txt,cl,pad)=>`<div class="tree-node-item items-center ${sel?'selected':''}" style="padding-left:${pad}px" onclick="${cl}"><i class="${ic}"></i><span>${txt}</span></div>`;
+  let h=it(curView==='search','fa-regular fa-window-maximize text-blue-700','Buscar Cliente en el CIM',"switchView('search')",4);
+  fichas.forEach(f=>{
+    h+=it(f===activeFicha&&curView==='interaction','fa-regular fa-window-maximize text-purple-700',`Página Central Interacción [${f.n}]`,`gotoFicha(${f.n},'interaction')`,4);
+    if(f.wo)h+=it(f===activeFicha&&curView==='workorder','fa-regular fa-window-maximize text-amber-700','Orden de Trabajo '+esc(f.wo.num),`gotoFicha(${f.n},'workorder')`,18);
+  });
+  el.innerHTML=h;
+}
+function switchView(v){
+  if(v==='billing'||v==='breakdown'){switchView('interaction');mainTab(v==='billing'?'facturacion':'averias');return}
+  if(!currentClient&&v!=='search'){openModal('guard-modal','<p class="font-bold text-red-800">Acceso no permitido</p><p>Busque y <strong>Seleccione</strong> primero un cliente en el CIM.</p>');return}
+  if(v==='workorder'&&!woState){showToast('No hay ninguna orden abierta.');return}
+  ['search','interaction','workorder'].forEach(x=>document.getElementById('view-'+x).classList.toggle('hidden',x!==v));
+  curView=v;if(activeFicha)activeFicha.view=v;
+  const TT={search:'Buscar Cliente en el CIM',interaction:'Página Central Interacción',workorder:'Orden de Trabajo'};
+  document.getElementById('app-window-title').innerText='CIM SaaS - '+(currentClient?`[${currentClient.name}] - `:'')+TT[v]+(activeFicha&&v!=='search'?' ['+activeFicha.n+']':'');
+  document.getElementById('status-message').innerText=currentClient?`Ficha activa: ${currentClient.name}`:'Modo Búsqueda: Seleccione cliente';
+  renderWindows();
+}
+function renderContacto(){
+  const c=currentClient;if(!c)return;const v=(i,x)=>document.getElementById(i).value=x;
+  v('ci-nif',c.nif);v('ci-mail',c.email||'contacto@ejemplo.com');v('ci-estado',c.status);v('ci-dir',c.dir||'CL EJEMPLO 1, 2º A, 28001 '+c.provincia);
+  v('ci-tel1',c.phone);v('ci-tel2','');v('ci-mov',c.mobile||'600000000');v('ci-clase',c.type);v('ci-vmax',c.speed);v('ci-vreal','');
+  v('ci-nodo','MD1-EX001');v('ci-rol','Titular');v('ci-cdf','28 / 01 / 100');
+}
+// ----- tabla unificada: interacciones, tickets, envíos y órdenes -----
+function clearIntFilters(){['f-tipo','f-estado'].forEach(i=>document.getElementById(i).value='TODOS');document.getElementById('f-msisdn').value='';renderInteracciones()}
+function renderInteracciones(){
+  const tb=document.getElementById('tbody-interacciones');if(!tb)return;
+  const tp=document.getElementById('f-tipo').value,es=document.getElementById('f-estado').value,ms=document.getElementById('f-msisdn').value.trim();
+  const d=s=>{const p=String(s).split('/');return p.length===3?new Date(p[2],p[1]-1,p[0]).getTime():0};
+  const rows=[...workOrdersData.map(w=>({k:'Orden',id:w.num,est:w.status,r1:'OT',r2:w.title,r3:'',res:'',fa:w.fApertura,fc:w.fCierre,tv:w.vendNum,ag:w.perfil,w})),
+   ...peticionesData.map(p=>({k:p.tipo,id:p.id,est:p.estado,r1:p.codigo,r2:p.titulo,r3:p.subcodigo,res:'A Especificar',fa:p.fCreacion,fc:p.fCierre,tv:'',ag:p.perfil}))]
+   .filter(r=>(tp==='TODOS'||r.k===tp)&&(es==='TODOS'||r.est===es)&&(!ms||(r.id+r.r2).includes(ms))).sort((a,b)=>d(b.fa)-d(a.fa));
+  tb.innerHTML=rows.map(r=>`<tr><td class="font-bold">${esc(r.k)}</td><td class="${r.w?'text-blue-800 underline':''}">${esc(r.id)}</td><td>${esc(r.est)}</td><td>${esc(r.r1)}</td><td>${esc(r.r2)}</td><td>${esc(r.r3)}</td><td>${esc(r.res)}</td><td>${esc(r.fa)}</td><td>${esc(r.fc)}</td><td>${esc(r.tv)}</td><td>${esc(r.ag)}</td></tr>`).join('');
+  tb.querySelectorAll('tr').forEach((tr,i)=>{if(rows[i].w)tr.onclick=()=>openExisting(rows[i].w)});
+}
+function renderWorkOrders(){renderInteracciones()}
+function renderPeticiones(){renderInteracciones()}
+</script>
+
+<script>
+// ===== Apartados de la ficha según el Smart Client real (datos ficticios) =====
+TABKEYS.splice(TABKEYS.indexOf('campanas')+1,0,'otra-info','mgm');
+const T=(hd,rows)=>`<table class="cim-table"><thead><tr>${hd.map(x=>`<th>${x}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(x=>`<td>${x}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+const BX=(t,b,cl='')=>`<div class="win-border bg-white p-1 ${cl}"><div class="gray-header">${t}</div><div class="mt-1 overflow-auto">${b}</div></div>`;
+const FLD=(l,v='')=>`<div><label class="block font-bold">${l}:</label><input type="text" readonly class="w-full bg-gray-50" value="${esc(v)}"></div>`;
+function svcAction(a){
+  if(a==='Añadir')return openWorkOrder('OT');
+  if(a==='Mig. Téc.')return openWorkOrder('MIG');
+  const n=selectedTreeNode;if(!n)return showToast('Seleccione primero un nodo del árbol de servicios.');
+  if(a==='Desinst.'){if(n.type!=='file')return showToast('Seleccione un servicio, no una carpeta.');openWorkOrder('OT');woState.lines.push({act:'BAJA',item:{id:n.id,name:n.name,price:Math.round(parseFloat(n.price)*100)||0,sys:'Core'},qty:1});woRender();return}
+  if(a==='Restaurar')return showToast('No hay cambios pendientes que restaurar.');
+  treeNodeAction(a==='Desc. T'?'Descuento temporal':'Modificar');
+}
+function renderFichaTabs(){
+  const c=currentClient;if(!c)return;const $=(i,x)=>{const e=document.getElementById(i);if(e)e.innerHTML=x};
+  $('svc-oferta',`<option>${esc(c.offer)}</option>`);$('svc-cuota','Cuota mensual actual: '+eur(baseCents(c.tree)));
+  $('tab-registros',BX('Registros de Cliente',T(['Fecha','Tipo registro','Descripción','Usuario'],[
+    ['15/05/2026','Datos facturación','Modificación de IBAN','ES_9381'],['10/01/2026','Cambio de oferta','Upgrade Fibra 300M → 1000M','ES_9381'],
+    ['03/02/2026','Encuesta','Encuesta de satisfacción atención','SAC'],['18/01/2026','Orden','Alta licencias CRM','FrontOffice'],['02/11/2025','Alta cliente','Alta en canal online','Online']])));
+  $('tab-campanas','<div class="grid grid-cols-2 gap-2">'+BX('Campañas',T(['Campaña','Cuota','Estado',''],[
+    ['Up-sell SaaS Security Shield','5,00 €','Disponible','<button class="purple-btn" onclick="showToast(\'Campaña añadida a la próxima orden\')">Aplicar</button>'],
+    ['Renovación terminal 5G 0 €','0,00 €','Disponible','<button class="purple-btn" onclick="showToast(\'Campaña añadida a la próxima orden\')">Aplicar</button>'],
+    ['Fidelidad 25 % (12 meses)','-25 %','Aplicada','']]))+BX('Servicios opcionales',T(['Servicio','Cuota'],[['Soporte premium 24x7','9,90 €'],['Backup cloud 500 GB','4,00 €']]))+'</div>');
+  $('tab-otra-info','<div class="grid grid-cols-2 gap-2">'+BX('Datos de cuenta','<div class="grid grid-cols-2 gap-2 p-1">'+FLD('Fecha de alta','02/11/2025')+FLD('Canal de alta','Online')+FLD('Segmento',c.segmento)+FLD('Idioma','Español')+FLD('Cuenta de facturación',c.id)+FLD('Grupo / matriz','-')+'</div>')
+    +BX('Consentimientos (RGPD / LOPDGDD)','<div class="space-y-1 p-1">'+['Comunicaciones comerciales','Cesión de datos a terceros','Elaboración de perfiles','Uso de datos de tráfico'].map((x,i)=>`<label class="flex items-center gap-1"><input type="checkbox" ${i%2?'':'checked'}> ${x}</label>`).join('')+'<button class="purple-btn mt-1" onclick="showToast(\'Consentimientos guardados\')">Guardar</button></div>')+'</div>');
+  $('tab-mgm','<div class="grid grid-cols-2 gap-2">'+BX('Programa Member Get Member','<div class="p-1 space-y-1">'+FLD('Código de referido','MGM-'+c.id.slice(-5))+FLD('Bonificación acumulada','30,00 €')+FLD('Referidos activos','2')+'</div>')
+    +BX('Referidos',T(['Referido','Fecha','Estado','Bonificación'],[['CLIENTE 00417','12/03/2026','Activo','15,00 €'],['CLIENTE 00533','20/06/2026','Activo','15,00 €'],['CLIENTE 00610','01/09/2026','Pte. alta','-']]))+'</div>');
+  $('subtab-direcciones-envio',T(['Tipo','Dirección','CP','Población','Principal'],[['Facturación','CL EJEMPLO 1, 2º A','28001',esc(c.provincia),'Sí'],['Instalación','CL EJEMPLO 1, 2º A','28001',esc(c.provincia),'No']]));
+  $('subtab-ajustes',T(['Fecha','Nº Factura','Concepto','Importe','Estado'],[['22/09/2026','FAC26-000087','Abono por incidencia SaaS','-12,00 €','Aplicado'],['22/06/2026','FAC26-000041','Devolución cargo duplicado','-4,00 €','Aplicado']]));
+  $('subtab-pagos',T(['Fecha pago','Nº Factura','Importe','Medio','Estado'],[['12/10/2026','FAC26-000101','120,00 €','Domiciliación','Pagado'],['13/09/2026','FAC26-000087','120,00 €','Domiciliación','Pagado'],['12/08/2026','FAC26-000063','120,00 €','Domiciliación','Pagado']]));
+  $('subtab-acc-recobro','<div class="flex items-center gap-2 mb-1"><label class="font-bold">MSISDN:</label><input type="text" class="w-24"><button class="purple-btn">Buscar Interacción</button></div>'
+    +T(['Secu.','C. evento','Descripción ev.','Comentario','F. completado','Completa…','Estado','F. prevista','Plazo máx.','Lím. plazo 1','Lím. plazo 2'],[
+      ['10','Z002','CAD01','Llamadas PDS','02/07/2026 0:00','RMCA','C','','','',''],['0','Z003','','Generación Email','05/02/2026 8:30','RMCA','C','','','',''],['0','Z001','','Generación SMS','06/02/2026 11:25','RMCA','C','','','',''],
+      ['0','Z009','','Se solicita la suspensión de los servicios','19/06/2026 7:17','RMCA','C','','','',''],['0','SUS','','Se solicita la suspensión de los servicios','16/07/2026 7:58','RMCA','C','','','','']])
+    +'<div class="grid grid-cols-2 gap-4 mt-2 p-2 text-2xs"><div class="space-y-1"><label class="flex items-center gap-1 font-bold"><input type="checkbox" disabled> Bloqueo cuenta contrato</label>'+FLD('Motivo bloqueo cuenta')+FLD('Inicio bloqueo cuenta')+FLD('Fin bloqueo cuenta')+'</div><div class="space-y-1">'+FLD('Factura')+FLD('Motivo bloqueo factura')+FLD('Inicio bloqueo factura')+FLD('Fin bloqueo factura')+'</div></div>');
+  $('subtab-financiacion',T(['Terminal','IMEI','Financiado','Cuotas','Pendiente','Estado'],[['Móvil 5G 128 GB','350000000000001','480,00 €','24','200,00 €','Activa']]));
+}
+const _af=activateFicha;activateFicha=function(f){_af(f);renderFichaTabs()};
+</script>
+
+<script>
+// ===== Motor de reglas, modos por estado, Create Contract (2/2) =====
+ST.CANC=['fa-solid fa-ban','text-gray-500','Cancelada'];
+const PROVIDES={'CRM-USR':['CRM-USR','CRM-BASIC','SAAS-01']};
+const cat=id=>CATALOG.find(c=>c.id===id);
+Object.assign(cat('CRM-USR'),{cat:'SaaS Core'});Object.assign(cat('STO-1TB'),{cat:'SaaS Core',requires:['CRM-USR']});
+Object.assign(cat('API-SF'),{cat:'Integraciones',requires:['CRM-USR']});Object.assign(cat('WH-KAFKA'),{cat:'Integraciones',requires:['API-SF']});
+Object.assign(cat('SSO-SAML'),{cat:'Seguridad',requires:['CRM-USR']});Object.assign(cat('FTTH-1G'),{cat:'Telecom',max:1});
+function agg(t){if(!t.children.length)return t.st;const s=t.children.map(agg);for(const k of['ERR','EXC','RUN'])if(s.includes(k))return k;if(s.every(x=>x==='OK'))return'OK';if(s.every(x=>x==='OK'||x==='CANC'))return'CANC';if(s.includes('OK'))return'RUN';return s.includes('BLOQ')?'BLOQ':'PEND'}
+function woMode(){if(!woState||!PV)return'edit';const s=agg(PV);return(s==='OK'||s==='CANC')?'closed':'run'}
+function fillCat(){const s=document.getElementById('wo-cat'),f=document.getElementById('wo-catf').value,cur=s.value;s.innerHTML=CATALOG.filter(c=>!f||c.cat===f).map(c=>`<option value="${c.id}">${esc(c.name)} (${eur(c.price)}/mes)</option>`).join('');if(cur)s.value=cur}
+function woApplyMode(){
+  if(!woState)return;const m=woMode();
+  document.querySelectorAll('#wo-pane-conf button:not(.keep),#wo-pane-conf select,#wo-pane-conf input,#wo-pane-conf textarea').forEach(e=>e.disabled=m!=='edit');
+  const b=document.getElementById('wo-banner'),nb='<button class="purple-btn keep ml-2" onclick="woNewFrom()">Crear OT de modificación</button>';
+  b.className=m==='edit'?'hidden':'p-1 text-2xs font-bold border '+(m==='closed'?'bg-gray-100 border-gray-400 text-gray-800':'bg-blue-50 border-blue-300 text-blue-900');
+  b.innerHTML=m==='closed'?'Orden cerrada: solo lectura. Para modificar servicios ya provisionados cree una OT nueva. '+nb:m==='run'?(PV.cancelled?'Anulación en curso: las tareas de desaprovisionamiento son obligatorias y la orden no pasa a Anulada hasta completarlas todas. Reintente los errores o escale a N2.':'Orden en provisionamiento: líneas bloqueadas. Puede gestionar tareas o anular la orden (se desaprovisionará lo ya provisionado); para cambiar servicios ya provisionados cree una OT nueva. <button class="purple-btn keep ml-2" onclick="woCancel()">Anular orden</button>'+nb):'';
+}
+function woNewFrom(){const ref=woState.num;openWorkOrder('OT');woState.ref=ref;woRender()}
+const rbName=n=>n.startsWith('Reservar')?'Liberar recurso / tenant':n.startsWith('Provisionar')?'Desprovisionar'+n.slice(11):n.startsWith('Alta/baja')?'Baja / abono en facturación':n.startsWith('Notificar')?'Notificar anulación al cliente':'Revertir: '+n;
+function woCancel(){
+  if(woMode()!=='run')return;if(PV.cancelled)return showToast('La anulación ya está en curso.');
+  PV.cancelled=true;const rb=mk('Anulación · desaprovisionamiento obligatorio','Orchestrator',PV);rb.rollback=true;
+  PV.children.slice().forEach(ln=>{
+    const done=ln.children.filter(t=>(t.st==='OK'||t.st==='RUN')&&!t.name.startsWith('Validar')).reverse();
+    ln.children.forEach(t=>{if(t.st!=='OK'){t.st='CANC';log(t,'WARN','Cancelada por anulación de la orden (ES_9381)')}});
+    if(!done.length)return;
+    const r=mk('Revertir · '+ln.name,ln.sys,rb);r.line=ln.line;rb.children.push(r);
+    [...done.filter(t=>!t.name.startsWith('Notificar')),...done.filter(t=>t.name.startsWith('Notificar'))].forEach(t=>{
+      const x=mk(rbName(t.name),t.sys,r);x.mandatory=true;if(t.fail==='http')x.fail='http';
+      log(x,'WARN','Tarea obligatoria de desaprovisionamiento generada por la anulación de la orden');r.children.push(x)});
+  });
+  if(rb.children.length){PV.children.push(rb);rb.children.forEach(r=>runStep(r,0))}
+  finishCheck();renderPV();
+  showToast(rb.children.length?'Anulación iniciada: tareas obligatorias de desaprovisionamiento generadas.':'Orden anulada: no había servicios provisionados que revertir.');
+}
+const _fc=finishCheck;finishCheck=function(){_fc();if(PV&&PV.cancelled&&agg(PV)!=='CANC'){const s=agg(PV),e=document.getElementById('wo-estado');
+  e.value=(s==='ERR'||s==='EXC')?'Anulación pte. intervención (desaprovisionamiento)':'Anulación en curso (desaprovisionando)';e.className='w-full font-bold bg-amber-100 text-amber-900';
+  const b=document.getElementById('wo-prov-badge');if(b)b.textContent=(s==='ERR'||s==='EXC')?'⚠':'…'}}
+const _wr=woRender;woRender=function(){_wr();if(!woState)return;fillCat();const f=document.getElementById('wo-fecha');if(!f.value)f.value=new Date().toISOString().slice(0,10);
+  const base=baseCents(currentClient.tree),d=woState.lines.reduce((a,l)=>a+(l.act==='BAJA'?-1:1)*l.item.price*l.qty,0),n=base+d;
+  document.getElementById('wo-price').innerHTML=`<b>Nuevo precio (mensual)</b><br>Cuota actual: ${eur(base)} → nueva: <b>${eur(n)}</b> (${d>=0?'+':''}${eur(d)})<br>IVA 21 %: ${eur(Math.round(n*.21))} · Total: <b>${eur(Math.round(n*1.21))}</b>`;
+  if(woState.ref)document.getElementById('wo-hdr').textContent+=' · modifica OT '+woState.ref;woApplyMode()};
+function woCheck(){
+  const s=woState,out=[],ids=new Set();(function w(n){if(n.id)ids.add(n.id);(n.children||[]).forEach(w)})(currentClient.tree);
+  const A=s.lines.filter(l=>l.act==='ALTA'),added=A.map(l=>l.item.id),removed=s.lines.filter(l=>l.act==='BAJA').map(l=>l.item.id);
+  const has=id=>(PROVIDES[id]||[id]).some(x=>(ids.has(x)||added.includes(x))&&!removed.includes(x));
+  if(!s.lines.length)out.push({lvl:'ERR',msg:'La orden no tiene líneas.'});
+  A.forEach(l=>{const c=cat(l.item.id)||{};(c.requires||[]).forEach(r=>{if(!has(r))out.push({lvl:'ERR',msg:`${l.item.name} requiere «${cat(r).name}».`})});
+    if(c.max&&l.qty>c.max)out.push({lvl:'ERR',msg:`${l.item.name}: máximo ${c.max} unidad(es).`});if(ids.has(l.item.id))out.push({lvl:'WARN',msg:`${l.item.name} ya está contratado.`})});
+  if(added.some((x,i)=>added.indexOf(x)!==i))out.push({lvl:'WARN',msg:'Hay productos repetidos en líneas distintas.'});
+  const tx=document.querySelector('#wo-extra input[type=text]');if(tx&&!tx.value.trim())out.push({lvl:'ERR',msg:'Complete el campo obligatorio del tipo de orden.'});
+  if(s.lines.reduce((a,l)=>a+(l.act==='BAJA'?-1:1)*l.item.price*l.qty,0)>10000)out.push({lvl:'WARN',msg:'Incremento superior a 100 €/mes: requiere aprobación de supervisor.'});
+  const f=document.getElementById('wo-fecha').value;if(f&&f<new Date().toISOString().slice(0,10))out.push({lvl:'WARN',msg:'Fecha de efecto en el pasado.'});
+  if(!out.length)out.push({lvl:'OK',msg:'Validación correcta: la orden puede tramitarse.'});
+  document.getElementById('wo-valid').innerHTML=out.map(x=>`<div class="${x.lvl==='ERR'?'text-red-700':x.lvl==='WARN'?'text-amber-700':'text-green-700'}">${x.lvl==='OK'?'✔':x.lvl==='ERR'?'✖':'⚠'} ${esc(x.msg)}</div>`).join('');return out;
+}
+// provisioning: filtro, progreso y solo lectura
+function pvNode(t,d){
+  const f=document.getElementById('pv-filter').value;if(f&&!all(t).some(y=>!y.children.length&&y.st===f))return'';
+  const s=agg(t),[ic,co,lb]=ST[s],leaf=!t.children.length;
+  let h=`<div class="tree-node-item items-center ${pvSel===t?'selected':''}" style="padding-left:${d*14+4}px" onclick="pvPick(${t.id})">`+(leaf?'<span style="width:11px"></span>':`<span class="tree-toggle-btn" onclick="event.stopPropagation();pvToggle(${t.id})">${t.open?'&minus;':'+'}</span>`)+`<i class="${ic} ${co}"></i><span>${esc(t.name)}</span>${leaf?`<span class="ml-auto text-gray-500">${lb}</span>`:''}</div>`;
+  if(t.open)t.children.forEach(c=>h+=pvNode(c,d+1));return h;
+}
+const _rp=renderPV;renderPV=function(){_rp();if(PV){const L=all(PV).filter(t=>!t.children.length),ok=L.filter(t=>t.st==='OK').length;document.getElementById('pv-bar').style.width=Math.round(ok*100/L.length)+'%'}woApplyMode()};
+const _rd=renderDetail;renderDetail=function(){_rd();if(woMode()==='closed'&&PV)document.getElementById('pv-actions').innerHTML='<span class="text-gray-500">Orden cerrada: solo lectura</span>'};
+['pvRetry','pvForce'].forEach(n=>{const o=window[n];window[n]=function(t){if(woMode()==='closed')return;o(t)}});
+const _pra=pvRetryAll;pvRetryAll=function(){if(woMode()!=='closed')_pra()};
+// ----- Create Contract (ventana 2/2) -----
+const dmy=s=>s?s.split('-').reverse().join('/'):'';
+const CF=(l,id,v='',ro)=>`<div><label class="block font-bold">${l}:</label><input type="text" id="${id}" value="${esc(v)}" class="w-full ${ro?'bg-gray-50':''}" ${ro?'readonly':''}></div>`;
+const CS=(l,id,o)=>`<div><label class="block font-bold">${l}:</label><select id="${id}" class="w-full">${o.map(x=>`<option>${x}</option>`).join('')}</select></div>`;
+let ctTabK='svc';
+function renderContract(){
+  const s=woState,el=document.getElementById('view-contract'),pl=dmy(document.getElementById('wo-fecha').value);
+  el.innerHTML=`<div class="red-header flex justify-between"><span>Create Contract</span><span>Orden 2 / 2 · Nº ${esc(s.num)}</span></div>
+  <div class="grid grid-cols-12 gap-1"><div class="col-span-8 win-border bg-gray-100 p-2 text-2xs space-y-2">
+  <div class="grid grid-cols-4 gap-2">${CF('Nº Orden','ct-num',s.num,1)}${CF('Descripción','ct-desc','Alta '+WO_TYPES[s.type],1)}${CF('Tipo','ct-tipo','TMA',1)}${CF('Estado de la Orden','ct-estado','Pte. Lanzar Procesos',1)}
+  ${CF('Fecha planificación','ct-fplan',pl,1)}${CF('Fecha venta','ct-fventa',today(),1)}${CF('Fecha inicio facturación','ct-ffact',pl,1)}${CS('Método entrega','ct-metodo',['Teléfono','Online','Tienda'])}</div>
+  <div class="grid grid-cols-2 gap-2"><div class="win-border p-1 bg-white grid grid-cols-2 gap-1"><b class="col-span-2">Estado de excepción</b>${CS('Tipo','ct-extipo',['(ninguno)','Documentación pendiente','Riesgo crediticio','Aprobación supervisor'])}${CS('Descripción','ct-exdesc',['(ninguna)','Falta firma','Scoring bajo','Incremento > 100 €'])}</div>
+  <div class="win-border p-1 bg-white grid grid-cols-2 gap-1"><b class="col-span-2">Datos vendedor</b>${CF('Vendedor','ct-vend','ES_9381')}${CF('Vendedor 3N','ct-vend3')}${CF('Técnico','ct-tec')}${CS('Razón venta','ct-razon',['Venta directa','Visita tienda','Televenta'])}</div></div>
+  <div><label class="block font-bold">Comentarios:</label><textarea id="ct-coment" class="w-full" rows="2"></textarea></div>
+  <div class="grid grid-cols-3 gap-2">${CF('Penalización','ct-pen')}${CF('Motivo','ct-mot')}${CS('Aceptación de contrato','ct-acept',['Pendiente','Grabación','Firma digital','SMS'])}</div></div>
+  <div class="col-span-4 win-border bg-white p-1 text-2xs"><div class="gray-header">Servicios de la Orden</div>${s.lines.map(l=>`<div class="py-px"><i class="fa-solid fa-arrow-right ${l.act==='BAJA'?'text-red-600':'text-green-600'}"></i> ${l.act} · ${esc(l.item.name)} x${l.qty}</div>`).join('')}</div></div>
+  <div class="flex items-end border-b border-gray-400 pt-1">${[['msg','Mensajes Cliente'],['svc','Servicios / Licencias'],['fact','Datos Fact.'],['hist','Histórico']].map(([k,l])=>`<button class="tab-btn" id="ct-tb-${k}" onclick="ctTab('${k}')">${l}</button>`).join('')}<button class="tab-btn disabled">Portab. Fijo</button><button class="tab-btn disabled">Portab. Móvil</button></div>
+  <div id="ct-pane" class="win-border bg-white p-1 flex-grow text-2xs overflow-auto"></div>
+  <div class="flex justify-center gap-1 pt-1">${[['Volver',"switchView('workorder')"],['Cancelar','ctCancel()'],['Comentarios',"showModalInfo('Comentarios','Use el campo Comentarios del contrato.')"],['Procesos',"showToast('Los procesos se lanzan al finalizar el contrato.')"],['Guardar',"showToast('Contrato guardado en borrador.')"],['Continuar / Finalizar','ctFinish()'],['Cerrar','closeWO()']].map(([l,c])=>`<button class="purple-btn" onclick="${c}">${l}</button>`).join('')}</div>`;
+  ctTab(ctTabK);
+}
+function ctTab(k){ctTabK=k;['msg','svc','fact','hist'].forEach(x=>document.getElementById('ct-tb-'+x).classList.toggle('active',x===k));
+  document.getElementById('ct-pane').innerHTML=k==='msg'?T(['Canal','Plantilla','Estado'],[['SMS','Confirmación de contratación','Pend. envío'],['Email','Contrato y condiciones','Pend. envío']])
+  :k==='svc'?T(['Instancia','Servicio','ID licencia / nº serie','Acción','Estado'],woState.lines.map((l,i)=>[i+1,esc(l.item.name),'A especificar',l.act==='ALTA'?'+':'-','Pend. de instalar']))
+  :k==='fact'?'<div class="grid grid-cols-3 gap-2 p-1">'+CF('IBAN','ct-iban')+CS('Ciclo de facturación','ct-ciclo',['Mensual día 1','Mensual día 15'])+CF('Email de factura','ct-mailf')+'</div>'
+  :T(['Fecha','Evento','Usuario'],[[today(),'Contrato creado en borrador','ES_9381']])}
+function ctCancel(){woState.contract=null;switchView('workorder');showToast('Creación de contrato cancelada.')}
+function ctFinish(){if(document.getElementById('ct-acept').value==='Pendiente')return showToast('Falta la aceptación del contrato.');woState.contract.done=true;launchOrder()}
+function launchOrder(){
+  woState.launched=true;buildPV();
+  workOrdersData.unshift({num:woState.num,title:WO_TYPES[woState.type]+' · '+woState.lines.length+' línea(s)'+(woState.ref?' (mod. '+woState.ref+')':''),status:'En Proceso',fApertura:today(),fPlanifica:dmy(document.getElementById('wo-fecha').value)||today(),fCierre:'-',vendNum:'07',vendName:'Venta Directa',perfil:'FrontOffice SaaS'});
+  renderWorkOrders();woRender();woTab('prov');switchView('workorder');PV.children.forEach(ln=>runStep(ln,0));finishCheck();
+}
+function submitWorkOrder(){
+  if(!woState)return showToast('Abra una orden desde Gest. Comercial.');
+  if(woMode()!=='edit')return showToast('La orden ya no admite cambios. Cree una OT nueva.');
+  if(woCheck().some(x=>x.lvl==='ERR'))return showToast('La orden tiene errores de validación (Cheq.).');
+  if(woState.lines.some(l=>l.act==='ALTA')){woState.contract=woState.contract||{done:false};renderContract();switchView('contract')}else launchOrder();
+}
+// ----- ventanas, vistas y contexto -----
+const woTwo=w=>!w.launched&&w.lines.some(l=>l.act==='ALTA');
+function renderWindows(){
+  saveFicha();const el=document.getElementById('ow-list');if(!el)return;
+  const it=(sel,ic,txt,cl,pad)=>`<div class="tree-node-item items-center ${sel?'selected':''}" style="padding-left:${pad}px" onclick="${cl}"><i class="${ic}"></i><span>${txt}</span></div>`,W='fa-regular fa-window-maximize';
+  let h=it(curView==='search',W+' text-blue-700','Buscar Cliente en el CIM',"switchView('search')",4);
+  fichas.forEach(f=>{const a=f===activeFicha;
+    h+=it(a&&curView==='interaction',W+' text-purple-700',`Página Central Interacción [${f.n}]`,`gotoFicha(${f.n},'interaction')`,4);
+    if(f.wo)h+=it(a&&curView==='workorder',W+' text-amber-700','Orden de Trabajo '+(woTwo(f.wo)?'1 / 2 ':'')+esc(f.wo.num),`gotoFicha(${f.n},'workorder')`,18);
+    if(f.wo&&f.wo.contract&&!f.wo.contract.done)h+=it(a&&curView==='contract',W+' text-green-700','Create Contract (2 / 2)',`gotoFicha(${f.n},'contract')`,18);
+  });el.innerHTML=h;
+}
+function switchView(v){
+  if(v==='billing'||v==='breakdown'){switchView('interaction');mainTab(v==='billing'?'facturacion':'averias');return}
+  if(!currentClient&&v!=='search'){openModal('guard-modal','<p class="font-bold text-red-800">Acceso no permitido</p><p>Busque y <strong>Seleccione</strong> primero un cliente en el CIM.</p>');return}
+  if(v==='workorder'&&!woState){showToast('No hay ninguna orden abierta.');return}
+  if(v==='contract'&&!(woState&&woState.contract&&!woState.contract.done)){showToast('No hay ningún contrato abierto.');return}
+  ['search','interaction','workorder','contract'].forEach(x=>document.getElementById('view-'+x).classList.toggle('hidden',x!==v));
+  curView=v;if(activeFicha)activeFicha.view=v;document.body.classList.toggle('no-ctx',v==='search');
+  const TT={search:'Buscar Cliente en el CIM',interaction:'Página Central Interacción',workorder:'Orden de Trabajo',contract:'Create Contract'},ctx=currentClient&&v!=='search';
+  document.getElementById('app-window-title').innerText='CIM SaaS - '+(ctx?`[${currentClient.name}] - `:'')+TT[v]+(activeFicha&&ctx?' ['+activeFicha.n+']':'');
+  document.getElementById('status-message').innerText=ctx?`Ficha activa: ${currentClient.name}`:'Modo Búsqueda: sin contexto de cliente';
+  renderWindows();
+}
+</script>
+
+<script>
+// ===== Anulación de OT con desaprovisionamiento obligatorio =====
+ST.REV=['fa-solid fa-rotate-left','text-gray-500','Revertida'];
+function agg(t){if(!t.children.length)return t.st;const s=t.children.map(agg);for(const k of['ERR','EXC','RUN'])if(s.includes(k))return k;
+  if(s.every(x=>['OK','CANC','REV'].includes(x)))return s.every(x=>x==='OK')?'OK':'CANC';if(s.includes('OK'))return'RUN';return s.includes('BLOQ')?'BLOQ':'PEND'}
+function woCancel(){
+  if(woMode()!=='run'||woState.cancelling)return;
+  if(!confirm('¿Anular la orden? Los servicios ya provisionados se desaprovisionarán con tareas obligatorias y la orden quedará anulada cuando todas terminen.'))return;
+  woState.cancelling=true;const rb=mk('Anulación · desaprovisionamiento obligatorio','Orchestrator',PV);rb.rollback=true;
+  PV.children.filter(x=>x.line).forEach(ln=>{
+    const baja=ln.line.act==='BAJA',cl=mk((baja?'Revertir · ':'Desaprovisionar · ')+ln.line.item.name,ln.sys,rb);cl.line=ln.line;
+    ln.children.filter(s=>(s.st==='OK'||s.st==='RUN')&&!/^(Validar|Notificar)/.test(s.name)).reverse().forEach(s=>{
+      const c=mk((baja?'Revertir baja: ':'Desaprovisionar: ')+s.name,s.sys,cl);c.fail=s.fail==='http'?'http':undefined;c.orig=s;cl.children.push(c)});
+    if(cl.children.length)rb.children.push(cl);
+  });
+  all(PV).filter(t=>!t.children.length&&t.st!=='OK').forEach(t=>{t.st='CANC';log(t,'WARN','Cancelada por anulación de la orden (ES_9381)')});
+  if(rb.children.length){PV.children.push(rb);rb.children.forEach(cl=>runStep(cl,0));showToast('Anulación iniciada: tareas de desaprovisionamiento generadas.')}
+  woTab('prov');finishCheck();renderPV();
+}
+const _fc=finishCheck;finishCheck=function(){_fc();if(!woState||!woState.cancelling||!PV)return;const s=agg(PV);if(s==='CANC')return;
+  const e=document.getElementById('wo-estado');e.value=s==='ERR'||s==='EXC'?'Anulación pte. intervención':'Anulando (desaprovisionando)';e.className='w-full font-bold bg-amber-100 text-amber-900';
+  const w=workOrdersData.find(x=>x.num===woState.num);if(w){w.status='Anulando';renderWorkOrders()}};
+const _wam=woApplyMode;woApplyMode=function(){_wam();if(!woState||!woState.cancelling)return;const m=woMode(),b=document.getElementById('wo-banner');
+  b.innerHTML=m==='run'?'Anulación en curso: se están desaprovisionando los servicios ya provisionados (tareas obligatorias). La orden quedará anulada cuando todas finalicen; reintente o resuelva las tareas con error.'
+   :'Orden anulada: servicios desaprovisionados. Solo lectura; cree una OT nueva si necesita volver a provisionar. <button class="purple-btn keep ml-2" onclick="woNewFrom()">Crear OT de modificación</button>'};
+// reabrir una OT de la tabla muestra su estado real de esta sesión
+const _lo=launchOrder;launchOrder=function(){_lo();const w=workOrdersData[0];if(w)w.snap={wo:woState,pv:PV}};
+const _oe=openExisting;openExisting=function(w){if(w.snap){woState=w.snap.wo;PV=w.snap.pv;pvSel=null;woRender();switchView('workorder');woTab('prov');renderPV();finishCheck();return}_oe(w)};
+</script>
+
+<script>
+// ===== Configurador de producto (alta y modificación de servicios contratados) =====
+const O=(v,d=0,s)=>({v,d,s});
+const ALIAS={'SAAS-01':'CRM-USR','CRM-BASIC':'CRM-USR','MOD-01':'API-SF','MOD-02':'STO-1TB','MOD-03':'WH-KAFKA','SEC-01':'SSO-SAML','TEL-01':'FTTH-1G','FIB-300':'FTTH-1G'};
+Object.entries(ALIAS).forEach(([a,c])=>{(PROVIDES[c]=PROVIDES[c]||[c]).push(a)});
+const RES=['admin','test','www','api','root'];
+const CFG={
+ 'CRM-USR':[{k:'plan',l:'Plan',t:'sel',o:[O('Basic'),O('Pro',1000),O('Enterprise',2500)],def:'Pro'},
+  {k:'tenant',l:'Subdominio del tenant',t:'txt',req:1,re:/^[a-z][a-z0-9-]{2,30}$/,hint:'minúsculas, números y guiones (3-31)',cd:'acme-corp',chk:v=>RES.includes(v.tenant)?'Subdominio reservado':''},
+  {k:'region',l:'Región de datos',t:'sel',o:[O('EU-West (Madrid)'),O('EU-Central (Frankfurt)'),O('US-East',-200)]},
+  {k:'soporte',l:'Soporte 24x7',t:'bool',d:500,s:'Activar soporte 24x7',chk:v=>v.soporte&&v.plan==='Basic'?'Soporte 24x7 requiere plan Pro o Enterprise':''},
+  {k:'backup',l:'Backup diario',t:'bool',d:200,s:'Activar backup diario'}],
+ 'STO-1TB':[{k:'tb',l:'Capacidad (TB)',t:'num',min:1,max:50,def:1,from:1,per:1800},
+  {k:'red',l:'Redundancia',t:'sel',o:[O('Local'),O('Geo-redundante',600,'Configurar replicación geo-redundante')]},
+  {k:'cmk',l:'Cifrado con clave propia (CMK)',t:'bool',d:300,s:'Configurar claves de cifrado (CMK)'}],
+ 'API-SF':[{k:'env',l:'Entorno',t:'sel',o:[O('Producción'),O('Sandbox',-4500)]},
+  {k:'sync',l:'Sincronización',t:'sel',o:[O('Cada 15 min'),O('Cada 5 min',1000),O('Tiempo real',2500,'Habilitar streaming en tiempo real')],chk:v=>v.env==='Sandbox'&&v.sync==='Tiempo real'?'Tiempo real no está disponible en Sandbox':''},
+  {k:'scope',l:'Alcance de datos',t:'sel',o:[O('Cuentas y contactos'),O('+ Oportunidades',800),O('Completo',1500)]}],
+ 'SSO-SAML':[{k:'idp',l:'Proveedor de identidad',t:'sel',o:[O('Okta'),O('Azure AD'),O('Google Workspace')]},
+  {k:'meta',l:'URL de metadatos SAML',t:'txt',req:1,re:/^https:\/\/[^\s]+$/,hint:'URL https',cd:'https://login.ejemplo.com/saml'},
+  {k:'mfa',l:'MFA obligatorio',t:'bool',d:400,s:'Activar MFA obligatorio'}],
+ 'WH-KAFKA':[{k:'topic',l:'Topic',t:'txt',req:1,re:/^[a-z0-9._-]{3,60}$/,hint:'3-60 caracteres: a-z, 0-9, . _ -',cd:'eventos.core'},
+  {k:'part',l:'Particiones',t:'num',min:1,max:24,def:3,from:3,per:100},
+  {k:'ret',l:'Retención',t:'sel',o:[O('7 días'),O('30 días',300),O('90 días',900)]}],
+ 'FTTH-1G':[{k:'vel',l:'Velocidad',t:'sel',o:[O('300 Mbps',-2000),O('600 Mbps',-1000),O('1 Gbps')],def:'1 Gbps'},
+  {k:'ip',l:'IP fija',t:'bool',d:500,s:'Asignar IP fija'},
+  {k:'inst',l:'Instalación',t:'sel',o:[O('Autoinstalación'),O('Técnico a domicilio',0,'Programar visita técnica')]}]};
+const COMMON=[{k:'perm',l:'Permanencia',t:'sel',o:[O('Sin permanencia'),O('12 meses (-10 %)'),O('24 meses (-15 %)')]},{k:'disc',l:'Descuento comercial (%)',t:'num',min:0,max:20,def:0}];
+const attrsOf=c=>[...(CFG[c.id]||[]),...COMMON];
+let CGS=null;
+function pcDefaults(c,n){const v={};attrsOf(c).forEach(a=>{v[a.k]=n&&a.cd!==undefined?a.cd:a.def!==undefined?a.def:a.t==='sel'?a.o[0].v:a.t==='bool'?false:a.t==='num'?a.min:''});
+  if(n&&c.id==='CRM-USR')v.plan=/Basic/i.test(n.name)?'Basic':'Pro';return v}
+function pcUnit(c,v){let u=c.price;attrsOf(c).forEach(a=>{const x=v[a.k];if(a.t==='sel'){const o=a.o.find(o=>o.v===x);if(o)u+=o.d}else if(a.t==='bool'){if(x)u+=a.d||0}else if(a.t==='num'&&a.per)u+=Math.max(0,(+x||0)-(a.from||0))*a.per});
+  u=Math.max(0,u);const m=/(\d+) %\)/.exec(v.perm||'');if(m)u*=1-m[1]/100;u*=1-(+v.disc||0)/100;return Math.round(u)}
+function pcErrors(c,v){const e=[];attrsOf(c).forEach(a=>{const x=v[a.k];
+  if(a.req&&!String(x).trim())e.push(a.l+' es obligatorio');else if(a.re&&!a.re.test(x))e.push(`${a.l}: formato no válido (${a.hint})`);
+  if(a.t==='num'&&(isNaN(x)||x<a.min||x>a.max))e.push(`${a.l}: debe estar entre ${a.min} y ${a.max}`);
+  if(a.chk){const m=a.chk(v);if(m)e.push(m)}});return e}
+function pcOpen(mode,id,o={}){const c=cat(id);CGS={mode,id,c,vals:o.vals||pcDefaults(c),prev:o.prev||null,qty:o.qty||1,idx:o.idx===undefined?-1:o.idx,nodeId:o.nodeId,nodeName:o.nodeName};pcRender()}
+function pcCancel(){CGS=null;const e=document.getElementById('wo-cfg');if(e){e.className='hidden';e.innerHTML=''}}
+function pcSet(k,v){CGS.vals[k]=v;pcUpdate()}
+function pcRender(){
+  const g=CGS,c=g.c,el=document.getElementById('wo-cfg');el.className='win-border bg-blue-50 p-1 space-y-1 text-2xs';
+  const fld=a=>{const x=g.vals[a.k];let i='';
+    if(a.t==='sel')i=`<select class="w-full" onchange="pcSet('${a.k}',this.value)">${a.o.map(o=>`<option value="${esc(o.v)}" ${o.v===x?'selected':''}>${esc(o.v)}${o.d?` (${o.d>0?'+':''}${eur(o.d)})`:''}</option>`).join('')}</select>`;
+    else if(a.t==='bool')i=`<label class="flex items-center gap-1"><input type="checkbox" ${x?'checked':''} onchange="pcSet('${a.k}',this.checked)"> ${a.d?'+'+eur(a.d):'Incluido'}</label>`;
+    else i=`<input type="${a.t==='num'?'number':'text'}" class="w-full" value="${esc(x)}" ${a.t==='num'?`min="${a.min}" max="${a.max}"`:''} oninput="pcSet('${a.k}',${a.t==='num'?'+this.value':'this.value'})">`;
+    return `<div class="${a.t==='txt'?'col-span-2':''}"><label class="block font-bold">${a.l}${a.req?' *':''}</label>${i}${a.hint?`<span class="text-gray-500">${a.hint}</span>`:''}</div>`};
+  el.innerHTML=`<div class="font-bold text-blue-900">${g.mode==='MODIF'?'Modificar configuración de':'Configurar producto a dar de alta:'} ${esc(g.nodeName||c.name)}</div><div class="grid grid-cols-2 gap-1">${attrsOf(c).map(fld).join('')}${g.mode==='ALTA'?`<div><label class="block font-bold">Cantidad</label><input type="number" min="1" class="w-full" value="${g.qty}" oninput="CGS.qty=Math.max(1,+this.value||1);pcUpdate()"></div>`:''}</div><div id="pc-prev"></div>
+  <div class="flex gap-1"><button class="purple-btn" onclick="pcCommit()">${g.mode==='MODIF'?'Aplicar modificación':g.idx>=0?'Guardar cambios':'Añadir a la orden'}</button><button class="purple-btn" onclick="pcCancel()">Cancelar</button></div>`;
+  pcUpdate();
+}
+function pcUpdate(){
+  const g=CGS,u=pcUnit(g.c,g.vals);let h;
+  if(g.mode==='MODIF'){const p=pcUnit(g.c,g.prev),d=u-p,ch=attrsOf(g.c).filter(a=>String(g.vals[a.k])!==String(g.prev[a.k]));
+    h=`Antes: ${eur(p)} → Después: <b>${eur(u)}</b> · Diferencia: <b>${d>=0?'+':''}${eur(d)}</b>/mes<br>Cambios: ${ch.length?ch.map(a=>`${a.l}: ${esc(g.prev[a.k])} → ${esc(g.vals[a.k])}`).join(' · '):'ninguno'}`}
+  else h=`Precio unitario: <b>${eur(u)}</b>/mes × ${g.qty} = <b>${eur(u*g.qty)}</b>/mes`;
+  if(+g.vals.disc>10)h+='<div class="text-amber-700">⚠ Descuento superior al 10 %: requiere aprobación de supervisor.</div>';
+  document.getElementById('pc-prev').innerHTML=h+pcErrors(g.c,g.vals).map(m=>`<div class="text-red-700">✖ ${esc(m)}</div>`).join('');
+}
+function pcCommit(){
+  const g=CGS;if(pcErrors(g.c,g.vals).length)return showToast('Corrija los errores de configuración.');
+  const u=pcUnit(g.c,g.vals);let l;
+  if(g.mode==='MODIF'){if(!attrsOf(g.c).some(a=>String(g.vals[a.k])!==String(g.prev[a.k])))return showToast('No hay cambios de configuración.');
+    l={act:'MODIF',item:{...g.c,name:'Modificar: '+g.nodeName,price:u-pcUnit(g.c,g.prev)},qty:1,cfg:{...g.vals},prev:g.prev,nodeId:g.nodeId,nodeName:g.nodeName}}
+  else l={act:'ALTA',item:{...g.c,price:u},qty:g.qty,cfg:{...g.vals}};
+  g.idx>=0?woState.lines[g.idx]=l:woState.lines.push(l);pcCancel();woRender();
+}
+function pcEdit(i){const l=woState.lines[i];pcOpen(l.act,l.item.id,{vals:{...l.cfg},prev:l.prev,qty:l.qty,idx:i,nodeId:l.nodeId,nodeName:l.nodeName})}
+function woAddLine(){if(woMode()!=='edit')return showToast('La orden ya no admite cambios.');pcOpen('ALTA',document.getElementById('wo-cat').value,{qty:Math.max(1,parseInt(document.getElementById('wo-qty').value)||1)})}
+function woModify(n){
+  if(!woState||woMode()!=='edit')return showToast('Abra una OT editable para modificar servicios.');
+  if(!n||n.type!=='file')return showToast('Seleccione un servicio contratado.');
+  const c=cat(ALIAS[n.id]||n.id);if(!c)return showToast('Este servicio no tiene parámetros configurables en el catálogo.');
+  const prev=pcDefaults(c,n);pcOpen('MODIF',c.id,{prev,vals:{...prev},nodeId:n.id,nodeName:n.name});
+}
+performTreeAction=function(a){
+  if(!woState)return showToast('Abra una orden desde Gest. Comercial.');
+  if(woMode()!=='edit')return showToast('La orden ya no admite cambios. Cree una OT nueva.');
+  const n=selectedTreeNode;if(!n||n.type!=='file')return showToast('Seleccione un producto del árbol.');
+  if(/^Modif/.test(a))return woModify(n);
+  if(a==='Desistir'||a==='Anular'){woState.lines.push({act:'BAJA',item:{id:n.id,name:n.name,price:Math.round(parseFloat(n.price)*100)||0,sys:'Core'},qty:1});woRender()}else showToast(a+': pendiente de implementar');
+};
+const _sa=svcAction;svcAction=function(a){if(a==='Modif.'){const n=selectedTreeNode;if(!n||n.type!=='file')return showToast('Seleccione un servicio contratado.');openWorkOrder('OT');woModify(n);return}_sa(a)};
+// tabla de líneas con configuración
+function pcSummary(l){const c=cat(l.item.id);if(!c||!l.cfg)return'';const as=attrsOf(c);
+  if(l.act==='MODIF')return as.filter(a=>String(l.cfg[a.k])!==String(l.prev[a.k])).map(a=>`${a.l}: ${esc(l.prev[a.k])}→${esc(l.cfg[a.k])}`).join(' · ');
+  return as.filter(a=>a.k==='disc'?l.cfg.disc>0:l.cfg[a.k]!==''&&l.cfg[a.k]!==false).map(a=>a.t==='bool'?esc(a.l):esc(l.cfg[a.k])).join(' · ')}
+function renderLines(){
+  const t=document.getElementById('wo-lines');if(!woState||!t)return;const ed=woMode()==='edit'&&!woState.launched;
+  t.innerHTML=woState.lines.map((l,i)=>`<tr><td class="font-bold ${l.act==='BAJA'?'text-red-700':l.act==='MODIF'?'text-blue-700':'text-green-700'}">${l.act}</td><td>${esc(l.item.name)}</td><td>${l.qty}</td><td style="white-space:normal">${pcSummary(l)}</td><td>${l.act==='MODIF'&&l.item.price>=0?'+':''}${eur(l.item.price*l.qty)}</td><td>${ed?`${l.cfg?`<button onclick="pcEdit(${i})">&#9998;</button>`:''}<button onclick="woDel(${i})">&#10005;</button>`:''}</td></tr>`).join('')||'<tr><td colspan="6" class="text-gray-500">Sin líneas. Añada un producto del catálogo o modifique un servicio contratado.</td></tr>';
+}
+const _wr2=woRender;woRender=function(){_wr2();renderLines()};
+const _wam2=woApplyMode;woApplyMode=function(){_wam2();if(woState&&woMode()!=='edit')pcCancel()};
+const _ow=openWorkOrder;openWorkOrder=function(k){pcCancel();_ow(k)};
+const _af2=activateFicha;activateFicha=function(f){pcCancel();_af2(f)};
+// validación de configuración en Cheq. y tramitación
+const renderValid=o=>document.getElementById('wo-valid').innerHTML=o.map(x=>`<div class="${x.lvl==='ERR'?'text-red-700':x.lvl==='WARN'?'text-amber-700':'text-green-700'}">${x.lvl==='OK'?'✔':x.lvl==='ERR'?'✖':'⚠'} ${esc(x.msg)}</div>`).join('');
+const _wc=woCheck;woCheck=function(){let out=_wc();const ex=[];
+  woState.lines.forEach(l=>{if(!l.cfg)return;const c=cat(l.item.id);pcErrors(c,l.cfg).forEach(m=>ex.push({lvl:'ERR',msg:`${l.item.name}: ${m}`}));if(+l.cfg.disc>10)ex.push({lvl:'WARN',msg:`${l.item.name}: descuento > 10 %, requiere aprobación.`})});
+  const m=woState.lines.filter(l=>l.act==='MODIF').map(l=>l.nodeId);if(m.some((x,i)=>m.indexOf(x)!==i))ex.push({lvl:'ERR',msg:'Hay varias modificaciones sobre el mismo servicio.'});
+  if(CGS)ex.push({lvl:'WARN',msg:'Hay una configuración de producto sin confirmar.'});
+  if(ex.length){out=out.filter(x=>x.lvl!=='OK').concat(ex);renderValid(out)}return out};
+// provisioning dirigido por la configuración
+function pcSteps(l){const c=cat(l.item.id);if(!c||!l.cfg)return[];const out=[];
+  attrsOf(c).forEach(a=>{const x=l.cfg[a.k],y=l.prev?l.prev[a.k]:undefined;if(l.prev&&x===y)return;
+    if(a.t==='bool'){if(x&&a.s)out.push([a.s,l.item.sys]);else if(!x&&y&&a.s)out.push(['Desactivar: '+a.l,l.item.sys])}
+    else if(a.t==='sel'){const o=a.o.find(o=>o.v===x);if(o&&o.s)out.push([o.s,l.item.sys])}});return out}
+function buildPV(){
+  PV=mk('Orden '+woState.num+' · '+WO_TYPES[woState.type],'Orchestrator',null);
+  woState.lines.forEach(l=>{
+    const ln=mk(l.act+' · '+l.item.name+' x'+l.qty,l.item.sys,PV);ln.line=l;PV.children.push(ln);const c=cat(l.item.id)||{},sy=l.item.sys;
+    const S=l.act==='BAJA'?[['Validar baja y dependencias','Core'],['Revocar licencia / recurso',sy]]
+     :l.act==='MODIF'?[['Validar cambios y dependencias','Catalog'],['Aplicar nueva configuración',sy],...(l.cfg.region&&l.cfg.region!==l.prev.region?[['Migrar datos a '+l.cfg.region,sy]]:[])]
+     :[['Validar catálogo y disponibilidad','Catalog'],['Reservar recurso / tenant',sy],['Provisionar '+l.item.name,sy]];
+    S.push(...pcSteps(l));if(l.act==='ALTA'&&c.failStep)S.push([c.failStep,sy,c.fail]);
+    S.push(['Alta/baja en facturación','Billing'],['Notificar al cliente','Notifier']);
+    S.forEach(([n,s,f])=>{const t=mk(n,s,ln);t.fail=f;ln.children.push(t)});
+  });
+}
+</script>
+
+<script>
+// ===== Detalle del servicio contratado: ficha técnica de solo lectura por cliente =====
+const HS=s=>{let x=0;for(const ch of String(s))x=(x*31+ch.charCodeAt(0))>>>0;return x};
+const HX=s=>HS(s).toString(16).padStart(8,'0');
+const DAGO=d=>{const x=new Date();x.setDate(x.getDate()-d);return x.toLocaleDateString('es-ES')};
+const slugOf=s=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/s\.l\.|s\.a\./g,'').trim().split(/\s+/).slice(0,2).join('-').replace(/[^a-z0-9-]/g,'');
+const RO=(l,v)=>`<div><label class="block font-bold text-gray-600">${l}</label><input type="text" readonly class="w-full bg-gray-50" value="${esc(v)}"></div>`;
+const ROB=(l,v)=>`<label class="flex items-center gap-1"><input type="checkbox" disabled ${v?'checked':''}> ${l}</label>`;
+const SEC=(t,b,open=true)=>`<details ${open?'open':''} class="win-border bg-white p-1"><summary class="font-bold text-blue-900 cursor-pointer">${t}</summary><div class="grid grid-cols-2 gap-x-2 gap-y-1 mt-1">${b}</div></details>`;
+function fileIds(n,s=new Set()){if(n.type==='file')s.add(n.id);(n.children||[]).forEach(c=>fileIds(c,s));return s}
+function fileList(n,a=[]){if(n.type==='file')a.push(n);(n.children||[]).forEach(c=>fileList(c,a));return a}
+const TECH={
+ 'CRM-USR':(n,k)=>[['Tenant URL',`https://${k.tenant}.saas.example`],['Tenant ID','tn-'+k.hx],['Datacenter',k.region],['Licencias en uso',`${k.used} / ${k.seats}`],['Versión de plataforma','2026.3'],['Último acceso admin',k.last]],
+ 'STO-1TB':(n,k)=>[['Bucket',`stor-${k.slug}-${k.hx.slice(0,4)}`],['Capacidad',k.v.tb+' TB'],['Uso',`${Math.round(k.v.tb*1024*k.pct/100)} GB (${k.pct} %)`],['Replicación',k.v.red],['Clave de cifrado',k.v.cmk?'CMK del cliente (KMS)':'Gestionada por la plataforma'],['Endpoint S3',`https://s3.${k.regc}.saas.example`]],
+ 'API-SF':(n,k)=>[['Org Salesforce','00D'+k.hx.slice(0,6).toUpperCase()],['Entorno',k.v.env],['Último sync',k.last],['Registros sincronizados (24 h)',String(1200+k.h%8000)],['Cola de errores','0'],['Versión de API','v59.0']],
+ 'SSO-SAML':(n,k)=>[['Entity ID',`https://${k.tenant}.saas.example/saml/${k.hx.slice(0,6)}`],['ACS URL',`https://${k.tenant}.saas.example/saml/acs`],['Metadatos IdP',k.v.meta],['Certificado','caduca '+k.certexp],['Huella SHA-256','••••'+k.hx.slice(-4).toUpperCase()],['Último login SSO',k.last]],
+ 'WH-KAFKA':(n,k)=>[['Bootstrap servers',`kafka-${k.regc}.saas.example:9093`],['Topic',k.v.topic],['Particiones',String(k.v.part)],['Retención',k.v.ret],['Consumer lag','0'],['Principal / ACL','svc-'+k.slug]],
+ 'FTTH-1G':(n,k)=>[['Nº de servicio','FTTH-'+k.hx.slice(0,6).toUpperCase()],['OLT / puerto',`OLT-${k.prov}-0${k.h%9}/1/${k.h%16}`],['ONT (serie)','ZNTS'+k.hx.toUpperCase()],['IP',k.v.ip?'Fija 198.51.100.'+(k.h%200+20):'Dinámica (CGNAT)'],['Velocidad contratada',k.v.vel],['Velocidad sincronizada','940 / 935 Mbps']]};
+function svcCfg(n,c){const v=pcDefaults(c,n),h=HS(currentClient.id+n.id);
+  if('tenant'in v)v.tenant=slugOf(currentClient.name);if('perm'in v)v.perm=h%2?'12 meses (-10 %)':'Sin permanencia';
+  if(c.id==='FTTH-1G')v.vel=/300/.test(n.name)?'300 Mbps':'1 Gbps';if(c.id==='STO-1TB')v.tb=parseInt((/\((\d+) TB\)/.exec(n.name)||[0,1])[1]);return v}
+function showTreeNodeDetails(node){
+  const box=document.getElementById('tree-detail-content'),cl=currentClient;
+  if(node.type==='folder'){const fs=fileList(node);
+    box.innerHTML=`<div class="bg-amber-50 p-2 border border-amber-300 rounded"><b class="text-amber-900"><i class="fa-solid fa-folder mr-1"></i> ${esc(node.name)}</b><br>${fs.length} servicio(s) · cuota total <b>${eur(baseCents(node))}</b>/mes</div>`+
+     T(['Servicio','ID','Estado','Cuota'],fs.map(f=>[esc(f.name),esc(f.id),esc(f.status),esc(f.price)]));return}
+  const c=cat(ALIAS[node.id]||node.id),h=HS(cl.id+node.id),hx=HX(cl.id+node.id),alta=200+h%500,modd=10+h%90,ot1=String(100000000+h%899999999),ot2=String(100000000+(h>>3)%899999999);
+  const head=`<div class="bg-blue-50 p-2 border border-blue-300 rounded flex flex-wrap items-center gap-2"><b class="text-blue-900 flex-grow"><i class="fa-solid fa-cube mr-1"></i> ${esc(node.name)}</b><span class="text-green-700 font-bold">${esc(node.status)}</span><button class="purple-btn" onclick="svcAction('Modif.')">Modificar configuración</button><button class="purple-btn" onclick="svcAction('Desinst.')">Desinstalar</button></div>`;
+  const perm=c?svcCfg(node,c).perm:'Sin permanencia',pm=/(\d+) meses/.exec(perm),fin=pm?(()=>{const d=new Date();d.setDate(d.getDate()-alta);d.setMonth(d.getMonth()+ +pm[1]);return d.toLocaleDateString('es-ES')})():'—';
+  const cents=Math.round(parseFloat(node.price)*100)||0;
+  const sum=SEC('Resumen del servicio',RO('ID componente',node.id)+RO('Instancia','inst-'+hx)+RO('Estado de provisión',node.status)+RO('Estado operativo','Operativo')+RO('Fecha de alta',DAGO(alta))+RO('Última modificación',DAGO(modd))+RO('OT de alta',ot1)+RO('Última OT de cambio',ot2));
+  const bill=SEC('Contrato y facturación',RO('Cuota vigente',node.price)+RO('IVA 21 %',eur(Math.round(cents*.21))+'/mes')+RO('Permanencia',perm)+RO('Fin de permanencia',fin)+RO('Cuenta de facturación',cl.id)+RO('Ciclo de facturación','Mensual, día 1'),false);
+  if(!c){const m=(/(\d{9})/.exec(node.name)||[,'—'])[1];
+    box.innerHTML=head+sum+SEC('Datos técnicos',RO('MSISDN',m)+RO('ICCID','8934'+hx+'0000')+RO('APN','internet.saas.example')+RO('Tarifa','Ilimitada 5G')+RO('Roaming UE','Activo')+RO('Estado de SIM','Activa'))+bill;return}
+  const v=svcCfg(node,c),seats=parseInt((/\((\d+) Usuarios\)/.exec(node.name)||[0,10])[1]),k={tenant:slugOf(cl.name),hx:hx.slice(0,8),h,v,region:v.region||'EU-West (Madrid)',regc:(v.region||'EU-West').split(' ')[0].toLowerCase(),seats,used:Math.max(1,seats-1-h%3),pct:20+h%55,last:DAGO(h%3)+' '+String(8+h%10).padStart(2,'0')+':'+String(h%60).padStart(2,'0'),certexp:DAGO(-(60+h%300)),slug:slugOf(cl.name),prov:String(cl.provincia||'MAD').slice(0,3).toUpperCase()};
+  const as=attrsOf(c),conf=SEC('Configuración del servicio (solo lectura)',as.map(a=>a.t==='bool'?ROB(a.l,v[a.k]):RO(a.l,a.k==='disc'?v[a.k]+' %':v[a.k])).join(''));
+  const tech=SEC('Datos técnicos de este cliente',(TECH[c.id]?TECH[c.id](node,k):[]).map(([l,x])=>RO(l,x)).join('')+RO('Correlation ID del último provisioning','c-'+hx));
+  const ids=fileIds(cl.tree),dep=(c.requires||[]).map(r=>{const ok=(PROVIDES[r]||[r]).some(x=>ids.has(x));return RO('Requiere: '+cat(r).name,ok?'Activo en el contrato':'No contratado')}).join('')||RO('Dependencias','Ninguna');
+  const rel=SEC('Dependencias',dep,false);
+  const ev=`<details class="win-border bg-white p-1"><summary class="font-bold text-blue-900 cursor-pointer">Últimos eventos</summary>${T(['Fecha','Evento','Origen'],[[DAGO(2),'Health-check correcto','Monitorización'],[DAGO(modd),'Cambio de configuración','OT '+ot2],[DAGO(alta),'Alta provisionada','OT '+ot1]])}</details>`;
+  box.innerHTML=head+sum+conf+tech+bill+rel+ev;
+}
+</script>
+</body>
+</html>

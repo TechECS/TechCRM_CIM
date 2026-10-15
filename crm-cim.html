@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ERP SaaS · Customer Interaction Manager</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#e4e6df;--fl:#f2f3ec;--pn:#fff;--tx:#161616;--mu:#666a62;--bd:#7b7f77;--red:#c8161d;--mg:#9c2a9b;--mgd:#5e165d;--sl:#8b90a2;--sl2:#a9adbc;--p1:#f1d0d0;--p2:#fcecec;--sel:#a4f0a0;--nv:#14194a;--mt:#1e1e2c;--ab:#9094b0;--lnk:#1c3fd0;--er:#c4161c;--hd:#dcdcd4}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#25272a;--fl:#2e3034;--pn:#1b1c1e;--tx:#e8e8e8;--mu:#9a9e98;--bd:#5a5e62;--red:#a3141a;--mg:#7b2379;--mgd:#2f0c2e;--sl:#4d5266;--sl2:#5f6478;--p1:#472b2b;--p2:#352424;--sel:#29682c;--nv:#2c3b8f;--mt:#0d0d14;--ab:#3a3d52;--lnk:#8aa8ff;--er:#ff7f85;--hd:#3b3d40}}
+:root[data-theme="dark"]{--bg:#25272a;--fl:#2e3034;--pn:#1b1c1e;--tx:#e8e8e8;--mu:#9a9e98;--bd:#5a5e62;--red:#a3141a;--mg:#7b2379;--mgd:#2f0c2e;--sl:#4d5266;--sl2:#5f6478;--p1:#472b2b;--p2:#352424;--sel:#29682c;--nv:#2c3b8f;--mt:#0d0d14;--ab:#3a3d52;--lnk:#8aa8ff;--er:#ff7f85;--hd:#3b3d40}
+:root[data-bar="blue"]{--mt:#4b86d4}
+html,body{height:100%;margin:0;overflow:hidden}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--tx);font:11px/1.25 Tahoma,Verdana,Arial,sans-serif}
+#fit{width:100%;height:100%;overflow:hidden;position:relative}
+#app{position:absolute;left:0;top:0;transform-origin:0 0;display:flex;flex-direction:column;background:var(--bg)}
+.ab{height:18px;background:var(--ab);color:#1a1a1a;text-align:center;line-height:18px;position:relative;flex:none}
+.wc{position:absolute;right:0;top:0;display:flex}
+.wc b{width:20px;height:15px;margin:1px 1px 0 0;background:var(--hd);border:1px solid var(--bd);text-align:center;line-height:12px;font-weight:400;font-size:10px;color:#000}
+.mbar{display:flex;align-items:center;background:var(--fl);height:19px;position:relative;z-index:30;border-bottom:1px solid var(--bd);flex:none}
+.mi{padding:2px 9px;font-size:12px;position:relative;cursor:default;white-space:nowrap}.mi:hover,.mi.on{background:var(--sel)}
+.cnt{margin-left:auto;display:flex;gap:9px;padding-right:30px}.cn{display:flex;align-items:center;gap:2px;font-size:10px;cursor:default}.cn i{font-style:normal;font-size:13px;width:14px;text-align:center}
+.dd{position:absolute;left:0;top:100%;background:var(--pn);border:1px solid var(--bd);box-shadow:2px 3px 8px rgba(0,0,0,.35);min-width:200px;padding:2px 0;z-index:40}
+.dd.up{top:auto;bottom:100%}.dw{position:relative;display:inline-block}
+.di{padding:3px 22px;white-space:nowrap;font-size:12px;font-weight:400;color:var(--tx)}.di:hover{background:var(--sel)}.di.off{color:var(--mu);pointer-events:none}
+hr{border:0;border-top:1px solid var(--bd);margin:2px 0}
+.hdr{display:grid;grid-template-columns:4.4fr 1.05fr 2.75fr .85fr;gap:6px;padding:3px 4px;background:var(--fl);height:86px;flex:none}
+.pn{background:var(--fl);border:1px solid var(--bd);overflow:hidden;min-width:0}
+.pt{background:var(--red);color:#fff;font-weight:700;padding:0 4px;height:15px;line-height:15px;white-space:nowrap}
+.pt a{color:#8a3ccf;text-decoration:underline;font-weight:400;margin-left:14px}
+.kv{display:grid;grid-template-columns:auto 1fr auto 1fr auto 1fr;gap:1px 6px;padding:3px 6px;align-items:baseline;white-space:nowrap}
+.kv b{text-align:right;font-weight:700}.rd{color:var(--er);font-weight:700}
+.ls{margin:3px;background:var(--pn);border:1px solid var(--bd);height:30px;overflow:auto}.ls div{padding:0 3px;white-space:nowrap;cursor:default}.ls div.on{background:var(--nv);color:#fff}
+.cb{display:flex;margin:0 3px;border:1px solid var(--bd);background:var(--pn);height:17px}.cb span{flex:1;padding:1px 3px}.cb i{width:14px;background:var(--hd);border-left:1px solid var(--bd);text-align:center;font-style:normal;font-size:8px;line-height:15px}
+.avs{margin:3px;background:var(--pn);border:1px solid var(--bd);height:52px;overflow:auto;color:var(--er);padding:1px 3px}.avs b{color:#e8820c}
+.main{display:flex;flex:1;min-height:0;padding:0 4px 3px;gap:4px;background:var(--bg)}
+.lp{width:172px;flex:none;display:flex;flex-direction:column;background:var(--pn);border:1px solid var(--bd)}
+.lp .pt{display:flex;justify-content:space-between;font-weight:400;font-size:12px}
+.tre{flex:1;overflow:auto;padding:3px 0}
+.ti{padding:1px 4px;white-space:nowrap;overflow:hidden;cursor:default;display:flex;gap:4px;align-items:center;height:16px}.ti.on{background:var(--nv);color:#fff}
+.ti.on .er{color:#ffb0b4}.ti.on .mu2{color:#ccd}.mu2{color:var(--mu)}
+.wic{width:12px;height:9px;background:#4a78d8;border-top:3px solid #1f3a85;flex:none;display:inline-block}
+.ic{font-style:normal;font-size:9px;width:11px;display:inline-block;flex:none}
+.rt{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.mdi{flex:1;min-height:0;display:flex;flex-direction:column;border:1px solid var(--bd);background:var(--bg);position:relative}
+.mt{height:18px;background:var(--mt);color:#fff;line-height:18px;padding-left:6px;display:flex;gap:6px;align-items:center;flex:none}
+.mw{flex:1;min-height:0;overflow:auto;padding:3px}
+.mctl{position:absolute;right:2px;top:20px;display:flex}.mctl b{width:17px;height:14px;margin-left:1px;background:var(--hd);border:1px solid var(--bd);text-align:center;line-height:11px;font-size:10px;font-weight:400}
+.tabs{display:flex;gap:1px;padding-right:62px;flex-wrap:wrap}
+.tab{background:var(--red);color:#fff;font-weight:700;padding:3px 13px;border:1px solid #7d0c10;border-top-color:#e4666a;border-left-color:#e4666a;white-space:nowrap;cursor:default}
+.tab.on{background:var(--fl);color:var(--tx);border-color:var(--bd);border-bottom-color:var(--fl);position:relative;top:1px}
+.tc{border:1px solid var(--bd);box-shadow:inset 1px 1px 0 #fff;background:var(--fl);padding:3px 4px}
+.gb{background:var(--sl);color:#fff;font-weight:700;padding:0 4px;height:15px;line-height:15px;margin:3px 0 2px}
+.sb{background:var(--sl2);color:#fff;font-weight:700;padding:0 4px;height:14px;line-height:14px;margin:2px 0}
+.f{display:flex;align-items:center;gap:5px;margin:2px 0}.f label,.sg label,.sg2 label{font-weight:700;white-space:nowrap}
+.sg{display:grid;grid-template-columns:auto 150px auto 150px auto 150px auto 150px;gap:3px 6px;align-items:center;padding:3px}.sg label,.sg2 label{text-align:right}
+.sg2{display:grid;grid-template-columns:auto 1fr;gap:3px 5px;align-items:center}
+input,select,textarea{font:inherit;height:18px;border:1px solid var(--bd);border-top-color:#555;background:var(--pn);color:var(--tx);padding:0 3px;box-shadow:inset 1px 1px 0 rgba(0,0,0,.15);min-width:0}
+input[readonly],input:disabled,select:disabled,textarea[readonly]{background:var(--hd)}
+select{appearance:none;padding-right:17px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='16'%3E%3Cpath fill='%23666' d='M4 6h7l-3.5 4z'/%3E%3C/svg%3E") right no-repeat,linear-gradient(var(--hd),var(--hd)) right/15px 100% no-repeat,var(--pn)}
+textarea{height:46px;width:100%;resize:none;padding:2px 3px}
+input[type=checkbox]{height:auto}
+.bt{background:linear-gradient(#b445b3,#8e2290);color:#fff;font:700 11px Tahoma,Verdana,Arial,sans-serif;border:1px solid var(--mgd);height:19px;padding:0 10px;cursor:pointer;white-space:nowrap}
+.bt:disabled{background:var(--hd);color:#999;border-color:var(--bd);cursor:default;font-weight:400}
+.bt:focus-visible,input:focus-visible,select:focus-visible{outline:1px solid #fff;outline-offset:-3px}
+.fn{display:inline-block;border:5px solid transparent;border-top:6px solid #fff;border-bottom:0;vertical-align:middle;margin-right:5px}
+.mg{display:inline-block;width:8px;height:8px;border:2px solid #fff;border-radius:50%;margin-right:7px;vertical-align:-1px;position:relative}.mg:after{content:'';position:absolute;width:5px;height:2px;background:#fff;right:-6px;bottom:-3px;transform:rotate(45deg)}
+.gw{overflow:auto;border:1px solid var(--bd);background:var(--p2)}
+table{border-collapse:collapse;width:100%}
+th{background:var(--hd);border:1px solid;border-color:#fff var(--bd) var(--bd) #fff;padding:1px 5px;text-align:left;font-weight:400;white-space:nowrap;position:sticky;top:0;height:17px}
+th:after{content:' ▽';color:var(--mu);font-size:9px}
+td{padding:0 5px;height:17px;white-space:nowrap;cursor:default}
+tr:nth-child(even) td{background:var(--p1)}tr:nth-child(odd) td{background:var(--p2)}tr.sel td{background:var(--sel)}tr.xr td{color:var(--er);font-weight:700}
+.rb{display:inline-block;width:10px;height:10px;border:1px solid #555;border-radius:50%;background:#fff;vertical-align:middle}.rb.on{background:radial-gradient(#222 38%,#fff 42%)}
+.cx{display:inline-block;width:11px;height:11px;border:1px solid #555;background:#fff;vertical-align:middle;margin-right:4px;text-align:center;line-height:9px;font-style:normal;font-size:10px}.cx.on:after{content:'✔'}
+a.l{color:var(--lnk);text-decoration:underline}.rt2{color:var(--er)}.mu{color:var(--mu)}
+.oc{display:grid;grid-template-columns:1.25fr 1.1fr 1fr;gap:8px;padding:3px}
+.mid{display:flex;gap:6px;height:200px;margin-top:4px}.mid>div:first-child{flex:1;min-width:0;display:flex;flex-direction:column}.mid>div:first-child .gw{flex:1}
+.trw{width:340px;flex:none;background:var(--pn);border:1px solid var(--bd);overflow:auto}
+.btr{display:flex;gap:3px;padding:3px;flex:none;border-top:1px solid var(--bd)}
+.dip{background:var(--fl);border:1px solid var(--bd);padding:2px 4px}
+.er{color:var(--er);font-weight:700}
+.tk{height:30px;background:#1f2229;display:flex;align-items:center;flex:none;color:#fff}
+.st{width:36px;height:30px;display:grid;grid-template:1fr 1fr/1fr 1fr;gap:1px;padding:9px 12px}.st i{background:#3aa0e8}
+.sb2{width:250px;height:30px;background:#ececec;color:#555;line-height:30px;padding-left:12px;margin-right:6px}
+.ap{width:16px;height:16px;margin:0 10px;display:inline-block}
+.tray{margin-left:auto;padding:0 12px;text-align:right;font-size:10px;line-height:11px}
+.ov{position:absolute;inset:0;background:rgba(0,0,0,.25);display:grid;place-items:center;z-index:60}
+.dlg{background:var(--bg);border:1px solid #000;min-width:400px;max-width:560px;box-shadow:3px 3px 12px rgba(0,0,0,.5);color:var(--tx)}
+.dt{background:var(--mt);color:#fff;height:18px;line-height:18px;padding-left:6px}.db{padding:10px 10px 4px}.df{display:flex;justify-content:flex-end;gap:6px;padding:6px 10px 10px}
+.ck{display:flex;gap:5px;align-items:center;margin:2px 0;font-weight:400}
+</style>
+</head>
+<body>
+<div id="fit"><div id="app">
+<div class="ab">ERP SaaS Customer Interaction Manager<span class="wc"><b>_</b><b>▫</b><b>✕</b></span></div>
+<div class="mbar" id="menu"></div>
+<div class="hdr" id="hdr"></div>
+<div class="main"><aside class="lp" id="lp"></aside><section class="rt"><div class="mdi" id="view"></div><div id="dip"></div></section></div>
+<div class="tk"><div class="st"><i></i><i></i><i></i><i></i></div><div class="sb2">Escribe aquí para buscar.</div><i class="ap" style="border:2px solid #fff;border-radius:50%"></i><i class="ap" style="border:2px solid #fff"></i><i class="ap" style="background:#c8161d"></i><i class="ap" style="background:conic-gradient(#e33,#fc0,#3a3,#39f,#e33);border-radius:50%"></i><i class="ap" style="background:#e9b949"></i><i class="ap" style="background:#e8d44d"></i><i class="ap" style="background:#1d7a45"></i><div class="tray" id="clk"></div></div>
+<div id="modal"></div>
+</div></div>
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const eur=c=>(c/100).toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2})+' €';
+const dd=d=>d?new Date(d).toLocaleDateString('es-ES'):'';
+const iso=n=>new Date(Date.now()+n*864e5).toISOString();
+const SL={active:'Activo',trialing:'En prueba',past_due:'Impago',suspended:'Suspendido',cancelled:'Cancelado',provisioning:'Provisionando',provisioning_failed:'Fallo de provisión'};
+const OL={pending:'Pendiente',running:'En curso',done:'Completada',failed:'Fallida',skipped:'Omitida',draft:'Pte. Lanzar Procesos',exception:'Excepción',completed:'Cerrada',cancelled:'Cancelada'};
+const AC={create:'Alta',update:'Cambio de plan',suspend:'Suspensión',resume:'Reactivación',delete:'Baja'};
+const ALLOW={update:['active','trialing'],suspend:['active','trialing','past_due'],resume:['suspended'],delete:['active','trialing','past_due','suspended']};
+const EST=['draft','running','exception','completed','cancelled'],OPEN=['running','exception','draft'];
+const lim=l=>Object.entries(l).map(([k,v])=>`${k.replace('_',' ')}: ${v.toLocaleString('es-ES')}`).join(' · ');
+
+/* ===== Motor de órdenes simulado (sustituir por la API real) ===== */
+let seq=1100,won=98001000,spn=270100002;
+const nid=p=>p+(++seq),nwo=()=>String(++won),nsp=()=>String(++spn);
+const T=(name,ch=[])=>({id:nid('k'),name,st:'pending',ch,exc:null,attempts:0});
+const TPL={
+ create:()=>[T('Validar datos del cliente'),T('Reservar plan y licencias'),T('Provisión en el producto',[T('Crear tenant'),T('Crear usuario administrador'),T('Aplicar límites y módulos')]),T('Facturación',[T('Alta en pasarela de pago')]),T('Notificar al cliente')],
+ update:()=>[T('Validar cambio de plan'),T('Provisión en el producto',[T('Actualizar entitlements')]),T('Facturación',[T('Prorrateo y nuevo importe')])],
+ suspend:()=>[T('Provisión en el producto',[T('Suspender acceso')]),T('Notificar al cliente')],
+ resume:()=>[T('Provisión en el producto',[T('Reactivar acceso')]),T('Notificar al cliente')],
+ delete:()=>[T('Provisión en el producto',[T('Eliminar tenant y datos')]),T('Facturación',[T('Baja de la suscripción')])]};
+const RISK={'Crear tenant':'EXC-504 · Timeout en la API del producto','Alta en pasarela de pago':'EXC-402 · Pago rechazado por la pasarela','Actualizar entitlements':'EXC-409 · Los límites nuevos no son aplicables'};
+const leaves=(ns,a=[])=>(ns.forEach(n=>n.ch.length?leaves(n.ch,a):a.push(n)),a);
+const tst=n=>{if(!n.ch.length)return n.st;const c=n.ch.map(tst);return c.includes('failed')?'failed':c.includes('running')?'running':c.every(x=>x==='done'||x==='skipped')?'done':c.some(x=>x==='done')?'running':'pending'};
+const db={
+ products:[{id:'facturacion',name:'Facturación'},{id:'crm',name:'CRM'},{id:'inventario',name:'Inventario'}],
+ plans:[
+  {id:'p1',product_id:'facturacion',name:'Básico',code:'FACBAS',price:1900,limits:{max_users:3},modules:['facturas']},
+  {id:'p2',product_id:'facturacion',name:'Pro',code:'FACPRO',price:4900,limits:{max_users:20},modules:['facturas','informes','api']},
+  {id:'p3',product_id:'crm',name:'Starter',code:'CRMSTA',price:2900,limits:{max_users:5,contactos:5000},modules:['contactos','pipeline']},
+  {id:'p4',product_id:'crm',name:'Business',code:'CRMBUS',price:7900,limits:{max_users:25,contactos:50000},modules:['contactos','pipeline','automatización']},
+  {id:'p5',product_id:'inventario',name:'Estándar',code:'INVEST',price:3900,limits:{max_users:10,almacenes:2},modules:['stock','pedidos']},
+  {id:'p6',product_id:'inventario',name:'Pro',code:'INVPRO',price:9900,limits:{max_users:50,almacenes:10},modules:['stock','pedidos','trazabilidad']}],
+ customers:[
+  {id:'c1',num:'748100221',name:'Talleres Ruiz S.L.',email:'admin@talleresruiz.es',tax_id:'B12345678',phone:'937100221',prov:'Barcelona',city:'Terrassa',cp:'08221',country:'ES',type:'Empresa',cls:'RE',acct:'Corporativa',st:'Activo'},
+  {id:'c2',num:'116300845',name:'Clínica Dental Sol S.L.',email:'gerencia@dentalsol.es',tax_id:'B87654321',phone:'932200845',prov:'Barcelona',city:'Sabadell',cp:'08201',country:'ES',type:'Empresa',cls:'RE',acct:'Corporativa',st:'Moroso'},
+  {id:'c3',num:'057022918',name:'Laura Vidal Prats',email:'laura.vidal@correo.es',tax_id:'47123456K',phone:'655022918',prov:'Madrid',city:'Alcalá de Henares',cp:'28801',country:'ES',type:'Particular',cls:'RS',acct:'Individual',st:'Activo'},
+  {id:'c4',num:'903355017',name:'Marcos Ferrer Olmo',email:'marcos@ferrerolmo.es',tax_id:'39555017X',phone:'688355017',prov:'Valencia',city:'Gandía',cp:'46700',country:'ES',type:'Particular',cls:'RS',acct:'Individual',st:'Desconectado'}],
+ subs:[
+  {id:'s1',customer_id:'c1',plan_id:'p2',product_id:'facturacion',status:'active',tenant_id:'tn_k29fa1',current_period_end:iso(12)},
+  {id:'s2',customer_id:'c1',plan_id:'p3',product_id:'crm',status:'trialing',tenant_id:'tn_x81bq7',current_period_end:iso(9)},
+  {id:'s3',customer_id:'c2',plan_id:'p1',product_id:'facturacion',status:'past_due',tenant_id:'tn_m55dd2',current_period_end:iso(-3)},
+  {id:'s4',customer_id:'c3',plan_id:'p5',product_id:'inventario',status:'suspended',tenant_id:'tn_p02zz9',current_period_end:iso(-20)},
+  {id:'s5',customer_id:'c4',plan_id:'p4',product_id:'crm',status:'provisioning_failed',tenant_id:null,current_period_end:null}],
+ orders:[]
+};
+const find=(k,i)=>db[k].find(x=>x.id===i);
+const pname=(pid)=>{const p=find('plans',pid);return find('products',p.product_id).name+' '+p.name};
+function mkWO(s,action,plan_id,parent){const o={id:nwo(),kind:'work',customer_id:s.customer_id,sub_id:s.id,action,plan_id,parent,title:AC[action]+' · '+pname(plan_id),status:'running',exc:null,opened:Date.now(),planned:Date.now(),closed:null,creator:'admin',tasks:TPL[action]()};db.orders.push(o);return o}
+function rollup(o){if(!o.parent)return;const p=find('orders',o.parent),ch=db.orders.filter(x=>x.parent===p.id);
+ p.status=ch.some(c=>c.status==='exception')?'exception':ch.every(c=>c.status==='completed')?'completed':ch.every(c=>c.status==='cancelled')?'cancelled':'running';
+ p.exc=(ch.find(c=>c.exc)||{}).exc||null;if(p.status==='completed')p.closed=Date.now()}
+function finish(o,s){o.status='completed';o.closed=Date.now();o.exc=null;s.busy=null;
+ if(o.action==='create'){s.status='active';s.tenant_id='tn_'+Math.random().toString(36).slice(2,8);s.current_period_end=iso(30)}
+ if(o.action==='update')s.plan_id=o.plan_id;
+ if(o.action==='suspend')s.status='suspended';
+ if(o.action==='resume')s.status='active';
+ if(o.action==='delete')s.status='cancelled';
+ rollup(o);render()}
+function step(o){if(o.status==='cancelled')return;const s=find('subs',o.sub_id),l=leaves(o.tasks).find(x=>x.st==='pending');
+ o.status='running';o.exc=null;s.busy=o.action;if(o.action==='create')s.status='provisioning';
+ if(!l)return finish(o,s);
+ l.st='running';l.attempts++;rollup(o);render();
+ setTimeout(()=>{if(o.status==='cancelled')return;
+  if(RISK[l.name]&&l.attempts===1&&Math.random()<.4){l.st='failed';l.exc=RISK[l.name];o.status='exception';o.exc=l.exc;s.busy=null;if(o.action==='create')s.status='provisioning_failed';rollup(o);render()}
+  else{l.st='done';step(o)}},1000)}
+const seedWO=(sid,act,parent,state,days)=>{const s=find('subs',sid),o=mkWO(s,act,s.plan_id,parent),L=leaves(o.tasks);o.opened=o.planned=Date.now()-days*864e5;
+ if(state==='completed'){L.forEach(l=>{l.st='done';l.attempts=1});o.status='completed';o.closed=o.opened+36e5}
+ else{const i=L.findIndex(l=>RISK[l.name]);L.forEach((l,j)=>{if(j<i){l.st='done';l.attempts=1}});L[i].st='failed';L[i].attempts=1;L[i].exc=RISK[L[i].name];o.status='exception';o.exc=L[i].exc}};
+const SP=(id,cid,plans,status,days,exc)=>db.orders.push({id,kind:'special',customer_id:cid,title:plans.map(pname).join(' + '),status,exc,signature:'Firmado',seller:'jgarcia',channel:'Telefónico',reason:'Alta nueva',opened:Date.now()-days*864e5,planned:Date.now()-days*864e5,closed:status==='completed'?Date.now()-days*864e5+36e5:null,creator:'jgarcia',plan_ids:plans,tasks:[]});
+SP('270100001','c1',['p2','p3'],'completed',40,null);SP('270100002','c4',['p4'],'exception',1,RISK['Crear tenant']);
+seedWO('s1','create','270100001','completed',40);seedWO('s2','create','270100001','completed',40);seedWO('s5','create','270100002','exception',1);seedWO('s4','suspend',null,'completed',20);
+
+const api={
+ async customers(q={}){const m=(a,b)=>!b||String(a).toLowerCase().includes(b.toLowerCase());
+  return db.customers.filter(c=>m(c.tax_id,q.tax)&&m(c.name,q.name)&&m(c.phone,q.phone)&&m(c.num,q.num)&&m(c.email,q.email)&&(!q.company||(c.type==='Empresa'&&m(c.name,q.company)))&&(!q.prov||c.prov===q.prov)&&(!q.city||c.city===q.city)&&(!q.tenant||db.subs.some(s=>s.customer_id===c.id&&m(s.tenant_id||'',q.tenant))))},
+ async customer(i){return find('customers',i)},
+ async createCustomer(d){if(!d.name||!d.email)throw Error('Nombre y email son obligatorios.');const c={id:nid('c'),num:String(100000000+Math.floor(Math.random()*899999999)),...d,type:'Particular',cls:'RS',acct:'Individual',st:'Activo',cp:'',country:'ES'};db.customers.push(c);return c},
+ async plans(){return db.plans},async products(){return db.products},async subs(){return db.subs},async orders(){return db.orders},
+ async createSpecial(d){const ps=d.plans||[];if(!ps.length)throw Error('Selecciona al menos un servicio a contratar.');
+  const prods=ps.map(p=>find('plans',p).product_id);if(new Set(prods).size!==prods.length)throw Error('Solo puede haber un plan por producto en la misma orden.');
+  const dup=db.subs.find(s=>s.customer_id===d.customer_id&&prods.includes(s.product_id)&&s.status!=='cancelled');
+  if(dup)throw Error('El cliente ya tiene contratado «'+find('products',dup.product_id).name+'». Usa una orden de trabajo de cambio de plan.');
+  const o={id:nsp(),kind:'special',customer_id:d.customer_id,title:ps.map(pname).join(' + '),status:'draft',exc:null,signature:'Pendiente',seller:'admin',channel:d.channel,reason:d.reason,opened:Date.now(),planned:d.planned?new Date(d.planned).getTime():Date.now(),closed:null,creator:'admin',plan_ids:ps,tasks:[]};db.orders.push(o);return o.id},
+ async sign(id){find('orders',id).signature='Firmado'},
+ async launch(id){const o=find('orders',id);if(o.signature!=='Firmado')throw Error('El contrato debe estar firmado antes de lanzar los procesos.');o.status='running';
+  o.plan_ids.forEach(pid=>{const p=find('plans',pid),s={id:nid('s'),customer_id:o.customer_id,plan_id:pid,product_id:p.product_id,status:'provisioning',tenant_id:null,current_period_end:null};db.subs.push(s);step(mkWO(s,'create',pid,o.id))})},
+ async createWork(sid,action,plan_id){const s=find('subs',sid);
+  if(db.orders.some(o=>o.sub_id===sid&&['running','exception'].includes(o.status)))throw Error('Ya hay una orden abierta para este servicio. Ciérrala o cancélala antes de crear otra.');
+  if(!ALLOW[action].includes(s.status))throw Error('No se puede hacer «'+AC[action]+'» sobre un servicio en estado «'+SL[s.status]+'».');
+  if(action==='update'&&(find('plans',plan_id).product_id!==s.product_id||plan_id===s.plan_id))throw Error('Elige un plan distinto del mismo producto.');
+  const o=mkWO(s,action,plan_id||s.plan_id,null);step(o);return o.id},
+ async retry(oid,tid){const o=find('orders',oid);Object.assign(leaves(o.tasks).find(x=>x.id===tid),{st:'pending',exc:null});step(o)},
+ async skip(oid,tid){const o=find('orders',oid);Object.assign(leaves(o.tasks).find(x=>x.id===tid),{st:'skipped',exc:null});step(o)},
+ async cancel(id){const kill=x=>{if(['completed','cancelled'].includes(x.status))return;x.status='cancelled';x.exc=null;leaves(x.tasks).forEach(l=>{if(['pending','failed','running'].includes(l.st))l.st='skipped'});
+   const s=x.sub_id&&find('subs',x.sub_id);if(s){s.busy=null;if(x.action==='create')s.status='cancelled'}rollup(x)};
+  const o=find('orders',id);kill(o);if(o.kind==='special')db.orders.filter(c=>c.parent===id).forEach(kill)}
+};
+
+/* ===== Estado y utilidades de interfaz ===== */
+const S={wins:[{id:'search'}],act:'search',ctx:null,ctxs:[],q:{},draft:{},sel:{},tab:{},sub:{},f:{tipo:'',estado:'',sv:'Activos'},menu:null,offer:{},dark:false,blue:false};
+const G=t=>`<div class="gb">${t}</div>`,SB=t=>`<div class="sb">${t}</div>`;
+const BT=(a,t,dis,x='')=>`<button class="bt" data-do="${a}" ${dis?'disabled':''} ${x}>${t}</button>`;
+const SEL=(opts,w,sel,at='')=>`<select style="width:${w}px" ${at}>${opts.map(o=>`<option ${o===sel?'selected':''}>${esc(o)}</option>`).join('')}</select>`;
+const RO=(v,x='')=>`<input readonly value="${esc(v)}" style="${x}">`;
+const R=(l,v,x)=>`<label>${l}:</label>${RO(v,x)}`;
+const fsel=(k,m,vs)=>`<select data-flt="${k}" style="width:120px"><option value="">Todos</option>${vs.map(v=>`<option value="${v}" ${S.f[k]===v?'selected':''}>${m[v]}</option>`).join('')}</select>`;
+const fl=(D,kind,cid)=>D.orders.filter(o=>(!cid||o.customer_id===cid)&&(kind?o.kind===kind:(!S.f.tipo||o.kind===S.f.tipo))&&(!S.f.estado||o.status===S.f.estado)).sort((a,b)=>b.opened-a.opened);
+const curCust=()=>S.act.startsWith('c:')?S.act.slice(2):S.ctx;
+const ctxO=D=>S.act.startsWith('o:')?D.orders.find(x=>x.id===S.act.slice(2)):null;
+const IC={done:'#1a9a2a',completed:'#1a9a2a',running:'#1f5fd0',pending:'#8a8a8a',draft:'#8a8a8a',failed:'#d11',exception:'#d11',skipped:'#8a8a8a',cancelled:'#8a8a8a'};
+const tnode=n=>({id:n.id,name:n.name,st:tst(n),exc:n.exc,att:n.attempts,kind:'task',leaf:!n.ch.length,ch:n.ch.map(tnode)});
+function treeOf(D,o){const wo=w=>({id:w.id,name:`Orden ${w.id} · ${w.title}`,st:w.status,exc:w.exc,kind:'work',ch:w.tasks.map(tnode)});
+ if(o.kind==='work')return wo(o);
+ const ch=o.status==='draft'?o.plan_ids.map(p=>({id:'pl_'+p,name:'Servicio · '+pname(p),st:'pending',exc:null,kind:'item',ch:[]})):D.orders.filter(x=>x.parent===o.id).map(wo);
+ return{id:o.id,name:`Contract ${o.id} · ${o.title}`,st:o.status,exc:o.exc,kind:'special',ch}}
+const fnode=(n,id)=>n.id===id?n:n.ch.map(c=>fnode(c,id)).find(Boolean);
+const selNode=(D,o)=>{const r=treeOf(D,o);return fnode(r,S.sel['o:'+o.id])||r};
+const ownerOf=(D,tid)=>D.orders.find(x=>x.kind==='work'&&leaves(x.tasks).some(l=>l.id===tid));
+const en=(a,D)=>{if(a==='new-wo'||a==='new-esp')return !!curCust();
+ if(a==='close-win')return S.wins.length>1;if(a==='open-sel')return !!S.sel.search;
+ if(!['sign','launch','retry','skip','cancel'].includes(a))return true;
+ const o=ctxO(D);if(!o)return false;const n=selNode(D,o),sp=o.kind==='special',fail=n.kind==='task'&&n.leaf&&n.st==='failed';
+ return{sign:sp&&o.status==='draft'&&o.signature!=='Firmado',launch:sp&&o.status==='draft'&&o.signature==='Firmado',retry:fail,skip:fail,cancel:OPEN.includes(o.status)}[a]};
+const MENUS=()=>({Archivo:[['Nuevo cliente…','new-customer'],['-'],['Cerrar ventana','close-win']],
+ Buscar:[['Buscar cliente','go:search'],['Abrir cliente seleccionado','open-sel']],
+ Tickets:[['Bandeja de órdenes','go:orders'],['Órdenes con excepción','q:exception'],['Pendientes de lanzar','q:draft']],
+ Acciones:[['Nueva orden de trabajo…','new-wo'],['Nueva orden especial…','new-esp'],['-'],['Firmar contrato','sign'],['Lanzar procesos','launch'],['Reintentar tarea','retry'],['Omitir tarea','skip'],['Cancelar orden','cancel']],
+ Herramientas:[['Actualizar','refresh'],['Leyenda…','legend'],['-'],['Tema: '+(S.dark?'claro':'oscuro'),'theme'],['Barra de título: '+(S.blue?'oscura':'azul'),'bar']],
+ Ayuda:[['Acerca de…','about']]});
+const DD={gc:[['Nueva orden de trabajo…','new-wo'],['Nueva orden especial…','new-esp'],['Nuevo cliente…','new-customer']],tk:[['Bandeja de órdenes','go:orders'],['Órdenes con excepción','q:exception']],pr:[['Reintentar tarea','retry'],['Omitir tarea','skip']]};
+const dropdown=(k,items,D,cls='')=>S.menu===k?`<div class="dd ${cls}">${items.map(i=>i[0]==='-'?'<hr>':`<div class="di ${en(i[1],D)?'':'off'}" data-do="${i[1]}">${esc(i[0])}</div>`).join('')}</div>`:'';
+async function data(){const[subs,orders,plans,products,cs]=await Promise.all([api.subs(),api.orders(),api.plans(),api.products(),api.customers()]);
+ return{subs,orders,cs,plans,products,pl:Object.fromEntries(plans.map(p=>[p.id,p])),pr:Object.fromEntries(products.map(p=>[p.id,p]))}}
+const wtitle=(id,D,sh)=>{if(id==='search')return sh?'Buscar Cliente':'Buscar Cliente en el CIM';if(id==='orders')return sh?'Tickets':'Gestión de Tickets · Órdenes';
+ if(id[0]==='c')return(sh?'Página Central':'Página Central Interacción')+' ['+(S.ctxs.indexOf(id.slice(2))+1)+']';
+ const o=D.orders.find(x=>x.id===id.slice(2));return o?(o.kind==='special'?'Contract '+(sh?': ':'')+o.id:(sh?'Orden: ':'Orden de trabajo ')+o.id):id};
+
+/* ===== Cuadrícula ===== */
+const grid=(g,cols,rows,o={})=>{const sid=S.sel[g]!==undefined?S.sel[g]:(o.first&&rows[0]?rows[0].id:undefined);
+ return`<div class="gw" style="${o.h?'max-height:'+o.h+'px':''}"><table><tr>${o.rb?'<th style="width:18px"></th>':''}${cols.map(c=>`<th>${c[0]}</th>`).join('')}</tr>${rows.map(r=>`<tr data-g="${g}" data-rid="${r.id}" ${o.open?`data-open="${o.open}${r.id}"`:''} class="${sid===r.id||(o.on&&o.on(r))?'sel':''} ${o.cls?o.cls(r):''}">${o.rb?`<td><i class="rb ${sid===r.id?'on':''}"></i></td>`:''}${cols.map(c=>`<td>${c[1](r)}</td>`).join('')}</tr>`).join('')||`<tr><td colspan="${cols.length+(o.rb?1:0)}">${o.empty||''}</td></tr>`}</table></div>`};
+
+/* ===== Ventanas ===== */
+function vSearch(D,rs){const d=S.draft,I=(k,w)=>`<input data-f="${k}" value="${esc(d[k]||'')}" style="width:${w||'100%'}">`,
+ so=(k,a)=>`<select data-f="${k}" style="width:100%"><option value="">A seleccionar</option>${a.map(x=>`<option ${d[k]===x?'selected':''}>${esc(x)}</option>`).join('')}</select>`,
+ pv=[...new Set(D.cs.map(c=>c.prov))],ct=[...new Set(D.cs.map(c=>c.city))],bl='<span></span>',svc=D.subs.filter(s=>rs.some(c=>c.id===s.customer_id));
+ return`${G('Criterios de Búsqueda')}<form id="sf" class="tc"><div class="sg"><label>NIF/CIF/Pasaporte:</label>${I('tax')}${bl.repeat(6)}
+ <label>Nombre:</label>${I('name')}<label>Email:</label>${I('email')}<label>Teléfono:</label>${I('phone')}<label>ID Cliente:</label>${I('num')}
+ <label>Empresa:</label>${I('company')}<label>Provincia:</label>${so('prov',pv)}<label>Población:</label>${so('city',ct)}<label>ID Tenant:</label>${I('tenant')}</div>
+ <div class="f" style="justify-content:flex-end"><button type="button" class="bt" data-do="clear">⟲ Limpiar</button><button class="bt"><i class="mg"></i>Buscar</button></div></form>
+ ${G('Resultados de Búsqueda')}${SB('Servicio / Tenant')}${grid('sv',[['Producto',r=>esc(D.pr[r.product_id].name)],['Plan',r=>esc(D.pl[r.plan_id].name)],['Tenant',r=>esc(r.tenant_id||'')],['Cliente',r=>esc(D.cs.find(c=>c.id===r.customer_id).name)],['Auto Provisión',r=>'SI'],['Estado',r=>SL[r.status]],['Provincia',r=>esc(D.cs.find(c=>c.id===r.customer_id).prov)],['Ciudad',r=>esc(D.cs.find(c=>c.id===r.customer_id).city)]],svc,{rb:1,h:90})}
+ ${SB('Cliente')}${grid('search',[['ID Cliente',r=>r.num],['Nombre y apellidos / Nombre Empresa',r=>esc(r.name)],['Clase Cliente',r=>r.cls],['Tipo Cuenta',r=>r.acct],['C/P',r=>'C'],['Estado',r=>r.st],['Teléfono',r=>r.phone],['Email',r=>esc(r.email)]],rs,{rb:1,open:'c:',empty:'Ningún cliente coincide con los criterios.'})}
+ <div class="f">${BT('open-sel','Abrir Cliente',!S.sel.search)}<span class="mu">Doble clic en un cliente para abrir su Página Central.</span></div>`}
+function vOrders(D){return`${G('Gestión de Tickets · Órdenes')}<div class="f"><label>Tipo:</label>${fsel('tipo',{work:'Trabajo',special:'Especial'},['work','special'])}<label>Estado:</label>${fsel('estado',OL,EST)}${BT('refresh','<i class="fn"></i>Filtrar')}</div>
+ ${grid('orders',[['Nº Orden',r=>r.id],['Tipo',r=>r.kind==='work'?'Trabajo':'Especial'],['Cliente',r=>esc(D.cs.find(c=>c.id===r.customer_id).name)],['Título',r=>esc(r.title)],['Estado',r=>OL[r.status]],['EE',r=>esc((r.exc||'').split(' ')[0])],['F. apertura',r=>dd(r.opened)],['F. cierre',r=>dd(r.closed)],['Perfil Crea.',r=>esc(r.creator)]],fl(D),{open:'o:',cls:r=>r.exc?'xr':'',empty:'No hay órdenes con ese filtro.'})}`}
+const TB=[['info','Información de Contacto'],['serv','Servicios Contratados'],['oferta','Configurador Oferta'],['jer','Jerarquía'],['reg','Registros de Cliente'],['fact','Facturación'],['camp','Campañas Comerciales'],['otra','Otra Información']];
+function vCust(D,id){const c=D.cs.find(z=>z.id===id);if(!c)return'Cliente no encontrado.';const tab=S.tab[id]||'reg',subs=D.subs.filter(s=>s.customer_id===id);
+ const body={info:cInfo,serv:cServ,oferta:cOferta,jer:cJer,reg:cReg,fact:cFact,camp:()=>'<p class="mu">Sin campañas comerciales activas.</p>',otra:()=>'<p class="mu">Sin información adicional.</p>'}[tab](D,c,subs);
+ return`<div class="tabs">${TB.map(t=>`<div class="tab ${tab===t[0]?'on':''}" data-itab="${id}|${t[0]}">${t[1]}</div>`).join('')}</div><div class="tc">${body}</div>`}
+function cInfo(D,c){const bl='<span></span>';return`${G('Datos del Cliente')}<div class="sg"><label>Nombre / Razón social:</label>${RO(c.name)}<label>NIF/CIF:</label>${RO(c.tax_id)}<label>Tipo de Cliente:</label>${RO(c.type)}<label>Clase Cliente:</label>${RO(c.cls)}
+ <label>Email:</label>${RO(c.email)}<label>Teléfono:</label>${RO(c.phone)}<label>Estado Cliente:</label>${RO(c.st)}<label>Tipo Cuenta:</label>${RO(c.acct)}
+ <label>Provincia:</label>${RO(c.prov)}<label>Población:</label>${RO(c.city)}<label>CP:</label>${RO(c.cp)}<label>País:</label>${RO(c.country)}
+ <label>Periodo Retención:</label>${RO('No')}<label>Tipo Contacto(C/P):</label>${RO('C')}${bl.repeat(4)}</div>`}
+function cServ(D,c,subs){const k='sv:'+c.id,fv=S.f.sv,rows=subs.filter(s=>fv==='Todos'||(fv==='Activos'&&!['cancelled','suspended'].includes(s.status))||(fv==='Suspendidos'&&s.status==='suspended')||(fv==='Cancelados'&&s.status==='cancelled')),s=subs.find(x=>x.id===S.sel[k]);
+ return`<div class="f" style="gap:24px;align-items:flex-start"><div style="width:260px">${G('Cuenta Cliente')}<div style="padding:2px 4px">${esc(c.st)}</div></div><div><label style="font-weight:700">Tipo de comerciabilidad</label>${RO(c.type==='Empresa'?'SAAS-B2B':'SAAS-B2C','width:200px;display:block')}</div><div><label class="ck"><i class="cx on"></i>Multi-tenant</label><label class="ck"><i class="cx on"></i>Auto-provisión</label></div></div>
+ ${G('Servicios básicos')}<div class="f"><label>Estado:</label><select data-flt="sv" style="width:110px">${['Activos','Todos','Suspendidos','Cancelados'].map(x=>`<option ${x===fv?'selected':''}>${x}</option>`).join('')}</select><label>Srv. Digital:</label>${SEL(['Todos','Web','API'],70)}${BT('refresh','<i class="fn"></i>Filtrar')}</div>
+ ${grid(k,[['Descripción',r=>`<span class="rt2">- ${esc(pname(r.plan_id))}@${D.pl[r.plan_id].code}</span>`],['Servicio',r=>`<a class="l">${D.pl[r.plan_id].code}</a>`],['Equipo',r=>r.tenant_id?`<a class="l">${r.tenant_id}</a>`:''],['Tipo Equipo',r=>'TENANT SAAS'],['Estado',r=>SL[r.status]+(r.busy?' · '+AC[r.busy]+'…':'')],['Plan',r=>esc(D.pl[r.plan_id].name)],['Precio/mes',r=>eur(D.pl[r.plan_id].price)],['Renovación',r=>dd(r.current_period_end)]],rows,{h:150,empty:'Sin servicios con este filtro.'})}
+ ${G('Detalle del servicio')}${s?`<div class="sg2" style="padding:3px;grid-template-columns:auto 1fr auto 1fr"><label>Límites:</label>${RO(lim(D.pl[s.plan_id].limits))}<label>Módulos:</label>${RO(D.pl[s.plan_id].modules.join(', '))}</div>`:'<div class="mu" style="padding:2px 4px">Selecciona un servicio de la lista.</div>'}
+ <div class="f">${BT('new-wo','Nueva Orden de Trabajo')}${BT('new-esp','Nueva Orden Especial')}</div>`}
+function cOferta(D,c){const k='of:'+c.id,on=S.offer[k]||[];
+ return`${G('Configurador de Oferta')}<div class="mu" style="padding:2px 4px">Marca los planes a contratar y crea una orden especial (contrato).</div>${grid(k,[['',r=>`<i class="cx ${on.includes(r.id)?'on':''}"></i>`],['Producto',r=>esc(D.pr[r.product_id].name)],['Plan',r=>esc(r.name)],['Código',r=>r.code],['Precio/mes',r=>eur(r.price)],['Límites',r=>esc(lim(r.limits))],['Módulos',r=>esc(r.modules.join(', '))]],D.plans,{on:r=>on.includes(r.id)})}
+ <div class="f">${BT('offer-go','Crear Orden Especial',!on.length)}</div>`}
+function cJer(D,c,subs){const row=(d,t,x='')=>`<div class="ti" style="padding-left:${4+d*16}px"><i class="wic"></i>${t}${x}</div>`;
+ return`${G('Jerarquía del cliente')}<div class="trw" style="width:auto;min-height:150px;padding:3px 0">${row(0,'Cliente '+c.num+' · '+esc(c.name))}${row(1,'Cuenta '+c.acct+' · '+esc(c.st))}${subs.map(s=>row(2,esc(pname(s.plan_id))+' ('+(s.tenant_id||'sin tenant')+') ',`<span class="mu2">[${SL[s.status]}]</span>`)+row(3,'Límites: '+esc(lim(D.pl[s.plan_id].limits)))).join('')||row(2,'Sin servicios contratados')}</div>`}
+function cReg(D,c){const k='ot:'+c.id,tn=S.draft.tn||'',ee=x=>x?String(x).split(' ')[0]:'',fail=o=>{const l=leaves(o.tasks).find(x=>x.st==='failed');return l?l.name:''},
+ w=fl(D,'work',c.id).filter(o=>!tn||(D.subs.find(s=>s.id===o.sub_id).tenant_id||'').includes(tn)),sp=fl(D,'special',c.id);
+ return`${G('Órdenes de trabajo')}<div class="f"><label>Estado:</label>${fsel('estado',OL,EST)}<label>Tenant:</label><input data-f="tn" value="${esc(tn)}" style="width:110px">${BT('refresh','<i class="fn"></i>Filtrar')}<span class="dw">${BT('legend','Leyenda ▾')}</span><span style="flex:1"></span>${BT('refresh','Refrescar')}</div>
+ ${grid(k,[['Nº Orden',r=>r.id],['Título',r=>esc(r.title)],['Estado',r=>OL[r.status]],['F. apertura',r=>dd(r.opened)],['F. planifica',r=>dd(r.planned)],['F. cierre',r=>dd(r.closed)],['EE',r=>esc(ee(r.exc))],['Fallo',r=>esc(fail(r))],['Perfil Crea.',r=>esc(r.creator)]],w,{open:'o:',cls:r=>r.exc?'xr':'',h:150,empty:'Sin órdenes de trabajo.'})}
+ ${G('Órdenes especiales · Contratos')}<div class="f"><label>Estado:</label>${fsel('estado',OL,EST)}${BT('refresh','<i class="fn"></i>Filtrar')}<span style="flex:1"></span>${BT('new-esp','Nueva Orden Especial')}</div>
+ ${grid('es:'+c.id,[['Nº Orden',r=>r.id],['Título',r=>esc(r.title)],['Estado',r=>OL[r.status]],['Canal',r=>r.channel],['Vendedor',r=>esc(r.seller)],['Aceptación',r=>r.signature],['F. creación',r=>dd(r.opened)],['F. cierre',r=>dd(r.closed)],['EE',r=>esc(ee(r.exc))],['Perfil Crea.',r=>esc(r.creator)]],sp,{open:'o:',cls:r=>r.exc?'xr':'',h:120,empty:'Sin órdenes especiales.'})}`}
+function invoices(D,cid){const subs=D.subs.filter(s=>s.customer_id===cid&&s.tenant_id&&s.status!=='cancelled'),base=subs.reduce((a,s)=>a+D.pl[s.plan_id].price,0),late=subs.some(s=>s.status==='past_due'),n=parseInt(cid.slice(1))*100;
+ return base?[0,1,2].map(m=>{const f=Date.now()-(m*30+3)*864e5,iva=Math.round(base*.21),imp=m===0&&late;return{id:'YI26-'+String(23000+n+m).padStart(8,'0'),f,fv:f+15*864e5,imp:eur(base),iva:eur(iva),tot:eur(base+iva),pag:eur(imp?0:base+iva),pen:eur(imp?base+iva:0),est:imp?'IMPAGADO':'PAGADO',late:imp}}):[]}
+function cFact(D,c){const inv=invoices(D,c.id),k='inv:'+c.id,sub=S.sub[k]||'Pagos',ST2=['Datos Facturación','Direcciones Envío','Ajustes','Pagos','Acciones Recobro','Financiación Terminal'],dt='<input style="width:100px"><b class="cx" style="width:16px;height:16px;margin:0">▦</b>',late=inv.some(i=>i.late);
+ let sc='';
+ if(sub==='Pagos')sc=`<div class="f"><label>Fecha desde:</label>${dt}<label>Fecha hasta:</label>${dt}<label>Nº factura:</label><input style="width:100px;background:#f6f3a8"><label>Tipo</label><label class="ck"><i class="rb"></i>Asignados</label><label class="ck"><i class="rb"></i>No Asignados</label><label class="ck"><i class="rb on"></i>Todos</label><span style="flex:1"></span>${BT('refresh','Todas Facturas')}${BT('refresh','<i class="fn"></i>Filtrar')}</div>${grid('pg:'+c.id,[['Fecha factura',r=>dd(r.f)],['Importe',r=>r.imp],['Fecha pago',r=>r.late?'':dd(r.f+4*864e5)],['Estado',r=>r.late?'FALLADO':'CREADO'],['Método pago',r=>r.late?'Recibo domiciliado':'Pago con tarjeta']],inv,{h:150,empty:'Sin pagos.'})}`;
+ else if(sub==='Acciones Recobro'){const ar=late?[['10','Z002','CAD01','Llamadas PDS',-14],['0','Z003','','Generación Email',-10],['0','Z001','','Generación SMS',-7],['0','Z009','','Se solicita la suspensión de los servicios del cliente',-2]].map((a,i)=>({id:'a'+i,a})):[];
+  sc=grid('ar:'+c.id,[['Secu…',r=>r.a[0]],['C. eve…',r=>r.a[1]],['Descripción ev…',r=>r.a[2]],['Comentario',r=>r.a[3]],['F. completado',r=>dd(Date.now()+r.a[4]*864e5)],['Completa…',r=>'RMCA'],['Estado',r=>'C'],['F. prevista',r=>'??? ?:?:?'],['Plazo max.',r=>'??? ?:?:?']],ar,{h:150,empty:'Sin acciones de recobro.'})+`<div class="f"><label>Tenant:</label><input style="width:150px">${BT('refresh','<i class="mg"></i>Buscar Interacción')}</div><div class="f"><label class="ck"><i class="cx"></i>Bloqueo cuenta contrato</label></div>`}
+ else sc=`<div class="sg2" style="padding:6px;max-width:420px"><label>Ciclo de facturación:</label>${RO('Mensual')}<label>Método de pago:</label>${RO('Domiciliación SEPA')}<label>Moneda:</label>${RO('EUR')}</div>`;
+ return`<div class="f"><label>Tipo Factura</label>${SEL(['Factura Principal'],130)}<label>Desde</label>${dt}<label>Hasta</label>${dt}<span style="flex:1"></span>${BT('inv-dup','Enviar Duplicado')}${BT('refresh','Todas Facturas')}</div>
+ ${grid(k,[['Nº Factura',r=>r.id],['Fecha fact…',r=>dd(r.f)],['Importe',r=>r.imp],['IVA',r=>r.iva],['Plazo Fina…',r=>dd(r.fv)],['Pagos a T…',r=>r.pag],['Total a pa…',r=>r.tot],['Base Impo…',r=>r.imp],['Tipo Factura',r=>'Factura Princi…'],['Fecha ven…',r=>dd(r.fv)],['Importe P…',r=>r.pen],['Estado',r=>r.est],['Evento co…',r=>''],['Existe Cargo',r=>'NO']],inv,{rb:1,first:1,h:70,cls:r=>r.late?'xr':'',empty:'Sin facturas.'})}
+ <div class="f"><i class="cx"></i>Facturas con costes de impago</div><div class="tabs">${ST2.map(t=>`<div class="tab ${sub===t?'on':''}" data-stab="${k}|${t}">${t}</div>`).join('')}</div><div class="tc">${sc}</div>`}
+function vOrder(D,id){const o=D.orders.find(z=>z.id===id);if(!o)return'Orden no encontrada.';
+ const c=D.cs.find(z=>z.id===o.customer_id),k='o:'+id,root=treeOf(D,o),sel=S.sel[k]||root.id,sp=o.kind==='special',TBS=sp?['Servicios','Op. Provisión','Datos Facturación','Histórico']:['Tareas'],ot=TBS.includes(S.sub[k])?S.sub[k]:TBS[0];
+ const sub=x=>D.subs.find(s=>s.id===x.sub_id)||{};let rows,cols;
+ if(sp){rows=o.status==='draft'?o.plan_ids.map((p,i)=>({id:'pl_'+p,i:i+1,t:pname(p),pl:p,st:'Pend de Instalar',tn:'',ee:'',w:null})):D.orders.filter(x=>x.parent===id).map((w,i)=>({id:w.id,i:i+1,t:w.title,pl:w.plan_id,st:OL[w.status],tn:sub(w).tenant_id||'',ee:w.exc,w}));
+  cols={Servicios:[['Instancia',r=>r.i],['Servicios',r=>esc(r.t)],['Plan',r=>esc(D.pl[r.pl].name)],['Estado',r=>r.st]],'Op. Provisión':[['Instancia',r=>r.i],['Orden',r=>r.w?r.w.id:''],['Estado',r=>r.st],['EE',r=>esc((r.ee||'').split(' ')[0])],['Id Tenant',r=>esc(r.tn)]],'Datos Facturación':[['Instancia',r=>r.i],['Servicios',r=>esc(r.t)],['Precio/mes',r=>eur(D.pl[r.pl].price)],['Ciclo',r=>'Mensual']],'Histórico':[['Instancia',r=>r.i],['Orden',r=>r.w?r.w.id:''],['F. apertura',r=>r.w?dd(r.w.opened):''],['F. cierre',r=>r.w?dd(r.w.closed):'']]}[ot]}
+ else{rows=leaves(o.tasks).map((l,i)=>({id:l.id,i:i+1,t:l.name,st:OL[l.st],a:l.attempts,ee:l.exc}));cols=[['Secu…',r=>r.i],['Tarea',r=>esc(r.t)],['Estado',r=>r.st],['Intentos',r=>r.a],['Estado de excepción',r=>esc(r.ee||'')]]}
+ const tr=(n,d,pre)=>`<div class="ti ${sel===n.id?'on':''}" data-pick="${k}|${n.id}" ${n.kind==='work'?`data-open="o:${n.id}"`:''} style="padding-left:${4+d*14}px"><i class="ic" style="color:${IC[n.st]}">${n.st==='failed'||n.st==='exception'?'✖':n.st==='pending'||n.st==='draft'?'▷':'▶'}</i>${pre?pre+': ':''}${esc(n.name)} <span class="mu2">[${OL[n.st]}]</span>${n.exc&&n.kind==='task'?` <span class="er">${esc(n.exc)}</span>`:''}</div>`+n.ch.map((x,i)=>tr(x,d+1,(pre?pre+'.':'')+(i+1))).join('');
+ const col1=`<div class="sg2">${R('Número Orden',o.id)}${R('Descripción',o.title)}${R('Fecha planificación',dd(o.planned))}${R(sp?'Fecha venta':'Fecha apertura',dd(o.opened))}${R('Fecha cierre',dd(o.closed))}<label>Estado de excepción:</label>${RO(o.exc||'','color:var(--er);font-weight:700')}${R('Tipo',sp?'Orden especial':'Orden de trabajo')}${sp?R('ID pedido Canal',o.id):R('Servicio',o.title)}</div><label style="font-weight:700">Comentarios:</label><textarea readonly></textarea>`;
+ const col2=`<div class="sg2">${R('Cliente',c.name)}${R('Fecha inicio facturación',dd(o.planned))}${R(sp?'Método entrega':'Origen',sp?o.channel:(o.parent?'Orden especial '+o.parent:'Manual'))}</div>${G('Datos vendedor')}<div class="sg2">${R('Vendedor',o.seller||o.creator)}${R('Razón venta',o.reason||'Operación de servicio')}${R('Perfil creador',o.creator)}</div>`;
+ const col3=`<div class="sg2"><label>Estado:</label><select style="pointer-events:none"><option>${esc(OL[o.status])}</option></select></div>${sp?`${G('Firma')}<div class="sg2"><label>Aceptación Contrato:</label><select style="pointer-events:none"><option>${o.signature}</option></select><label>Compromiso:</label>${SEL(['A Especificar'],120)}<label>Motivo:</label>${RO('')}<label>Id Interacción:</label>${RO('')}</div>`:''}`;
+ return`<div class="oc"><div>${col1}</div><div>${col2}</div><div>${col3}</div></div>
+ <div class="mid"><div>${G(sp?'Servicios / Equipos':'Tareas de la orden')}${sp?`<div class="tabs" style="padding:0">${TBS.map(t=>`<div class="tab ${ot===t?'on':''}" data-stab="${k}|${t}">${t}</div>`).join('')}</div>`:''}${grid(k,cols,rows,{open:sp?'o:':'',cls:r=>r.ee?'xr':'',empty:''})}</div>
+ <div class="trw">${tr(root,0,'')}</div></div>`}
+const obtns=(D,o)=>{const sp=o.kind==='special',X=a=>!en(a,D);return`<div class="btr">${sp?BT('print','Imprimir Contrato'):''}${BT('close-win','Volver')}${BT('cancel','Cancelar',X('cancel'))}${BT('comments','Comentarios')}<span class="dw"><button class="bt" data-menu="pr">Procesos ▾</button>${dropdown('pr',DD.pr,D,'up')}</span>${BT('save','Guardar')}${sp?BT('sign','Firmar contrato',X('sign')):''}${BT('summary','Resumen Compra')}${sp?BT('launch','Continuar / Finalizar Venta',X('launch')):''}${BT('close-win','Cerrar')}</div>`};
+const dip=D=>`${G('Detalle Interacción actual')}<div class="dip"><div class="f"><label>Razón 1:</label>${SEL(['A Especificar'],200)}<label>Razón 2:</label>${SEL(['A Especificar'],200)}<label>Razón 3:</label>${SEL(['A Especificar'],200)}<span style="flex:1"></span><label>Resultado:</label>${SEL(['No Aplica'],120)}</div>
+ <div class="f" style="align-items:flex-start"><label>Notas:</label><textarea style="flex:1;height:36px"></textarea><div><div class="f"><label>Aplicaciones:</label><select disabled style="width:120px"><option></option></select><button class="bt" disabled>Info</button></div><div class="f"><button class="bt" disabled>Nueva Llamada / Ficha</button><button class="bt" disabled>Guardar</button></div></div></div>
+ <div class="f" style="margin-left:150px"><span class="dw"><button class="bt" data-menu="tk">Tickets ▾</button>${dropdown('tk',DD.tk,D,'up')}</span><span class="dw"><button class="bt" data-menu="gc">Gest. Clientes ▾</button>${dropdown('gc',DD.gc,D,'up')}</span></div></div>`;
+
+/* ===== Marco ===== */
+function hdr(D){const c=D.cs.find(x=>x.id===S.ctx),subs=c?D.subs.filter(s=>s.customer_id===c.id&&s.status!=='cancelled'):[],ords=c?D.orders.filter(o=>o.customer_id===c.id):[];
+ const L=l=>`<b>${l}:</b>`,V=v=>`<span>${v==null?'':v}</span>`,debt=subs.filter(s=>s.status==='past_due').reduce((a,s)=>a+D.pl[s.plan_id].price,0),users=subs.filter(s=>s.status!=='provisioning_failed').reduce((a,s)=>a+D.pl[s.plan_id].limits.max_users,0);
+ const av=[...ords.filter(o=>o.exc).map(o=>'EXC: '+o.id+' '+o.exc.split(' ')[0]),...subs.filter(s=>s.status==='past_due').map(s=>'IMP: '+D.pr[s.product_id].name)];
+ $('#hdr').innerHTML=`<div class="pn"><div class="pt">Información Llamante<a>Ver detalle/Editar</a></div><div class="kv">${L('ID')}${V(c&&c.num)}${L('Cliente')}${V(c&&esc(c.name))}${L('Periodo Retención')}${V(c&&'No')}${L('Estado Cliente')}${V(c&&c.st)}${L('Empresa')}${V(c&&c.type==='Empresa'?esc(c.name):'')}${L('Tipo Contacto(C/P)')}${V(c&&'C')}${L('Tipo de Cliente')}${V(c&&c.type)}${L('Clase Cliente')}${V(c&&c.cls)}</div></div>
+ <div class="pn"><div class="pt">Contexto</div><div class="ls">${S.ctxs.map((id,i)=>`<div class="${id===S.ctx?'on':''}" data-cx="${id}">[${i+1}] ${esc(D.cs.find(x=>x.id===id).name)}</div>`).join('')}</div><div class="cb"><span>*</span><i>▼</i></div></div>
+ <div class="pn"><div class="pt">Información de Servicio/Dirección</div><div class="kv">${L('Paquete contratado')}${V(c?(subs.length?esc([...new Set(subs.map(s=>D.pr[s.product_id].name))].join(', ')):'No existe'):'')}${L('Tecnología')}${V(c?'Cloud multi-tenant':'')}<b></b><span></span>${L('Serviciable')}${V(c?'[WEB][API]':'')}${L('Usuarios Máx.')}${V(c?users:'')}${L('Autoprov.')}${V(c?'[WEB][API]':'')}${L('Deuda Principal')}<span class="rd">${c?eur(debt):''}</span>${L('Deuda Extras')}${V(c?'0,00 €':'')}</div></div>
+ <div class="pn"><div class="pt">Avisos</div><div class="avs">${av.map(a=>`<div><b>⚠</b> ${esc(a)}</div>`).join('')}</div></div>`}
+function chrome(D){const n=s=>D.orders.filter(o=>o.status===s).length,st=(c,i,k,t,v)=>`<span class="cn" ${k?`data-do="${k}"`:''} title="${t}"><i style="color:${c}">${i}</i>${v}</span>`;
+ $('#menu').innerHTML=Object.entries(MENUS()).map(([m,it])=>`<div class="mi ${S.menu===m?'on':''}" data-menu="${m}">${m}${S.menu===m?`<div class="dd">${it.map(i=>i[0]==='-'?'<hr>':`<div class="di ${en(i[1],D)?'':'off'}" data-do="${i[1]}">${esc(i[0])}</div>`).join('')}</div>`:''}</div>`).join('')
+  +`<div class="cnt">${st('#1a9a2a','▶','q:running','Órdenes en curso',n('running'))}${st('#d11','⚠','q:exception','Órdenes con excepción',n('exception'))}${st('#d08a0c','✎','q:draft','Pendientes de lanzar',n('draft'))}${st('#4a6fa5','☎','','Llamadas',0)}${st('#4a6fa5','✉','','Mensajes',0)}${st('#4a6fa5','⚑','','Alertas',0)}${st('#4a6fa5','☰','','Cola',0)}</div>`;
+ hdr(D);
+ const rw=S.wins.filter(w=>w.id[0]!=='o'),ow=S.wins.filter(w=>w.id[0]==='o'),items=[];
+ rw.forEach(w=>{items.push([w,0]);if(w.id[0]==='c')ow.forEach(x=>{const o=D.orders.find(z=>z.id===x.id.slice(2));if(o&&o.customer_id===w.id.slice(2))items.push([x,1])})});
+ ow.forEach(x=>{if(!items.some(i=>i[0]===x))items.push([x,0])});
+ $('#lp').innerHTML='<div class="pt"><span>Abrir Ventanas</span><span>▾</span></div><div class="tre">'+items.map(([w,d])=>`<div class="ti ${w.id===S.act?'on':''}" data-win="${w.id}" style="padding-left:${4+d*14}px">${d?'<span>└</span>':''}<i class="wic"></i>${esc(wtitle(w.id,D,1))}</div>`).join('')+'</div>';
+ tick()}
+const tick=()=>{const d=new Date(),c=$('#clk');if(c)c.innerHTML=d.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'})+'<br>'+d.toLocaleDateString('es-ES')};
+let tok=0,last='';
+const sync=()=>document.querySelectorAll('[data-f]').forEach(i=>S.draft[i.dataset.f]=i.value);
+async function render(){const k=++tok;sync();const[D,rs]=await Promise.all([data(),S.act==='search'?api.customers(S.q):[]]);if(k!==tok)return;
+ const v=S.act,mw=$('.mw'),sc=last===v&&mw?mw.scrollTop:0;let body='',btr='';
+ if(v==='search')body=vSearch(D,rs);else if(v==='orders')body=vOrders(D);else if(v[0]==='c')body=vCust(D,v.slice(2));else{body=vOrder(D,v.slice(2));const o=D.orders.find(x=>x.id===v.slice(2));if(o)btr=obtns(D,o)}
+ $('#view').innerHTML=`<div class="mt"><i class="wic"></i>${esc(wtitle(v,D))}</div><div class="mw">${body}</div>${btr}${v[0]==='c'?'<div class="mctl"><b>_</b><b>▫</b><b>✕</b></div>':''}`;
+ $('#dip').innerHTML=v[0]==='c'?dip(D):'';$('.mw').scrollTop=sc;last=v;chrome(D)}
+async function focus(id){S.menu=null;const D=await data(),o=id[0]==='o'?D.orders.find(x=>x.id===id.slice(2)):null,cid=id[0]==='c'?id.slice(2):o&&o.customer_id;
+ if(cid){if(!S.ctxs.includes(cid))S.ctxs.push(cid);S.ctx=cid}S.act=id;render()}
+async function go(id){if(!S.wins.some(w=>w.id===id))S.wins.push({id});return focus(id)}
+function closeWin(id){if(S.wins.length<2)return;const i=S.wins.findIndex(w=>w.id===id);S.wins.splice(i,1);
+ if(id[0]==='c'&&!S.wins.some(w=>w.id===id)){S.ctxs=S.ctxs.filter(x=>x!==id.slice(2));if(S.ctx===id.slice(2))S.ctx=S.ctxs[S.ctxs.length-1]||null}
+ if(S.act===id)S.act=S.wins[Math.max(0,i-1)].id;return focus(S.act)}
+function modal(title,body,ok,fn,cancel=true){$('#modal').innerHTML=`<div class="ov"><form class="dlg" id="mf"><div class="dt">${title}</div><div class="db">${body}<p class="er" id="merr"></p></div><div class="df"><button class="bt">${ok}</button>${cancel?'<button type="button" class="bt" data-do="close">Cancelar</button>':''}</div></form></div>`;
+ const f=$('#mf');f.onsubmit=async e=>{e.preventDefault();try{const fd=new FormData(f);await fn(Object.fromEntries(fd),fd);$('#modal').innerHTML='';render()}catch(x){$('#merr').textContent=x.message}};
+ const i=f.querySelector('input,select');if(i)i.focus()}
+const info=(t,b)=>modal(t,b,'Aceptar',()=>{},false);
+async function doit(a){S.menu=null;if(a==='close'){$('#modal').innerHTML='';return}
+ if(a.startsWith('go:'))return go(a.slice(3));
+ if(a.startsWith('q:')){S.f.tipo='';S.f.estado=a.slice(2);return go('orders')}
+ const D=await data(),o=ctxO(D),cc=curCust();
+ if(a==='refresh')return render();
+ if(a==='clear'){S.draft={};S.q={};return render()}
+ if(a==='open-sel')return go('c:'+S.sel.search);
+ if(a==='close-win')return closeWin(S.act);
+ if(a==='theme'){S.dark=!S.dark;document.documentElement.dataset.theme=S.dark?'dark':'light';return render()}
+ if(a==='bar'){S.blue=!S.blue;document.documentElement.dataset.bar=S.blue?'blue':'';return render()}
+ if(a==='about')return info('Acerca de','<p><b>ERP SaaS</b> · Customer Interaction Manager v0.3<br>Gestión de servicios mediante órdenes de trabajo y órdenes especiales.<br><span class="mu">Datos simulados: sin conexión a backend.</span></p>');
+ if(a==='legend')return info('Leyenda','<p>Fila verde: elemento seleccionado.<br><span class="er">Texto rojo en negrita: orden con excepción (columna EE).</span><br>Pte. Lanzar Procesos: contrato pendiente de firma o de lanzamiento.<br>Fallo: tarea del árbol que ha fallado.</p>');
+ if(a==='inv-dup')return info('Enviar Duplicado','<p>Se ha enviado un duplicado de la factura seleccionada al email del cliente.</p>');
+ if(a==='print')return info('Imprimir Contrato','<p>Contrato generado en PDF y enviado a la cola de impresión.</p>');
+ if(a==='save')return info('Guardar','<p>Los cambios de la orden se han guardado.</p>');
+ if(a==='comments')return modal('Comentarios','<textarea style="height:80px"></textarea>','Guardar',()=>{});
+ if(a==='summary'&&o){const ps=o.kind==='special'?o.plan_ids:[o.plan_id];return info('Resumen Compra','<table>'+ps.map(p=>`<tr><td>${esc(pname(p))}</td><td style="text-align:right">${eur(find('plans',p).price)}/mes</td></tr>`).join('')+`<tr><td><b>Total</b></td><td style="text-align:right"><b>${eur(ps.reduce((s,p)=>s+find('plans',p).price,0))}/mes</b></td></tr></table>`)}
+ if(a==='new-customer')return modal('Nuevo cliente','<div class="sg2"><label>Nombre:</label><input name="name" required><label>Email:</label><input name="email" type="email" required><label>NIF/CIF:</label><input name="tax_id"><label>Teléfono:</label><input name="phone"><label>Provincia:</label><input name="prov"><label>Población:</label><input name="city"></div>','Crear cliente',async d=>{const c=await api.createCustomer(d);await go('c:'+c.id)});
+ if(a==='offer-go'){const ids=S.offer['of:'+cc]||[];return api.createSpecial({customer_id:cc,channel:'Telefónico',reason:'Alta nueva',plans:ids}).then(id=>{S.offer['of:'+cc]=[];go('o:'+id)},e=>info('No se puede crear',`<p class="er">${esc(e.message)}</p>`))}
+ if(a==='new-esp')return modal('Nueva orden especial',`<div class="sg2"><label>Cliente:</label><select name="customer_id">${D.cs.map(x=>`<option value="${x.id}" ${x.id===cc?'selected':''}>${esc(x.name)}</option>`).join('')}</select><label>Canal de venta:</label><select name="channel">${['Telefónico','Web','Tienda','Partner'].map(x=>`<option>${x}</option>`).join('')}</select><label>Razón venta:</label><select name="reason">${['Alta nueva','Ampliación','Migración'].map(x=>`<option>${x}</option>`).join('')}</select><label>Fecha planificación:</label><input type="date" name="planned" value="${new Date().toISOString().slice(0,10)}"></div><div class="sb" style="margin-top:6px">Servicios a contratar</div>${D.plans.map(p=>`<label class="ck"><input type="checkbox" name="plan" value="${p.id}"> ${esc(pname(p.id))} — ${eur(p.price)}/mes</label>`).join('')}`,'Guardar orden',async(d,fd)=>{const id=await api.createSpecial({...d,plans:fd.getAll('plan')});await go('o:'+id)});
+ if(a==='new-wo'){const sv=D.subs.filter(s=>s.customer_id===cc&&s.status!=='cancelled');
+  if(!sv.length)return info('Nueva orden de trabajo','<p>El cliente no tiene servicios contratados. Crea antes una orden especial.</p>');
+  return modal('Nueva orden de trabajo',`<div class="sg2"><label>Servicio:</label><select name="sub">${sv.map(s=>`<option value="${s.id}">${esc(pname(s.plan_id))} (${SL[s.status]})</option>`).join('')}</select><label>Operación:</label><select name="action">${['update','suspend','resume','delete'].map(x=>`<option value="${x}">${AC[x]}</option>`).join('')}</select><label>Plan nuevo:</label><select name="plan">${D.plans.map(p=>`<option value="${p.id}">${esc(pname(p.id))}</option>`).join('')}</select></div><p class="mu">El plan nuevo solo se usa en el cambio de plan.</p>`,'Crear orden',async d=>{const id=await api.createWork(d.sub,d.action,d.plan);await go('o:'+id)})}
+ if(!o)return;
+ if(a==='sign'){await api.sign(o.id);return render()}
+ if(a==='launch')return api.launch(o.id).then(render,e=>info('No se puede lanzar',`<p class="er">${esc(e.message)}</p>`));
+ if(a==='cancel')return modal('Cancelar orden',`<p>Se cancelarán las tareas pendientes de la orden ${o.id}.<br>Esta acción no se puede deshacer.</p>`,'Cancelar orden',()=>api.cancel(o.id));
+ if(a==='retry'||a==='skip'){const n=selNode(D,o),w=ownerOf(D,n.id);await api[a](w.id,n.id);return render()}}
+document.addEventListener('click',e=>{const t=e.target,d=t.closest('[data-do]'),w=t.closest('[data-win]'),it=t.closest('[data-itab]'),st=t.closest('[data-stab]'),pk=t.closest('[data-pick]'),mn=t.closest('[data-menu]'),cx=t.closest('[data-cx]'),row=t.closest('tr[data-rid]');
+ if(cx)return focus('c:'+cx.dataset.cx);
+ if(w)return focus(w.dataset.win);
+ if(it){const[i,tb]=it.dataset.itab.split('|');S.tab[i]=tb;return render()}
+ if(st){const[i,tb]=st.dataset.stab.split('|');S.sub[i]=tb;return render()}
+ if(pk){const[k,id]=pk.dataset.pick.split('|');S.sel[k]=id;return render()}
+ if(d)return doit(d.dataset.do);
+ if(mn){S.menu=S.menu===mn.dataset.menu?null:mn.dataset.menu;return render()}
+ if(row){const g=row.dataset.g,id=row.dataset.rid;if(g.startsWith('of:')){const a=S.offer[g]||(S.offer[g]=[]),i=a.indexOf(id);i<0?a.push(id):a.splice(i,1)}else S.sel[g]=id;S.menu=null;return render()}
+ if(S.menu){S.menu=null;render()}});
+document.addEventListener('dblclick',e=>{const r=e.target.closest('[data-open]');if(r&&r.dataset.open)go(r.dataset.open)});
+document.addEventListener('change',e=>{const t=e.target;if(t.dataset.flt!==undefined){S.f[t.dataset.flt]=t.value;render()}});
+document.addEventListener('submit',e=>{if(e.target.id==='sf'){e.preventDefault();sync();S.q={...S.draft};S.sel.search=null;render()}});
+function fit(){const f=$('#fit'),a=$('#app'),s=Math.min(1,f.clientWidth/1100);a.style.width=f.clientWidth/s+'px';a.style.height=f.clientHeight/s+'px';a.style.transform='scale('+s+')'}
+addEventListener('resize',fit);setInterval(tick,5000);fit();render();
+</script>
+</body>
+</html>
