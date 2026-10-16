@@ -267,6 +267,39 @@ select{appearance:none;padding-right:17px!important;background:url("data:image/s
 .tree-node-item.selected{background:var(--nv)!important;color:#fff!important}
 .tree-toggle-btn{background:var(--pn)!important;border-color:var(--bd)!important;color:var(--tx)!important}
 ::-webkit-scrollbar-track{background:var(--fl)!important;border-color:var(--bd)!important}::-webkit-scrollbar-thumb{background:var(--hd)!important;border:1px solid var(--bd)!important;box-shadow:none!important}
+.tk{height:30px;background:#1f2229;display:flex;align-items:center;flex:none;color:#fff}
+.tk .st{width:36px;height:30px;display:grid;grid-template:1fr 1fr/1fr 1fr;gap:1px;padding:9px 12px}.tk .st i{background:#3aa0e8}
+.tk .sb2{width:250px;height:22px;background:#ececec;color:#555;line-height:22px;padding-left:12px}
+.tk .tray{margin-left:auto;padding:0 12px;font-size:10px}
+/* ===== Órdenes, configurador y provisioning ===== */
+.pill{display:inline-block;color:#fff;font-weight:700;font-size:9px;padding:0 7px;border-radius:8px;line-height:14px;white-space:nowrap}
+#wo-steps{display:flex;align-items:center;background:var(--fl);border:1px solid var(--bd);padding:4px 10px}
+.stp{display:flex;align-items:center;gap:5px;font-weight:700;color:var(--mu);white-space:nowrap}
+.stp i{width:17px;height:17px;border-radius:50%;background:var(--hd);border:1px solid var(--bd);display:grid;place-items:center;font-style:normal;font-size:9px}
+.stp.done{color:#1a7a28}.stp.done i{background:#1a9a2a;border-color:#1a7a28;color:#fff}
+.stp.cur{color:var(--nv)}.stp.cur i{background:#1f5fd0;border-color:#14194a;color:#fff}
+.stp.bad{color:var(--er)}.stp.bad i{background:var(--er);border-color:#7d0c10;color:#fff}
+.stl{flex:1;height:2px;background:var(--bd);margin:0 8px;min-width:12px}.stl.done{background:#1a9a2a}
+.stsum{margin-left:14px;padding-left:12px;border-left:1px solid var(--bd);color:var(--mu);white-space:nowrap}.stsum b{color:var(--tx)}
+#pv-kpi{display:grid;grid-template-columns:repeat(4,1fr);gap:3px;margin-bottom:3px}
+.kpi{background:var(--fl);border:1px solid var(--bd);border-top:3px solid var(--sl);padding:2px 6px}
+.kpi b{display:block;font-size:14px;line-height:17px}.kpi span{color:var(--mu);font-size:9px;text-transform:uppercase;letter-spacing:.3px}
+#wo-cfg{background:var(--pn)!important;border:1px solid var(--bd)!important;border-left:3px solid var(--nv)!important;padding:0!important}
+#wo-cfg>div:first-child{background:var(--nv);color:#fff!important;padding:3px 6px;font-size:11px}
+#wo-cfg>.grid{padding:6px}#wo-cfg label.block{color:var(--mu);font-size:9px;text-transform:uppercase;letter-spacing:.3px;margin-bottom:1px}
+#wo-cfg #pc-prev{padding:4px 6px;border-top:1px solid var(--bd);background:var(--fl)}#wo-cfg>.flex{padding:4px 6px;border-top:1px solid var(--bd)}
+.bd{width:100%;margin-top:3px}.bd td{padding:1px 4px;border-bottom:1px dotted var(--bd)!important;background:none!important;height:16px}.bd td:last-child{text-align:right}.bd tr.t td{font-weight:700;border-top:1px solid var(--tx)!important}
+#wo-price{background:var(--pn)!important;border:1px solid var(--bd)!important;border-left:3px solid var(--sl)!important;padding:4px 6px!important;line-height:1.5}
+#wo-valid>div{padding:1px 0}
+.wc-fs{position:relative;border:1px solid var(--bd);padding:8px 6px 4px;margin-top:8px}
+.wc-fs>.lg{position:absolute;top:-7px;left:8px;background:var(--bg);padding:0 3px;color:var(--mu)}
+#wc-form .wc-fs>.lg{background:var(--pn)}
+.wc-list{border:1px solid var(--bd);background:var(--pn);max-height:118px;overflow:auto}
+.wc-row{display:flex;align-items:center;gap:6px;padding:1px 4px;cursor:pointer}
+.wc-row:nth-child(odd){background:var(--p2)}.wc-row:nth-child(even){background:var(--p1)}.wc-row.wc-h{background:var(--p1);border-bottom:1px solid var(--bd)}
+.wc-t{padding:1px 3px;white-space:nowrap;cursor:default}.wc-t.sel{background:var(--nv);color:#fff}
+.wc-bx{display:inline-block;width:9px;height:9px;border:1px solid #888;font-size:9px;line-height:7px;text-align:center;margin-right:4px}
+#product-tree-wo,#wc-olines{background:var(--pn)}
 </style>
 </head>
 <body class="h-screen w-screen flex flex-col overflow-hidden select-none">
@@ -1501,7 +1534,7 @@ select{appearance:none;padding-right:17px!important;background:url("data:image/s
             const label = document.createElement('span');
             label.className = "font-bold text-gray-800";
             label.innerText = node.name;
-            row.appendChild(label);
+            row.appendChild(label);if(node.pend){const b=document.createElement('span');b.className='ml-1';b.style.cssText='color:#b45309;font-weight:400';b.innerText='['+node.status+']';row.appendChild(b)}
 
             row.onclick = function(e) {
                 e.stopPropagation();
@@ -2188,7 +2221,7 @@ function woCancel(){
   if(rb.children.length){PV.children.push(rb);rb.children.forEach(cl=>runStep(cl,0));showToast('Anulación iniciada: tareas de desaprovisionamiento generadas.')}
   woTab('prov');finishCheck();renderPV();
 }
-const _fc=finishCheck;finishCheck=function(){_fc();if(!woState||!woState.cancelling||!PV)return;const s=agg(PV);if(s==='CANC')return;
+const _fc2=finishCheck;finishCheck=function(){_fc2();if(!woState||!woState.cancelling||!PV)return;const s=agg(PV);if(s==='CANC')return;
   const e=document.getElementById('wo-estado');e.value=s==='ERR'||s==='EXC'?'Anulación pte. intervención':'Anulando (desaprovisionando)';e.className='w-full font-bold bg-amber-100 text-amber-900';
   const w=workOrdersData.find(x=>x.num===woState.num);if(w){w.status='Anulando';renderWorkOrders()}};
 const _wam=woApplyMode;woApplyMode=function(){_wam();if(!woState||!woState.cancelling)return;const m=woMode(),b=document.getElementById('wo-banner');
@@ -2478,6 +2511,112 @@ function hNew(){const c=currentClient,n=document.getElementById('h-n').value.tri
 function hMain(id){const c=currentClient;c.accts.forEach(a=>a.main=a.id===id);c.accts.sort((a,b)=>b.main-a.main);hl('Cuenta «'+c.accts[0].name+'» marcada como principal');renderHier()}
 function hDel(id){const c=currentClient,a=c.accts.find(x=>x.id===id);if(fileList(c.tree).some(f=>c.asg[f.id]===id))return showToast('Reasigne antes los servicios de esta cuenta.');c.accts=c.accts.filter(x=>x!==a);hl('Cuenta «'+a.name+'» eliminada');renderHier()}
 const _mt=mainTab;mainTab=function(k){_mt(k);if(k==='averias')renderBreakdown();if(k==='jerarquia')renderHier()};
+// ===== Órdenes de trabajo: configurador fiel al CIM (telecom + SaaS), sincronización con Servicios Contratados y menú Procesos =====
+CATALOG.push({id:'TEL-FIJO',name:'Telefonía fija',price:1200,sys:'Telecom',cat:'Telecom'},{id:'MOV-5G',name:'Línea móvil 5G',price:2500,sys:'Telecom',cat:'Telecom'});
+CFG['TEL-FIJO']=[{k:'bono',l:'Bono de llamadas',t:'sel',o:[O('Sin bono'),O('Ilimitadas nacionales',500),O('Internacionales 300 min',800,'Activar bono internacional')]},{k:'buzon',l:'Buzón de voz',t:'bool',d:200,s:'Activar buzón de voz'},{k:'portab',l:'Portabilidad de número',t:'bool',d:0,s:'Gestionar portabilidad'}];
+CFG['MOV-5G']=[{k:'tarifa',l:'Tarifa',t:'sel',o:[O('Básica 20 GB'),O('Plus 100 GB',1000),O('Ilimitada 5G',2500)]},{k:'sim',l:'Tipo de SIM',t:'sel',o:[O('SIM física'),O('eSIM',0,'Generar perfil eSIM')]},{k:'roam',l:'Roaming UE',t:'bool',d:300,s:'Activar roaming UE'},{k:'portab',l:'Portabilidad de número',t:'bool',d:0,s:'Gestionar portabilidad'}];
+TECH['TEL-FIJO']=(n,k)=>[['Nº de línea','91'+String(1000000+k.h%8999999)],['Bono',k.v.bono],['Buzón de voz',k.v.buzon?'Activo':'No'],['Portabilidad',k.v.portab?'Sí':'No']];
+TECH['MOV-5G']=(n,k)=>[['MSISDN','6'+String(10000000+k.h%89999999)],['Tarifa',k.v.tarifa],['SIM',k.v.sim],['Roaming UE',k.v.roam?'Activo':'No']];
+// --- definición de familias (pestañas) y catálogos de servicios adicionales: 'Nombre@CÓDIGO|€/mes' ---
+const CAMPS='Abono de cargo por duplicado de factura@ADFAT|-1.6;Abono del cargo por cambio de titularidad@ACHTI|-2.4;Abono por cambio de paquete@ACPAQ|-2.4;Oferta Verano@VER15|-5',OPC='Factura electrónica@FELEC|0;Aviso de consumo por SMS@ASMS|0.5;Envío de factura en papel@FPAP|1';
+const FD={
+ tel:{l:'Telefonía',sys:'Telecom',ln:['Línea Teléfono',['TEL-FIJO']],port:1,A:[['Bonos Llamadas Nacionales','Bono Nacionales 300 min@BNAC3|3;Bono Nacionales ilimitado@BNACI|8;Bono Móviles 5 h@BMOV5|4;Bono Móviles 10 h@BMOV10|7'],['Bonos Llamadas Internacionales','Bono Fijos Int. Colombia 10 minutos día@B10CO|20;Bono Fijos Int. Colombia 90 minutos@BMCOL|8;Bono Fijos Int. Ecuador 10 minutos día@B10EC|40;Bono Fijos Int. Marruecos 60 min@B60MA|6']],T:['Tarifas','Tarifa plana nacional@TPLN|5;Tarifa voz sin cuota@TVSC|0'],E:['Servicios equipos','Alquiler Teléfono IP 700@TAT70|2.5;Venta Teléfono IP 700@TVT70|35.9;Venta Terminal SPC 3225@TV225|21.9'],O:['Otros servicios','Buzón de voz adicional@BVOZ|1.2;Identificador de llamadas@CLIP|0;Cambio de Número de Teléfono@TCNUM|0;Cargo por Cambio de Paquete@CCPAQ|2.4']},
+ int:{l:'Internet',sys:'Telecom',ln:['Línea Internet',['FTTH-1G']],A:[['Servicios de red','IP fija adicional@IPFIJ|5;Wi-Fi 6 gestionado@WIFI6|4;Control parental@CPAR|2;Antivirus de red@AVRED|3'],['Calidad de servicio','Reserva de ancho de banda 100 Mb@BW100|10;SLA reparación 4 h@SLA4H|15;Línea de respaldo 4G@BK4G|12']],T:['Tarifas','Fibra simétrica@TFSIM|0;Fibra empresa@TFEMP|10'],E:['Servicios equipos','Router Wi-Fi 6@RTW6|3;Repetidor Mesh@RMESH|2.5;Venta Router Wi-Fi 6@VRW6|59'],O:['Otros servicios','Instalación técnica@INSTT|0;Traslado de línea@TRASL|20']},
+ mov:{l:'Móvil',sys:'Telecom',ln:['Línea Móvil',['MOV-5G']],port:1,A:[['Bonos de datos','Bono 10 GB@BD10|5;Bono 50 GB@BD50|12;Bono datos ilimitado@BDIL|25'],['Bonos de roaming','Roaming UE 5 GB@RUE5|6;Roaming Internacional 1 GB@RINT1|9']],T:['Tarifas','Plan Diario Voz Móvil@MRPD1|9;Plan Ilimitado 5G@MRP5G|25'],E:['Servicios equipos','SIM adicional@SIMAD|3;eSIM adicional@ESIM2|0;Venta Smartphone 5G@VSM5G|299'],O:['Otros servicios','Duplicado de SIM@DSIM|6;Bloqueo de llamadas premium@BLQP|0']},
+ crm:{l:'CRM',sys:'CRM',ln:['Instancia CRM',['CRM-USR']],A:[['Módulos CRM','Módulo Facturación@MBILL|12;Módulo Marketing Automation@MMKT|18;Módulo Soporte y Tickets@MSUP|10;Módulo Analítica@MANA|14'],['Soporte y SLA','Soporte 24x7@S247|50;SLA Premium 99,95 %@SLAP|40;Gestor de cuenta dedicado@GCD|80']],T:['Planes','Plan Pro@PLPRO|0;Plan Enterprise@PLENT|25'],E:['Licencias y entornos','Licencia CRM usuario adicional@LUSR|15;Entorno Sandbox@ESBX|30;Licencia API lectura@LAPI|5'],O:['Otros servicios','Migración de datos@MIGD|200;Formación para administradores@FORM|150']},
+ sto:{l:'Almacenamiento',sys:'Storage',ln:['Almacenamiento',['STO-1TB']],A:[['Capacidad y rendimiento','Capacidad adicional +1 TB@TB1|18;Capacidad adicional +5 TB@TB5|80;CDN integrado@CDN|10'],['Seguridad y continuidad','Replicación geo-redundante@GEOR|6;Cifrado con clave propia (CMK)@CMK|3;Backup diario retención 30 d@BKP30|8;Versionado de objetos@VERS|2']],T:['Clases de almacenamiento','Estándar@STD|0;Archivo frío@COLD|-8'],E:['Cuotas y buckets','Bucket adicional@BKT|5;Cuota por departamento@QDEP|2'],O:['Otros servicios','Auditoría de accesos@AUDA|4;Migración desde otro proveedor@MIGS|120']},
+ itg:{l:'Integraciones',sys:'Integraciones',ln:['Conector',['API-SF','WH-KAFKA']],A:[['Conectores adicionales','Conector ERP genérico@CERP|30;Conector Microsoft 365@CM365|25;Conector HubSpot@CHUB|22'],['Streaming y eventos','Topic adicional@TOPA|10;Retención extendida 90 d@RET90|9;Dead-letter queue@DLQ|4']],T:['Sincronización','Cada 15 min@SY15|0;Cada 5 min@SY5|10;Tiempo real@SYRT|25'],E:['Entornos','Entorno Sandbox integraciones@ESBI|20'],O:['Otros servicios','Mapeo de campos a medida@MAPC|120;Monitorización avanzada@MONI|15']},
+ idn:{l:'Identidad',sys:'Identity',ln:['Proveedor de identidad',['SSO-SAML']],A:[['Seguridad','MFA obligatorio@MFA|4;Política de contraseñas avanzada@PPWD|3;Detección de inicios anómalos@ANOM|6'],['Federación','Segundo IdP (Azure AD)@IDP2|15;Aprovisionamiento SCIM@SCIM|9;Auditoría de accesos@AUDI|5']],T:['Edición','Estándar@SSTD|0;Premium@SPRE|12'],E:['Entornos','Tenant de pruebas SSO@TSSO|10'],O:['Otros servicios','Rotación de certificados@ROTC|0;Integración asistida@IASS|90']},
+ cli:{l:'Servicios Cliente',sys:'Core',O:['Servicios de cliente','Cambio de titularidad@CTIT|0;Duplicado de factura@DUPF|1.6;Cambio de ciclo de facturación@CCIC|0;Cambio de datos bancarios@CIBAN|0']}};
+const FAM=Object.keys(FD).map(k=>({k,l:FD[k].l,ids:FD[k].ln?FD[k].ln[1]:[]})),ITEMS={};
+const parseL=(s,k)=>s.split(';').map(x=>{const[a,p]=x.split('|'),[n,c]=a.split('@'),it={code:c,name:n,p:Math.round(parseFloat(p)*100),fam:k,sys:FD[k].sys};ITEMS[c]=it;if(!cat(c))CATALOG.push({id:c,name:n,price:it.p,sys:it.sys,cat:'Adicionales',addon:1,fam:k});return it});
+Object.keys(FD).forEach(k=>{const d=FD[k];if(d.A)d.A=d.A.map(([t,s])=>[t,parseL(s,k)]);['T','E','O'].forEach(x=>{if(d[x])d[x]=[d[x][0],parseL(d[x][1],k)]});d.C=parseL(CAMPS,k);d.P=parseL(OPC,k)});
+const famOf=id=>FAM.find(f=>f.ids.includes(id))||FAM[0];let WCF='tel',WCN=[];const WS={q:{},all:{},sub:'add',ol:-1};const LST={};
+// --- sincronización con Servicios Contratados ---
+const sFind=(n,id)=>{if(n.type==='file'&&n.id===id)return n;for(const c of n.children||[]){const r=sFind(c,id);if(r)return r}return null};
+const sPar=(n,x)=>{for(const c of n.children||[]){if(c===x)return n;const r=sPar(c,x);if(r)return r}return null};
+function sFold(cl,sys){const t=cl.tree,re=sys==='Addon'?/otros|descuent/i:sys==='Telecom'?/telecom|conectiv|fibra/i:/saas|cloud/i;let f=(t.children||[]).find(x=>x.type==='folder'&&re.test(x.name));
+ if(!f){f={type:'folder',name:sys==='Addon'?'Otros Servicios/Descuentos':sys==='Telecom'?'Telecom y Conectividad':'Servicios SaaS',expanded:true,children:[]};(t.children=t.children||[]).push(f)}f.expanded=true;return f}
+function syncOrder(){const w=woState;if(!w||!PV||!w.client)return;const cl=w.client;let ch=false;
+ const set=(n,st,p)=>{if(n.status!==st||n.pend!==p){n.status=st;n.pend=p;ch=true}};
+ PV.children.forEach(ln=>{const l=ln.line;if(!l||!l._live)return;const s=agg(ln),done=s==='OK',rev=s==='CANC';
+  if(l.act==='ALTA'){let n=l._n;if(rev){if(n){const p=sPar(cl.tree,n);if(p)p.children.splice(p.children.indexOf(n),1);l._n=null;ch=true}return}
+   if(!n){n={type:'file',id:l.item.id,name:l.item.name+(l.qty>1?' x'+l.qty:''),price:'0.00 €/mes',status:'Alta en curso',pend:true,cfg:l.cfg?{...l.cfg}:undefined,ord:w.num};sFold(cl,l.item.addon?'Addon':l.item.sys).children.push(n);l._n=n;ch=true}
+   if(done&&!l._ap){l._ap=1;n.price=(l.item.price*l.qty/100).toFixed(2)+' €/mes';set(n,'Activo',false);ch=true}return}
+  const n=sFind(cl.tree,l.act==='MODIF'?l.nodeId:l.item.id);if(!n)return;
+  if(l.act==='BAJA'){if(done&&!l._ap){l._ap=1;const p=sPar(cl.tree,n);if(p)p.children.splice(p.children.indexOf(n),1);if(selectedTreeNode===n)selectedTreeNode=null;ch=true}else if(rev)set(n,n._st||'Activo',false);else if(!done){n._st=n._st||n.status;set(n,'Baja pendiente',true)}}
+  else{if(done&&!l._ap){l._ap=1;n.cfg={...l.cfg};n.price=(pcUnit(cat(l.item.id),l.cfg)/100).toFixed(2)+' €/mes';set(n,'Activo',false);ch=true}else if(rev)set(n,'Activo',false);else if(!done)set(n,'Modificación pendiente',true)}});
+ if(ch){renderContractedServicesTree();wcTree();const d=document.getElementById('tree-detail-content');if(selectedTreeNode&&d)showTreeNodeDetails(selectedTreeNode)}}
+const _fc_m=finishCheck;finishCheck=function(){_fc_m();syncOrder()};
+const _lo_m=launchOrder;launchOrder=function(){woState.base0=baseCents(woState.client.tree);woState.lines.forEach(l=>l._live=1);_lo_m();syncOrder()};
+const _sc2=svcCfg;svcCfg=function(n,c){return n.cfg?{...n.cfg}:_sc2(n,c)};
+const _pd=pcDefaults;pcDefaults=function(c,n){return n&&n.cfg?{...n.cfg}:_pd(c,n)};
+// --- esqueleto ---
+const WC_HTML=`<div class="col-span-12 flex flex-wrap items-center gap-2 win-border bg-gray-100 p-1"><b>Tipo:</b><span id="wo-type-lbl" class="font-bold text-blue-900"></span><b>Fecha efecto:</b><input type="date" id="wo-fecha"><b>Prioridad:</b><select id="wo-prio"><option>Normal</option><option>Alta</option><option>Urgente</option></select><b>Entrega:</b><select><option>Autoinstalable / envío exprés</option><option>Técnico presencial</option></select><span id="wo-extra" class="flex gap-1"></span><b class="ml-auto">Estado de procesos:</b><input type="text" id="wo-estado" readonly style="width:190px;font-weight:700"><select id="wo-cat" class="hidden"></select><select id="wo-catf" class="hidden"><option value=""></option></select><input id="wo-qty" class="hidden" value="1"></div>
+<div class="col-span-4 flex flex-col gap-1 overflow-hidden" style="min-height:0"><div class="wc-fs flex flex-col flex-grow" style="min-height:0"><span class="lg">Servicios Contratados</span><div class="flex items-center gap-1 mb-1 mt-1"><span class="flex-grow"></span><b>Oferta:</b><select id="wc-ofe" disabled style="width:110px"></select><button class="purple-btn keep" onclick="showModalInfo('Leyenda','▶ servicio activo · [entre corchetes] servicio con una orden en curso: Alta en curso, Baja pendiente o Modificación pendiente. Al completarse el provisioning el árbol se actualiza solo.')">Leyenda</button></div><div id="product-tree-wo" class="win-inset flex-grow overflow-auto p-1 text-2xs" style="min-height:0"></div><div class="grid grid-cols-3 gap-1 mt-1"><button id="wcb1" class="purple-btn" onclick="wcDisc()">Desc. T</button><button id="wcb2" class="purple-btn" onclick="wcBaja()">Desinst.</button><button id="wcb3" class="purple-btn" onclick="woModify(selectedTreeNode)">Modif.</button><button id="wcb4" class="purple-btn" style="grid-column:span 2" onclick="wcRest()">Restaurar</button><button class="purple-btn" onclick="wcLine((FD[WCF].ln||[0,[]])[1][0]||'')">Añadir</button></div></div>
+<div class="wc-fs flex flex-col" style="height:38%;min-height:0"><span class="lg">Productos de la Orden</span><div id="wc-olines" class="win-inset overflow-auto flex-grow mt-1 text-2xs" style="min-height:0"></div><table class="hidden"><tbody id="wo-lines"></tbody></table><div id="wo-valid"></div><div class="flex gap-1 mt-1"><button class="purple-btn" onclick="showModalInfo('Leyenda','ALTA: nuevo servicio · MODIF: cambio de configuración · BAJA: desinstalación.')">Leyenda</button><button class="purple-btn" onclick="woCheck()">Cheq.</button><button class="purple-btn" onclick="wcElim()">Elim.</button><button class="purple-btn" onclick="wcEdit()">Modif.</button></div></div></div>
+<div class="col-span-8 flex flex-col overflow-hidden" style="min-height:0"><div id="wc-tabs" class="flex flex-wrap px-1"></div><div class="win-border bg-white p-2 flex-grow flex flex-col" style="min-height:0"><div id="wc-form" class="flex-grow overflow-auto" style="min-height:0"></div><div class="flex justify-end gap-1 pt-1"><button class="purple-btn" onclick="wcReset()">Restablecer</button><button class="purple-btn" onclick="wcAccept()">Aceptar</button></div></div><div class="wc-fs" style="height:132px;overflow:auto"><span class="lg">Nuevo Precio</span><div id="wc-stg" class="mt-1"></div><div id="pc-prev"></div><div id="wo-price"></div></div></div>
+<div class="col-span-12 flex items-center gap-1"><span class="relative inline-block"><button id="wc-proc" class="purple-btn keep" onclick="event.stopPropagation();document.getElementById('wc-pm').classList.toggle('hidden')">Procesos ▾</button><span id="wc-pm" class="hidden absolute flex flex-col gap-px z-30" style="bottom:100%;left:0;min-width:150px"><button class="purple-btn text-left keep" onclick="woTab('prov',1)">Provisioning</button><button id="wc-ct" class="purple-btn text-left keep hidden" onclick="switchView('contract')">Contrato</button></span></span><span class="flex-grow"></span><button class="purple-btn" onclick="submitWorkOrder()">Tramitar Orden</button><button class="purple-btn keep" onclick="closeWO()">Cerrar</button></div>`;
+(()=>{const p=document.getElementById('wo-pane-conf');p.innerHTML=WC_HTML;p.style.gridTemplateRows='auto minmax(0,1fr) auto';document.getElementById('wo-tabb-conf').parentElement.style.display='none';
+ const h=document.querySelector('#view-workorder .red-header');if(h){h.style.cssText='background:var(--nv)!important;color:#fff';h.firstElementChild.textContent='Orden de Trabajo'}
+ document.getElementById('wo-pane-prov').insertAdjacentHTML('afterbegin','<div class="col-span-12 flex items-center gap-2 gray-header"><button class="purple-btn" onclick="woTab(\'conf\')">◂ Volver a la orden</button><b>Procesos ▸ Provisioning</b></div>');
+ document.addEventListener('click',()=>{const m=document.getElementById('wc-pm');if(m)m.classList.add('hidden')})})();
+// --- árbol de servicios contratados (agrupado como en el CIM) ---
+const gOf=n=>{const id=ALIAS[n.id]||n.id,c=cat(id);if(c&&c.addon)return'oth';const m={'FTTH-1G':'int','TEL-FIJO':'tel','MOV-5G':'mov','CRM-USR':'crm','STO-1TB':'sto','API-SF':'itg','WH-KAFKA':'itg','SSO-SAML':'idn'}[id];if(m)return m;const s=n.name;
+ return/banda ancha|fibra|ftth|internet/i.test(s)?'int':/m[óo]vil|\b[67]\d{8}\b/i.test(s)?'mov':/tel[ée]fono|voz/i.test(s)?'tel':/almacen/i.test(s)?'sto':/sso|identidad|saml/i.test(s)?'idn':/conector|api|webhook|kafka/i.test(s)?'itg':/licencia|crm|m[óo]dulo|saas/i.test(s)?'crm':'oth'};
+function wcTree(){const e=document.getElementById('product-tree-wo'),cl=woState&&woState.client;if(!e||!cl)return;const g={};[...FAM.map(f=>f.k),'oth'].forEach(k=>g[k]=[]);WCN=fileList(cl.tree);WCN.forEach((n,i)=>g[gOf(n)].push(i));
+ const G=[...FAM.filter(f=>f.k!=='cli'),{k:'oth',l:'Otros Servicios/Descuentos'}];
+ e.innerHTML=`<div class="wc-t"><i class="fa-solid fa-folder-open" style="color:#d9a21b"></i> Cliente ${esc(cl.id)}</div>`+G.map(f=>{const L=g[f.k];return`<div class="wc-t" style="padding-left:10px" onclick="if(FD['${f.k}']){WCF='${f.k}';wcTab('${f.k}')}"><span class="wc-bx">${L.length?'−':'□'}</span>${L.length?'<i class="fa-solid fa-play" style="color:#2a9a2a;font-size:8px"></i> ':''}${f.l}</div>`+L.map((i,k)=>{const n=WCN[i];return`<div class="wc-t ${n===selectedTreeNode?'sel':''}" style="padding-left:36px" onclick="wcPick(${i})"><i class="fa-solid fa-play" style="color:${n.pend?'#d97706':'#2a9a2a'};font-size:8px"></i> ${k+1} - ${esc(n.name)}@${esc(n.id)}${n.pend?` <i>[${esc(n.status)}]</i>`:''}</div>`}).join('')}).join('');wcBtns()}
+renderWorkOrderTree=function(){wcTree()};
+function wcPick(i){selectedTreeNode=WCN[i];showTreeNodeDetails(selectedTreeNode);wcTree()}
+function wcBtns(){const ok=woState&&woMode()==='edit'&&selectedTreeNode&&selectedTreeNode.type==='file';['wcb1','wcb2','wcb3','wcb4'].forEach(i=>{const b=document.getElementById(i);if(b)b.disabled=!ok})}
+function wcLines(){const e=document.getElementById('wc-olines');if(!e||!woState)return;
+ e.innerHTML=`<div class="wc-t"><i class="fa-solid fa-folder-open" style="color:#d9a21b"></i> Orden ${woState.num}</div>`+(woState.lines.map((l,i)=>`<div class="wc-t ${i===WS.ol?'sel':''}" style="padding-left:14px" onclick="WS.ol=${i};wcLines()"><b style="color:${l.act==='BAJA'?'#c4161c':l.act==='MODIF'?'#2563eb':'#1a9a2a'}">${l.act}</b> ${esc(l.item.name)}${l.qty>1?' x'+l.qty:''} <span style="opacity:.7">${pcSummary(l)}</span> <span style="float:right">${l.act==='MODIF'&&l.item.price>=0?'+':''}${(l.item.price*l.qty/100).toFixed(2)} Eur</span></div>`).join('')||'<div class="wc-t" style="padding-left:14px;opacity:.6">Sin líneas. Añada servicios y pulse Aceptar.</div>')}
+function wcElim(){if(woMode()!=='edit'||WS.ol<0||!woState.lines[WS.ol])return showToast('Seleccione una línea de la orden.');woState.lines.splice(WS.ol,1);WS.ol=-1;woRender()}
+function wcEdit(){const l=woState&&woState.lines[WS.ol];if(woMode()!=='edit'||!l)return showToast('Seleccione una línea de la orden.');if(!l.cfg)return showToast('Esta línea no tiene parámetros configurables.');pcEdit(WS.ol)}
+const wcSel=()=>{const n=selectedTreeNode;if(!woState||woMode()!=='edit'){showToast('La orden no admite cambios.');return null}if(!n||n.type!=='file'){showToast('Seleccione un servicio contratado.');return null}return n};
+function wcBaja(){const n=wcSel();if(!n)return;if(woState.lines.some(l=>l.nodeId===n.id||(l.act==='BAJA'&&l.item.id===n.id)))return showToast('El servicio ya tiene una línea en esta orden.');const c=cat(ALIAS[n.id]||n.id);
+ woState.lines.push({act:'BAJA',item:{id:n.id,name:n.name,price:Math.round(parseFloat(n.price)*100)||0,sys:c?c.sys:'Core'},qty:1});woRender()}
+function wcRest(){const n=wcSel();if(!n)return;woState.lines=woState.lines.filter(l=>!(l.nodeId===n.id||(l.act==='BAJA'&&l.item.id===n.id)));woRender()}
+function wcDisc(){const n=wcSel();if(!n)return;const c=cat(ALIAS[n.id]||n.id);if(!c)return showToast('Este servicio no admite descuentos configurables.');const prev=pcDefaults(c,n);pcOpen('MODIF',c.id,{prev,vals:{...prev,disc:10},nodeId:n.id,nodeName:n.name})}
+// --- pestañas y formulario del configurador ---
+function wcTabs(){const e=document.getElementById('wc-tabs');if(!e||!woState)return;e.innerHTML=FAM.map(f=>{const n=woState.lines.filter(l=>(l.item.fam||famOf(l.item.id).k)===f.k).length;return`<button class="tab-btn ${f.k===WCF?'active':''}" onclick="wcTab('${f.k}')">${f.l}${n?' ('+n+')':''}</button>`}).join('')}
+function wcTab(k){if(!woState||woMode()!=='edit')return;WCF=k;WS.sub='add';if(CGS&&famOf(CGS.id).k!==k)CGS=null;wcTabs();wcForm()}
+function wcLine(id){if(woMode()!=='edit')return;if(!id){CGS=null;WS.sub='add';return wcForm()}WS.sub='cfg';pcOpen('ALTA',id);if(CGS){attrsOf(CGS.c).forEach(a=>{if(a.cd&&!CGS.vals[a.k])CGS.vals[a.k]=a.cd});wcForm()}}
+function wcReset(){if(woMode()!=='edit')return;WS.q={};if(CGS)pcOpen(CGS.mode,CGS.id,CGS.mode==='MODIF'?{prev:CGS.prev,vals:{...CGS.prev},nodeId:CGS.nodeId,nodeName:CGS.nodeName,idx:CGS.idx}:{});else wcForm()}
+function wcCk(c,on){if(on)WS.q[c]=WS.q[c]||1;else delete WS.q[c];wcForm()}
+function wcUn(c,v){WS.q[c]=Math.max(1,+v||1);wcPrice()}
+function wcAllCk(id,on){(LST[id]||[]).forEach(i=>{if(on)WS.q[i.code]=WS.q[i.code]||1;else delete WS.q[i.code]});wcForm()}
+function wcTar(k,c){(FD[k].T[1]).forEach(i=>delete WS.q[i.code]);if(c)WS.q[c]=1;wcForm()}
+function wcPrice(){const e=document.getElementById('wc-stg');if(!e)return;const k=Object.keys(WS.q),t=k.reduce((a,c)=>a+ITEMS[c].p*WS.q[c],0);
+ e.innerHTML=k.length?`<b>Pendiente de aceptar:</b> ${k.length} servicio(s) · ${t>=0?'+':''}${(t/100).toFixed(2)} Eur/mes<br><span style="opacity:.8">${k.map(c=>esc(ITEMS[c].name)+(WS.q[c]>1?' x'+WS.q[c]:'')).join(' · ')}</span>`:'<span class="text-gray-500">Sin servicios pendientes de aceptar.</span>'}
+function wcAccept(){if(!woState||woMode()!=='edit')return;const keys=Object.keys(WS.q);if(!CGS&&!keys.length)return showToast('Nada que añadir: seleccione servicios o un producto.');
+ if(CGS){pcCommit();if(CGS)return}
+ keys.forEach(c=>{const it=ITEMS[c];if(woState.lines.some(l=>l.item.id===c&&l.act==='ALTA'))return showToast(it.name+' ya está en la orden.');woState.lines.push({act:'ALTA',item:{id:c,name:it.name,price:it.p,sys:it.sys,addon:1,fam:it.fam},qty:WS.q[c]})});
+ WS.q={};woRender();wcForm()}
+pcSet=function(k,v){CGS.vals[k]=v;CGS.touched=1;pcUpdate()};
+pcRender=function(){if(!CGS)return;WCF=famOf(CGS.id).k;if(CGS.mode==='MODIF'||CGS.idx>=0)WS.sub='cfg';wcTabs();wcForm()};
+pcCancel=function(){CGS=null;if(woState)wcForm()};
+function wcList(id,title,items,eq){const vis=WS.all[id]?items:items.slice(0,3);LST[id]=vis;const w=title.split(' ')[0];
+ const row=i=>`<label class="wc-row"><input type="checkbox" ${WS.q[i.code]?'checked':''} onchange="wcCk('${i.code}',this.checked)"><span class="flex-grow">${esc(i.name)}@${i.code} [${i.p/100} Eur]</span>${eq?`<input type="text" style="width:60px;height:15px" value="${WS.q[i.code]||''}" ${WS.q[i.code]?'':'disabled'} oninput="wcUn('${i.code}',this.value)">`:''}</label>`;
+ return`<div><div class="flex items-center"><b class="flex-grow">${esc(title)}:</b><label><input type="checkbox" ${WS.all[id]?'checked':''} onchange="WS.all['${id}']=this.checked;wcForm()"> <b>Ver todos</b></label></div><div class="wc-list"><label class="wc-row wc-h"><input type="checkbox" onchange="wcAllCk('${id}',this.checked)"><span class="flex-grow">${w} frecuentes</span>${eq?'<span style="width:68px">Unidades</span>':''}</label>${vis.map(row).join('')}</div></div>`}
+function wcForm(){const el=document.getElementById('wc-form');if(!el||!woState)return;const sc=el.scrollTop;
+ if(woMode()!=='edit'){el.innerHTML=`<div class="wc-fs" style="padding:24px;text-align:center">${woState.launched?'<b>Orden tramitada: configuración en solo lectura.</b><br>':''}Utilice <b>Procesos ▸ Provisioning</b> para seguir las tareas. Los cambios se reflejan en Servicios Contratados al completarse.</div>`;wcPrice();return}
+ const d=FD[WCF],g=CGS&&famOf(CGS.id).k===WCF?CGS:null;
+ const top=d.ln?`<div class="flex items-center gap-2"><b>${d.ln[0]}:</b><select style="width:230px" onchange="wcLine(this.value)"><option value="">A especificar</option>${d.ln[1].map(i=>`<option value="${i}" ${g&&g.id===i?'selected':''}>${esc(cat(i).name)}</option>`).join('')}</select>${d.port?`<label><input type="checkbox" ${g&&g.vals.portab?'checked':''} ${g?'':'disabled'} onchange="pcSet('portab',this.checked)"> <b>Portabilidad</b></label>`:''}</div><div class="flex mt-1">${[['add','Servicios adicionales'],['cfg',d.port||WCF==='int'?'Servicios línea':'Configuración']].map(([k,l])=>`<button class="tab-btn ${WS.sub===k?'active':''}" onclick="WS.sub='${k}';wcForm()">${l}</button>`).join('')}</div>`:'';
+ let b;
+ if(d.ln&&WS.sub==='cfg'){if(!g)b=`<div class="wc-fs" style="padding:18px;text-align:center">Seleccione un elemento en «${d.ln[0]}» para configurar sus parámetros.</div>`;else{const V=g.vals,A=attrsOf(g.c),M=g.mode==='MODIF';
+  const fld=a=>{const x=V[a.k];const i=a.t==='sel'?`<select class="w-full" onchange="pcSet('${a.k}',this.value)">${a.o.map(o=>`<option value="${esc(o.v)}" ${o.v===x?'selected':''}>${esc(o.v)}${o.d?` [${o.d>0?'+':''}${eur(o.d)}]`:''}</option>`).join('')}</select>`:`<input type="${a.t==='num'?'number':'text'}" class="w-full" value="${esc(x)}" ${a.t==='num'?`min="${a.min}" max="${a.max}"`:''} oninput="pcSet('${a.k}',${a.t==='num'?'+this.value':'this.value'})">`;return`<div><label class="block font-bold">${a.l}${a.req?' *':''}</label>${i}${a.hint?`<span class="text-gray-500">${a.hint}</span>`:''}</div>`};
+  b=`<div class="wc-fs"><span class="lg">${M?'Modificando: '+esc(g.nodeName):'Configuración de '+esc(g.c.name)}</span><div class="grid grid-cols-2 gap-x-3 gap-y-1 mt-1">${A.filter(a=>a.t!=='bool').map(fld).join('')}${M?'':`<div><label class="block font-bold">Cantidad</label><input type="number" min="1" class="w-full" value="${g.qty}" oninput="CGS.qty=Math.max(1,+this.value||1);pcUpdate()"></div>`}</div><div class="wc-list mt-1">${A.filter(a=>a.t==='bool').map(a=>`<label class="wc-row"><input type="checkbox" ${V[a.k]?'checked':''} onchange="pcSet('${a.k}',this.checked)"><span class="flex-grow">${esc(a.s||a.l)} [${a.d?a.d/100+' Eur':'incl.'}]</span></label>`).join('')}</div></div>`}}
+ else{b=(d.A?`<div class="wc-fs"><span class="lg">Servicios adicionales</span><div class="grid grid-cols-2 gap-3 mt-1">${wcList(WCF+'1',d.A[0][0],d.A[0][1])}${wcList(WCF+'2',d.A[1][0],d.A[1][1])}</div><div class="flex items-center gap-2 mt-2"><b>${d.T[0]}:</b><select style="width:220px" onchange="wcTar('${WCF}',this.value)"><option value="">A especificar</option>${d.T[1].map(i=>`<option value="${i.code}" ${WS.q[i.code]?'selected':''}>${esc(i.name)}@${i.code} [${i.p/100} Eur]</option>`).join('')}</select></div></div>`:'')+(d.E?`<div class="wc-fs"><span class="lg">${d.E[0]}</span>${wcList(WCF+'E',d.E[0],d.E[1],1)}</div>`:'')+`<div class="wc-fs"><span class="lg">${d.O[0]}</span>${wcList(WCF+'O',d.O[0],d.O[1])}</div><div class="wc-fs"><span class="lg">Campañas</span><div class="grid grid-cols-2 gap-3 mt-1">${wcList(WCF+'C','Campañas',d.C)}${wcList(WCF+'P','Servicios opcionales',d.P)}</div></div>`}
+ el.innerHTML=top+b;el.scrollTop=sc;wcPrice();if(CGS)pcUpdate()}
+const _wr4=woRender;woRender=function(){_wr4();if(!woState)return;wcTabs();wcTree();wcLines();wcProc();
+ if(woState.launched&&woState.base0!==undefined){const d=woState.lines.reduce((a,l)=>a+(l.act==='BAJA'?-1:1)*l.item.price*l.qty,0);document.getElementById('wo-price').innerHTML=`Cuota anterior: ${eur(woState.base0)} → cuota nueva: <b>${eur(woState.base0+d)}</b> (${d>=0?'+':''}${eur(d)})`}};
+function wcProc(){const b=document.getElementById('wc-proc');if(!b||!woState)return;b.disabled=!woState.launched;b.title=woState.launched?'':'Disponible cuando la orden está tramitada';document.getElementById('wc-ct').classList.toggle('hidden',!woState.contract)}
+const _ow4=openWorkOrder;openWorkOrder=function(k){_ow4(k);if(woState){woState.client=woState.client||currentClient;document.getElementById('wc-ofe').innerHTML=document.getElementById('svc-oferta').innerHTML;WCF='tel';WS.q={};WS.sub='add';WS.ol=-1;wcProc();wcTree();wcLines();wcForm()}};
+const _wam4=woApplyMode;woApplyMode=function(){_wam4();wcProc();wcForm();wcBtns()};
+const _wt=woTab;woTab=function(k,via){if(k==='prov'&&!via)k='conf';_wt(k);wcProc()};
+const _wc4=woCheck;woCheck=function(){const g=CGS;if(g&&!g.touched)CGS=null;try{return _wc4()}finally{CGS=g}};
 </script>
 </body>
 </html>
